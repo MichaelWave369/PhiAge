@@ -1,0 +1,110 @@
+/* ΦAge static research dashboard. No external dependencies or API calls. */
+"use strict";
+const SVG_NS = "http://www.w3.org/2000/svg";
+const $ = id => document.getElementById(id);
+const clamp = n => Math.max(0, Math.min(1, n));
+let lastRun = null;
+
+function toyModel(steps, generation, repair, boost) {
+  let damage = 0.18, inflammation = 0.08, senescence = 0.04, capacity = 0.85;
+  const series = [];
+  for (let t = 0; t <= steps; t++) {
+    series.push({step:t, damage, inflammation, senescence, repair_capacity:capacity});
+    const d=damage, i=inflammation, s=senescence;
+    damage=clamp(d+0.2*(generation*(1+0.5*i)-repair*capacity*(1+boost)));
+    inflammation=clamp(i+0.013*d+0.006*s-0.012*i);
+    senescence=clamp(s+0.012*d-0.006*s);
+    capacity=clamp(capacity+0.003*(1-d)-0.008*d);
+  }
+  return {model:"phiage-toy-feedback/v0.1",parameters:{steps,generation,repair,boost},
+    series,warning:"Toy equations; arbitrary dimensionless parameters, not calibrated to humans. No clinical or longevity prediction."};
+}
+function createSvg(tag, attrs) {
+  const node=document.createElementNS(SVG_NS,tag);
+  for(const key of Object.keys(attrs)) node.setAttribute(key,String(attrs[key]));
+  return node;
+}
+function drawChart(series) {
+  const svg=$("chart"); svg.replaceChildren();
+  const left=48,right=614,top=18,bottom=270,w=right-left,h=bottom-top;
+  for(let y=0;y<=4;y++){
+    const v=y/4, yy=bottom-v*h;
+    svg.append(createSvg("line",{x1:left,x2:right,y1:yy,y2:yy,stroke:"#304157","stroke-width":1}));
+    const label=createSvg("text",{x:36,y:yy+4,fill:"#94a5ba","font-size":11,"text-anchor":"end"});
+    label.textContent=v.toFixed(2); svg.append(label);
+  }
+  for(let t=0;t<=80;t+=20){
+    const xx=left+w*t/80;
+    const label=createSvg("text",{x:xx,y:295,fill:"#94a5ba","font-size":11,"text-anchor":"middle"});
+    label.textContent=String(t);svg.append(label);
+  }
+  for(const [key,color] of [["damage","#ffbb84"],["inflammation","#91b7fc"],["repair_capacity","#72e4c4"]]){
+    const points=series.map(d=>(left+w*d.step/80).toFixed(1)+","+(bottom-h*d[key]).toFixed(1)).join(" ");
+    svg.append(createSvg("polyline",{points,fill:"none",stroke:color,"stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round"}));
+  }
+  const label=createSvg("text",{x:331,y:307,fill:"#94a5ba","font-size":10,"text-anchor":"middle"});
+  label.textContent="SIMULATION STEPS (NOT YEARS)";svg.append(label);
+}
+function renderSim() {
+  const generation=Number($("generation").value),repair=Number($("repair").value),boost=Number($("boost").value);
+  $("generation-value").textContent=generation.toFixed(3);
+  $("repair-value").textContent=repair.toFixed(3);
+  $("boost-value").textContent=boost.toFixed(2);
+  lastRun=toyModel(80,generation,repair,boost);
+  drawChart(lastRun.series);
+  const end=lastRun.series[lastRun.series.length-1];
+  $("damage-final").textContent=end.damage.toFixed(3);
+  $("inflammation-final").textContent=end.inflammation.toFixed(3);
+  $("repair-final").textContent=end.repair_capacity.toFixed(3);
+}
+function setupSim(){
+  for(const id of ["generation","repair","boost"]) $(id).addEventListener("input",renderSim);
+  $("reset").addEventListener("click",()=>{
+    $("generation").value="0.06";$("repair").value="0.04";$("boost").value="0";renderSim();
+  });
+  $("export").addEventListener("click",()=>{
+    if(!lastRun)return;
+    const blob=new Blob([JSON.stringify(lastRun,null,2)+"\n"],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");link.href=url;link.download="phiage-toy-simulation.json";
+    document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);
+  });
+  renderSim();
+}
+function hallmarkCard(h,index){
+  const card=document.createElement("article");card.className="hallmark";
+  const head=document.createElement("div");head.className="hallmark-head";
+  const number=document.createElement("span");number.className="num";number.textContent="H"+String(index+1).padStart(2,"0");
+  const tier=document.createElement("span");tier.className="tier";tier.textContent=h.scale;
+  head.append(number,tier);
+  const title=document.createElement("h3");title.textContent=h.name;
+  const question=document.createElement("p");question.textContent=h.question;
+  card.append(head,title,question);
+  return card;
+}
+async function setupHallmarks(){
+  const host=$("hallmark-grid");
+  try{
+    const response=await fetch("./hallmarks.json");
+    if(!response.ok)throw Error("HTTP "+response.status);
+    const data=await response.json();
+    if(!Array.isArray(data.hallmarks)||data.hallmarks.length!==12)throw Error("invalid taxonomy");
+    const catalog=data.hallmarks;
+    const render=scale=>{
+      host.replaceChildren();
+      for(const [index,h] of catalog.entries())if(scale==="All"||h.scale===scale)host.append(hallmarkCard(h,index));
+    };
+    document.querySelectorAll(".filter").forEach(button=>button.addEventListener("click",()=>{
+      document.querySelectorAll(".filter").forEach(b=>{
+        const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
+      });render(button.dataset.scale);
+    }));
+    render("All");
+  }catch(error){
+    host.replaceChildren();
+    const p=document.createElement("p");p.className="muted";
+    p.textContent="Could not load bundled hallmark data. View data/hallmarks.json in the repository.";
+    host.append(p);console.error("Taxonomy load failed",error);
+  }
+}
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();});
