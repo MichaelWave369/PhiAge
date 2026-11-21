@@ -26,7 +26,7 @@ def inspect_table(text: str, expected_headers: list[str], *, kind: str) -> dict:
     except StopIteration as exc:
         raise ExpressionQCError("expression table is empty") from exc
     if len(actual_header) != 17 or len(expected_headers) != 17:
-        raise ExpressionQCError("expected exactly 17 table columns")
+        raise ExpressionQCError("expression header: expected exactly 17 table columns")
     # The archived inspector intentionally clipped long labels at 130 chars.
     # The one long command-containing annotation header can be compared by its
     # pinned prefix; all other headers, especially sample columns, must match.
@@ -102,6 +102,8 @@ def inspect_table(text: str, expected_headers: list[str], *, kind: str) -> dict:
         "blank_feature_ids": blank_features, "duplicate_feature_ids": feature_duplications,
         "unique_feature_ids": len(first_ids), "observed_chr_label_count_capped": len(chr_values),
         "structural_numeric_qc_pass": integrity,
+        "ordinary_integer_count_model_ready": (integrity and kind == "raw" and nonintegral == 0
+                                                and feature_duplications == 0),
         "sample_aggregate_descriptives": samples,
         "feature_semantics_verified": False,
         "warning": "These aggregate counts are technical data QC, not gene-level interpretation or evidence of biological age change.",

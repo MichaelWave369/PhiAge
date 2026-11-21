@@ -35,6 +35,7 @@ class ExpressionQCTests(unittest.TestCase):
         self.assertTrue(report["structural_numeric_qc_pass"])
         self.assertEqual(report["duplicate_feature_ids"], 0)
         self.assertFalse(report["feature_semantics_verified"])
+        self.assertTrue(report["ordinary_integer_count_model_ready"])
 
     def test_missing_cells_reported(self):
         text = self.fake_text().replace("\t2\t2\t2\t2\t2\t2\t2\t2\t2", "\t2\t2\t2\tNA\t2\t2\t2\t2\t2")
@@ -49,6 +50,7 @@ class ExpressionQCTests(unittest.TestCase):
         self.assertEqual(report["non_numeric_or_nonfinite_cells"], 1)
         self.assertEqual(report["negative_cells"], 1)
         self.assertEqual(report["non_integer_raw_cells"], 1)
+        self.assertFalse(report["ordinary_integer_count_model_ready"])
 
     def test_duplicate_feature_ids_are_reported(self):
         row = ["RE_A", "chr1", "1", "2", "+", "1", "1", "x"] + ["1"] * 9

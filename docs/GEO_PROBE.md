@@ -53,3 +53,10 @@ Nine GEO sample detail pages explicitly publish `Library name: TM…` in their *
 **Resolution:** The expression-column identity ambiguity is resolved using public depositor metadata, not positional inference. This is not an assertion that every GSM is an independent donor. A complete scientific analysis remains gated by donor provenance, feature semantics, normalization, covariates, license review, and replication.
 
 The read-only command `python -m phiage expression-qc --allow-network` validates public file hashes against the original receipts and scans table-level numeric quality and feature-ID properties. It does not produce gene-level or clinical aging conclusions.
+
+## v0.4 live numerical QC (2026-11-21)
+
+CI structurally scanned both pinned deposited tables: **27,142 unique feature identifiers and nine expression columns in each**. No missing, nonnumeric, nonfinite, negative, blank-ID or duplicate feature-ID entries were observed. Importantly, the file named `raw` contains **73,187 non-integer numeric entries**, so it is **not** automatically eligible for models requiring integer raw counts, despite its file label. The source describes HOMER pipeline processing; fractional values may have technical reasons, but those reasons are not validated here.
+
+The QC now exposes `ordinary_integer_count_model_ready` separately from `structural_numeric_qc_pass`. Passing numeric QC does **not** mean statistical analysis is authorized or biologically interpretable. This is a technical observation, not an aging finding.
+
