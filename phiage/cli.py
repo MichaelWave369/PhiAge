@@ -9,6 +9,7 @@ import sys
 from .evidence import EvidenceError, audit, load
 from .simulation import simulate
 from .sources import RegistryError, audit_registry
+from .geo_probe import GEOProbeError, probe as geo_probe
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -29,6 +30,11 @@ def main(argv=None) -> int:
     sources.add_argument("--output", help="write deterministic JSON audit to disk")
     sources.add_argument("--require-ready", action="store_true",
                          help="exit 3 unless at least one source passes the metadata gates")
+    geo = subs.add_parser("geo-probe", help="read-only structural metadata probe of NCBI GEO")
+    geo.add_argument("accession", help="GSE accession from the EXP-001 allowlist")
+    geo.add_argument("--allow-network", action="store_true", help="explicitly permit bounded HTTPS GEO fetches")
+    geo.add_argument("--with-counts", action="store_true", help="inspect a vetted public supplementary-file header")
+    geo.add_argument("--output", help="write immutable JSON probe receipt")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -37,6 +43,8 @@ def main(argv=None) -> int:
                     "evidence": len(bundle["evidence"])}
         elif args.command == "audit":
             data = audit(load(args.input))
+        elif args.command == "geo-probe":
+            data = geo_probe(args.accession, allow_network=args.allow_network, with_counts=args.with_counts)
         elif args.command == "sources":
             data = audit_registry(json.loads(Path(args.input).read_text(encoding="utf-8")))
         else:
@@ -52,6 +60,6 @@ def main(argv=None) -> int:
             print("phiage: no source passes the EXP-001 readiness gate", file=sys.stderr)
             return 3
         return 0
-    except (ValueError, EvidenceError, RegistryError, OSError, json.JSONDecodeError) as exc:
+    except (ValueError, EvidenceError, RegistryError, GEOProbeError, OSError, json.JSONDecodeError) as exc:
         print(f"phiage: {exc}", file=sys.stderr)
         return 2
