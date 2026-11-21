@@ -26,6 +26,12 @@ class GEOProbeTests(unittest.TestCase):
             geo_supplement_url("GSE307377"),
             "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_raw.txt.gz",
         )
+        self.assertEqual(
+            geo_supplement_url("GSE307377", "tpm"),
+            "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_tpm.txt.gz",
+        )
+        with self.assertRaises(GEOProbeError):
+            geo_supplement_url("GSE307377", "invented")
 
     def test_metadata_cardinality(self):
         parsed = parse_series_matrix(SYNTHETIC_MATRIX, "GSE307377")

@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Probe public GEO source metadata and supplementary header
-        run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --output /tmp/phiage-geo-probe.json
+        run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --with-tpm --output /tmp/phiage-geo-probe.json
       - name: Summarize source structure (not findings)
         run: |
-          python -c "import json; p=json.load(open('/tmp/phiage-geo-probe.json')); print(json.dumps({'accession':p['accession'], 'matrix':p['series_matrix'], 'supplementary_table':p.get('supplementary_table'), 'analysis_ready':p['analysis_ready']},indent=2))"
+          python -c "import json; p=json.load(open('/tmp/phiage-geo-probe.json')); print(json.dumps({'accession':p['accession'], 'matrix':p['series_matrix'], 'supplementary_table':p.get('supplementary_table'), 'normalized_table':p.get('normalized_table'), 'analysis_ready':p['analysis_ready']},indent=2))"

@@ -34,6 +34,7 @@ def main(argv=None) -> int:
     geo.add_argument("accession", help="GSE accession from the EXP-001 allowlist")
     geo.add_argument("--allow-network", action="store_true", help="explicitly permit bounded HTTPS GEO fetches")
     geo.add_argument("--with-counts", action="store_true", help="inspect a vetted public supplementary-file header")
+    geo.add_argument("--with-tpm", action="store_true", help="inspect deposited TPM table header")
     geo.add_argument("--output", help="write immutable JSON probe receipt")
     args = parser.parse_args(argv)
     try:
@@ -44,7 +45,8 @@ def main(argv=None) -> int:
         elif args.command == "audit":
             data = audit(load(args.input))
         elif args.command == "geo-probe":
-            data = geo_probe(args.accession, allow_network=args.allow_network, with_counts=args.with_counts)
+            data = geo_probe(args.accession, allow_network=args.allow_network,
+                             with_counts=args.with_counts, with_tpm=args.with_tpm)
         elif args.command == "sources":
             data = audit_registry(json.loads(Path(args.input).read_text(encoding="utf-8")))
         else:

@@ -20,7 +20,10 @@ MAX_COMPRESSED = 12 * 1024 * 1024
 MAX_UNCOMPRESSED = 80 * 1024 * 1024
 GEO_HOST = "ftp.ncbi.nlm.nih.gov"
 FIXED_SUPPLEMENT = {
-    "GSE307377": "GSE307377_raw.txt.gz",
+    "GSE307377": {
+        "raw": "GSE307377_raw.txt.gz",
+        "tpm": "GSE307377_tpm.txt.gz",
+    },
 }
 ACCEPTED = frozenset({"GSE307377", "GSE226189", "GSE275846", "GSE262619"})
 
@@ -33,11 +36,12 @@ def geo_matrix_url(accession: str) -> str:
     family = accession[:-3] + "nnn"
     return f"https://{GEO_HOST}/geo/series/{family}/{accession}/matrix/{accession}_series_matrix.txt.gz"
 
-def geo_supplement_url(accession: str) -> str:
-    if accession not in FIXED_SUPPLEMENT:
-        raise GEOProbeError("no vetted supplementary filename configured for accession")
+def geo_supplement_url(accession: str, kind: str = "raw") -> str:
+    if accession not in FIXED_SUPPLEMENT or kind not in FIXED_SUPPLEMENT[accession]:
+        raise GEOProbeError("no vetted supplementary filename configured for accession/kind")
     family = accession[:-3] + "nnn"
-    return f"https://{GEO_HOST}/geo/series/{family}/{accession}/suppl/{FIXED_SUPPLEMENT[accession]}"
+    name = FIXED_SUPPLEMENT[accession][kind]
+    return f"https://{GEO_HOST}/geo/series/{family}/{accession}/suppl/{name}"
 
 class GEOOnlyRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
@@ -159,7 +163,8 @@ def inspect_supplement_header(text: str) -> dict:
         "note": "Structural inspection only; expression values not analyzed and no donor mapping implied.",
     }
 
-def probe(accession: str, *, allow_network: bool = False, with_counts: bool = False) -> dict:
+def probe(accession: str, *, allow_network: bool = False, with_counts: bool = False,
+          with_tpm: bool = False) -> dict:
     if accession not in ACCEPTED:
         raise GEOProbeError("accession not in read-only EXP-001 allowlist")
     if not allow_network:
@@ -192,5 +197,18 @@ def probe(accession: str, *, allow_network: bool = False, with_counts: bool = Fa
             "sha256": hashlib.sha256(blob).hexdigest(),
             "compressed_bytes": len(blob),
             "structure": inspect_supplement_header(decompress_bounded(blob)),
+        }
+    if with_tpm:
+        tpm_url = geo_supplement_url(accession, "tpm")
+        tpm_blob = download_bounded(tpm_url)
+        result["normalized_table"] = {
+            "source_url": tpm_url,
+            "sha256": hashlib.sha256(tpm_blob).hexdigest(),
+            "compressed_bytes": len(tpm_blob),
+            "sample_column_crosswalk_verified": False,
+            "normalization_type_reported": "TPM",
+            "normalization_validated": False,
+            "structure": inspect_supplement_header(decompress_bounded(tpm_blob)),
+            "note": "TPM as named by depositor. No independent normalization verification, donor mapping, or age-effect analysis.",
         }
     return result

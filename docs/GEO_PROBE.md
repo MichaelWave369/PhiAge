@@ -35,3 +35,6 @@ The exact metadata/header receipt from the successful non-blocking CI probe is s
 
 **Crosswalk blocker:** The expression header includes eight non-sample columns (`Transcript/RepeatID`, chromosome, start, end, strand, length, copies, and annotation) followed by nine columns with `TM`/ `CKC` tags. They are not named by GSM accession. The tag names suggest five older and four younger profiles, but that is **not independent proof** of which individual column corresponds to which GSM or donor. The source registry must remain blocked until a documented mapping is established.
 
+
+## TPM discovery
+The official [GSE307377 GEO record](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE307377) also lists `GSE307377_tpm.txt.gz`, a separate deposited processed expression table. Probe its header with `--with-tpm`. TPM values are relative abundance estimates, **not** differential-expression test statistics or an age reversal measurement. The pipeline still refuses to infer which `TM` tag belongs to which GSM accession.
