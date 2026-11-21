@@ -17,9 +17,9 @@ class RegistryTests(unittest.TestCase):
 
     def test_sources_exist_but_not_approved(self):
         audit = audit_registry(self.registry)
-        self.assertEqual(audit["source_count"], 5)
+        self.assertEqual(audit["source_count"], 6)
         self.assertEqual(audit["analysis_ready_count"], 0)
-        self.assertEqual(audit["review_counts"], {"candidate": 5})
+        self.assertEqual(audit["review_counts"], {"candidate": 6})
         self.assertTrue(all(s["blockers"] for s in audit["sources"]))
 
     def test_ui_snapshot_is_exact_duplicate(self):

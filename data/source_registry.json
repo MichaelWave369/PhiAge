@@ -127,6 +127,32 @@
         "Potentially substantial immunological and cell-composition confounding.",
         "No independent cohort or usage permission review completed."
       ]
+    },
+    {
+      "id": "GSE113957",
+      "accession": "GSE113957",
+      "collection_id": "GSE113957",
+      "title": "Human dermal fibroblast transcriptomes across the lifespan (Fleischer et al., 2018)",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113957",
+      "access_scope": "metadata_only",
+      "age_resolution": "reported_range",
+      "assay": "bulk_rna_seq",
+      "tissues": [
+        "skin-derived fibroblasts"
+      ],
+      "sample_count": 143,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Original published study describes 133 healthy individuals aged 1–94 plus 10 people with Hutchinson-Gilford progeria syndrome; these cohorts require explicit separation.",
+        "Sample count of 143 is from the paper's reported study composition; verify GEO-level unique donors, accessions, and available processed expression files before analysis.",
+        "FPKM/RNA-seq preprocessing differs from GSE307377's HOMER TPM, so feature/normalization harmonization is required. Verify research reuse conditions.",
+        "Other publications reusing GSE113957 are NOT independent biological cohorts; cross-study donor overlap and culture/batch metadata remain to be assessed."
+      ]
     }
   ]
 }

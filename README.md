@@ -11,7 +11,7 @@
 - **[Research dashboard](docs/index.html)**: interactive hallmark atlas and an explicitly hypothetical feedback-system simulator. This is a static website; it has no backend and makes no network requests except to load bundled files.
 - **[12 hallmarks](data/hallmarks.json)**: annotated conceptual taxonomy from López-Otín et al., *Cell* (2023), DOI [10.1016/j.cell.2022.11.001](https://doi.org/10.1016/j.cell.2022.11.001).
 - **[Observed feature QC receipt](data/receipts/GSE307377_feature_qc_summary_2026-11-21.json)**: archived summary from successful GitHub Actions, also rendered by the static dashboard. Source is one existing published GEO study, not independent aging replication.
-- **[Source registry](data/source_registry.json)**: five documented candidate human datasets, all pending licensing and independence review. Run `python -m phiage sources data/source_registry.json` for a machine-readable readiness audit.
+- **[Source registry](data/source_registry.json)**: six documented candidate human datasets, all pending licensing and independence review. Run `python -m phiage sources data/source_registry.json` for a machine-readable readiness audit.
 - **[First experiment](experiments/EXP-001.md)**: preregistered-style plan to assess cross-tissue reproducibility, causal ambiguity, and intervention tradeoffs.
 - **[Evidence policy](docs/EVIDENCE_POLICY.md)**: how to distinguish hypotheses, observations, experiments, and human outcomes.
 
