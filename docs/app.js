@@ -107,4 +107,42 @@ async function setupHallmarks(){
     host.append(p);console.error("Taxonomy load failed",error);
   }
 }
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();});
+async function setupSources(){
+  const host=$("source-grid");
+  try {
+    const response=await fetch("./sources.json");
+    if(!response.ok)throw Error("HTTP "+response.status);
+    const data=await response.json();
+    if(data.schema_version!=="phiage-source-registry/v0.2"||!Array.isArray(data.sources))throw Error("invalid source schema");
+    host.replaceChildren();
+    $("candidate-count").textContent=String(data.sources.length);
+    // The browser has no authority to certify datasets. It displays only manual review metadata.
+    const approved=data.sources.filter(s=>s.review_state==="approved" && s.license_status==="reviewed" &&
+      s.access_scope==="public_processed" && s.sample_overlap_status==="documented_nonoverlap" &&
+      s.metadata_complete===true && /^[0-9a-f]{64}$/.test(s.curated_file_sha256||"") &&
+      s.age_resolution!=="unverified" && !s.overlap_with.length);
+    $("ready-count").textContent=String(approved.length);
+    for(const s of data.sources){
+      const item=document.createElement("article");item.className="source-card";
+      const line=document.createElement("div");line.className="source-card-top";
+      const id=document.createElement("span");id.textContent=s.accession;
+      const chip=document.createElement("span");chip.className="status";
+      chip.textContent=s.review_state==="approved"?"MANUALLY MARKED APPROVED":"CANDIDATE";
+      line.append(id,chip);
+      const heading=document.createElement("h3");heading.textContent=s.title;
+      const details=document.createElement("p");details.className="source-meta";
+      details.textContent=s.assay.replaceAll("_"," ")+" · "+s.tissues.join(", ");
+      const caveat=document.createElement("p");caveat.className="source-detail";
+      caveat.textContent=s.limitations[0];
+      const link=document.createElement("a");link.href=s.source_url;link.target="_blank";link.rel="noopener noreferrer";
+      link.textContent="View original source ↗";
+      item.append(line,heading,details,caveat,link);host.append(item);
+    }
+  } catch(error){
+    host.replaceChildren();
+    const p=document.createElement("p");p.className="muted";
+    p.textContent="Source metadata unavailable. See the GitHub source registry.";
+    host.append(p);console.error("Source registry load failed",error);
+  }
+}
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();});

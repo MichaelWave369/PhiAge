@@ -1,0 +1,132 @@
+{
+  "schema_version": "phiage-source-registry/v0.2",
+  "created_on": "2026-11-21",
+  "purpose": "Candidate source discovery for EXP-001. Metadata review only; no source has been licensed, de-duplicated, ingested, or cleared for analysis.",
+  "sources": [
+    {
+      "id": "GTEX-V11",
+      "accession": "GTEx v11",
+      "collection_id": "GTEX-ADULT",
+      "title": "Adult Genotype-Tissue Expression Project, V11",
+      "source_url": "https://gtexportal.org/home/datasets/",
+      "access_scope": "public_processed",
+      "age_resolution": "decade_bins",
+      "assay": "bulk_rna_seq",
+      "tissues": [
+        "multi-tissue"
+      ],
+      "sample_count": null,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Public donor age is reported in 10-year brackets; exact donor age is protected.",
+        "Raw sequencing data and complete donor metadata require controlled access.",
+        "GTEx version releases must not be counted as independent cohorts."
+      ]
+    },
+    {
+      "id": "GSE226189",
+      "accession": "GSE226189",
+      "collection_id": "GSE226189",
+      "title": "Primary human skin fibroblast aging transcriptomes",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE226189",
+      "access_scope": "metadata_only",
+      "age_resolution": "reported_range",
+      "assay": "bulk_rna_seq",
+      "tissues": [
+        "skin-derived fibroblasts"
+      ],
+      "sample_count": 82,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Source describes 82 people spanning ages 22–89; independently verify sample-to-donor mapping and downloadable processed matrices.",
+        "In-vitro cultured fibroblast biology is not a direct measurement of whole-organism aging.",
+        "No dataset independence or expression preprocessing has been verified."
+      ]
+    },
+    {
+      "id": "GSE307377",
+      "accession": "GSE307377",
+      "collection_id": "GSE307377",
+      "title": "Human dermal fibroblasts from young and older donors",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE307377",
+      "access_scope": "metadata_only",
+      "age_resolution": "age_groups",
+      "assay": "bulk_rna_seq",
+      "tissues": [
+        "skin-derived fibroblasts"
+      ],
+      "sample_count": 9,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Source reports four younger (23–33) and five older (64–72) donors; small cohort and broad grouping.",
+        "Cannot treat individual sequencing replicates as independent human donors.",
+        "Cultured cells are not direct evidence of human healthspan or lifespan."
+      ]
+    },
+    {
+      "id": "GSE275846",
+      "accession": "GSE275846",
+      "collection_id": "GSE275846",
+      "title": "Human epidermal keratinocyte aging, single-cell RNA-seq",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE275846",
+      "access_scope": "metadata_only",
+      "age_resolution": "age_groups",
+      "assay": "single_cell_rna_seq",
+      "tissues": [
+        "epidermis"
+      ],
+      "sample_count": null,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Young 20–30 versus older 65–70 female donors; donor number requires verification.",
+        "Cells from one donor are not independent donors.",
+        "Not directly comparable to bulk RNA-seq without modality-aware handling."
+      ]
+    },
+    {
+      "id": "GSE262619",
+      "accession": "GSE262619",
+      "collection_id": "GSE262619",
+      "title": "Human peripheral blood leukocyte aging transcriptome",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE262619",
+      "access_scope": "metadata_only",
+      "age_resolution": "unverified",
+      "assay": "rna_seq",
+      "tissues": [
+        "peripheral blood leukocytes"
+      ],
+      "sample_count": null,
+      "review_state": "candidate",
+      "license_status": "unreviewed",
+      "sample_overlap_status": "unknown",
+      "metadata_complete": false,
+      "curated_file_sha256": null,
+      "overlap_with": [],
+      "limitations": [
+        "Confirm publicly available age annotation, sample counts, normalized gene matrix and blood cell composition.",
+        "Potentially substantial immunological and cell-composition confounding.",
+        "No independent cohort or usage permission review completed."
+      ]
+    }
+  ]
+}

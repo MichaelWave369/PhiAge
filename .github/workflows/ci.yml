@@ -20,5 +20,10 @@ jobs:
         run: |
           python -m phiage audit examples/synthetic-evidence.json > /tmp/phiage-audit.json
           python -c "import json; r=json.load(open('/tmp/phiage-audit.json')); assert all(x['independence_groups']==0 and x['stage']=='no-empirical-evidence' for x in r['hypotheses'])"
+      - name: Registry candidate audit
+        run: |
+          python -m phiage sources data/source_registry.json > /tmp/phiage-source-audit.json
+          python -c "import json; r=json.load(open('/tmp/phiage-source-audit.json')); assert r['source_count']==5 and r['analysis_ready_count']==0"
+          python -c "from pathlib import Path; assert Path('data/source_registry.json').read_bytes() == Path('docs/sources.json').read_bytes()"
       - name: Compile Python
         run: python -m compileall -q phiage
