@@ -1,0 +1,48 @@
+{
+  "schema_version": "phiage-evidence/v0.1",
+  "metadata": {
+    "name": "Synthetic exercise: evidence independence and contradiction",
+    "synthetic": true,
+    "description": "All records are invented for software testing, NOT observations from biology."
+  },
+  "hypotheses": [
+    {
+      "id": "HYP-001",
+      "hallmark": "cellular-senescence",
+      "claim": "Reducing senescent-cell burden would preserve selected tissue functions under specified conditions.",
+      "falsifier": "Controlled perturbations show no benefit or unacceptable tradeoffs across matched endpoints."
+    },
+    {
+      "id": "HYP-002",
+      "hallmark": "epigenetic-alterations",
+      "claim": "An epigenetic biomarker change predicts a sustained improvement in an independent functional endpoint.",
+      "falsifier": "Biomarker changes fail to predict independently measured function in held-out cohorts."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "SYN-A1", "hypothesis_id": "HYP-001", "design": "intervention",
+      "species": "mouse", "direction": "supports", "synthetic": true,
+      "independence_group": "fake-cohort-a", "sample_size": 40,
+      "summary": "Invented favorable signal, for auditor unit tests only."
+    },
+    {
+      "id": "SYN-A2", "hypothesis_id": "HYP-001", "design": "review",
+      "species": "mouse", "direction": "supports", "synthetic": true,
+      "independence_group": "fake-cohort-a",
+      "summary": "Invented secondary write-up of fake cohort A; not independent."
+    },
+    {
+      "id": "SYN-B1", "hypothesis_id": "HYP-001", "design": "intervention",
+      "species": "mouse", "direction": "contradicts", "synthetic": true,
+      "independence_group": "fake-cohort-b", "sample_size": 60,
+      "summary": "Invented contradictory outcome to test audit handling."
+    },
+    {
+      "id": "SYN-C1", "hypothesis_id": "HYP-002", "design": "observational",
+      "species": "human", "direction": "supports", "synthetic": true,
+      "independence_group": "fake-biomarker-cohort",
+      "summary": "Invented biomarker association that must not count as evidence."
+    }
+  ]
+}

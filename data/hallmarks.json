@@ -1,0 +1,19 @@
+{
+  "taxonomy": "López-Otín et al., Cell (2023), 12 hallmarks",
+  "doi": "10.1016/j.cell.2022.11.001",
+  "warning": "Conceptual taxonomy, not clinical evidence of reversible human aging.",
+  "hallmarks": [
+    {"id":"genomic-instability","name":"Genomic instability","scale":"Molecular","question":"Can damage-response improvements preserve function without reducing tumor surveillance?"},
+    {"id":"telomere-attrition","name":"Telomere attrition","scale":"Molecular","question":"How do tissue-specific telomere dynamics differ from broad aging biomarkers?"},
+    {"id":"epigenetic-alterations","name":"Epigenetic alterations","scale":"Molecular","question":"Which age-associated epigenetic shifts are causal rather than passengers?"},
+    {"id":"loss-of-proteostasis","name":"Loss of proteostasis","scale":"Cellular","question":"Which proteome maintenance changes predict functional recovery?"},
+    {"id":"disabled-macroautophagy","name":"Disabled macroautophagy","scale":"Cellular","question":"When does altered recycling improve stress resistance rather than merely shift markers?"},
+    {"id":"deregulated-nutrient-sensing","name":"Deregulated nutrient sensing","scale":"Cellular","question":"Can interventions improve resilience without metabolic harm?"},
+    {"id":"mitochondrial-dysfunction","name":"Mitochondrial dysfunction","scale":"Cellular","question":"Which mitochondrial changes drive decline in different tissues?"},
+    {"id":"cellular-senescence","name":"Cellular senescence","scale":"Cellular","question":"Which senescent-cell populations are harmful, protective, or context-dependent?"},
+    {"id":"stem-cell-exhaustion","name":"Stem cell exhaustion","scale":"Tissue","question":"Which tissue-specific regenerative losses are both reversible and safe to target?"},
+    {"id":"altered-intercellular-communication","name":"Altered intercellular communication","scale":"Systemic","question":"Which network signals causally propagate age-related dysfunction?"},
+    {"id":"chronic-inflammation","name":"Chronic inflammation","scale":"Systemic","question":"When is inflammation causal, compensatory, or necessary for repair?"},
+    {"id":"dysbiosis","name":"Dysbiosis","scale":"Systemic","question":"How do microbiome shifts relate to host aging after controlling confounders?"}
+  ]
+}

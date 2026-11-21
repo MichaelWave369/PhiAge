@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phiage"
+version = "0.1.0"
+description = "Evidence-first computational geroscience research workbench"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "PHI369 Labs"}]
+keywords = ["geroscience", "aging", "research", "reproducibility"]
+[project.scripts]
+phiage = "phiage.cli:main"
+[tool.setuptools.packages.find]
+include = ["phiage*"]
