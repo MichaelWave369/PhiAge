@@ -6,7 +6,43 @@
   "program_commit_sha": "d1044a5ba38336f17b89155a1be60a7f835c94e1",
   "provenance": "Public NCBI GEO material; hashes are SHA-256 of downloaded gzip bytes, not proof of donor independence.",
   "accession": "GSE307377",
-  "matrix": {
+  "supplementary_table": {
+    "sample_column_crosswalk_verified": false,
+    "mapping_instruction": "Compare sample_catalog titles and supplementary basenames with column_labels; do not infer a donor mapping merely from column position.",
+    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_raw.txt.gz",
+    "sha256": "08102ba1c503ce08782eee5eab08619d04c5b396785dc027d65c737b5e1a640c",
+    "compressed_bytes": 1363809,
+    "structure": {
+      "delimiter": "tab",
+      "column_count": 17,
+      "first_column_label": "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_H",
+      "GSM_columns": 0,
+      "column_labels": [
+        "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_HS_RC_S11 tags/TM12_CKC14_O_HS_",
+        "chr",
+        "start",
+        "end",
+        "strand",
+        "Length",
+        "Copies",
+        "Annotation/Divergence",
+        "tags/TM15_CKC7_O_CTRL_S15 (24231287.0 total)",
+        "tags/TM16_CKC8_Y_CTRL_S16 (29213548.0 total)",
+        "tags/TM17_CKC14_O_CTRL_S17 (27749988.0 total)",
+        "tags/TM18_CKC15_Y_CTRL_S18 (27297887.0 total)",
+        "tags/TM19_CKC16_O_CTRL_S19 (31283964.0 total)",
+        "tags/TM1_CKC3_Y_CTRL_S1 (31598368.0 total)",
+        "tags/TM2_CKC4_Y_CTRL_S2 (33021164.0 total)",
+        "tags/TM3_CKC5_O_CTRL_S3 (25505823.0 total)",
+        "tags/TM4_CKC6_O_CTRL_S4 (35926444.0 total)"
+      ],
+      "table_contents_analysed": false,
+      "note": "Structural inspection only; expression values not analyzed and no donor mapping implied."
+    }
+  },
+  "analysis_ready": false,
+  "curator_note": "Observed 9 sample accessions with ages; supplementary has 8 annotation columns and 9 TM-tagged data columns. Column-to-GSM mapping not verified; no expression testing performed.",
+  "series_matrix": {
     "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/matrix/GSE307377_series_matrix.txt.gz",
     "sha256": "0410e57d6a6b7dbdfbaeee3595a439f801f3dccbbcf7f8aa7339e920cc6fd709",
     "compressed_bytes": 2312,
@@ -137,40 +173,7 @@
       "note": "A GSM is a deposited sample, not necessarily one independent human donor."
     }
   },
-  "supplementary_table": {
-    "sample_column_crosswalk_verified": false,
-    "mapping_instruction": "Compare sample_catalog titles and supplementary basenames with column_labels; do not infer a donor mapping merely from column position.",
-    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_raw.txt.gz",
-    "sha256": "08102ba1c503ce08782eee5eab08619d04c5b396785dc027d65c737b5e1a640c",
-    "compressed_bytes": 1363809,
-    "structure": {
-      "delimiter": "tab",
-      "column_count": 17,
-      "first_column_label": "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_H",
-      "GSM_columns": 0,
-      "column_labels": [
-        "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_HS_RC_S11 tags/TM12_CKC14_O_HS_",
-        "chr",
-        "start",
-        "end",
-        "strand",
-        "Length",
-        "Copies",
-        "Annotation/Divergence",
-        "tags/TM15_CKC7_O_CTRL_S15 (24231287.0 total)",
-        "tags/TM16_CKC8_Y_CTRL_S16 (29213548.0 total)",
-        "tags/TM17_CKC14_O_CTRL_S17 (27749988.0 total)",
-        "tags/TM18_CKC15_Y_CTRL_S18 (27297887.0 total)",
-        "tags/TM19_CKC16_O_CTRL_S19 (31283964.0 total)",
-        "tags/TM1_CKC3_Y_CTRL_S1 (31598368.0 total)",
-        "tags/TM2_CKC4_Y_CTRL_S2 (33021164.0 total)",
-        "tags/TM3_CKC5_O_CTRL_S3 (25505823.0 total)",
-        "tags/TM4_CKC6_O_CTRL_S4 (35926444.0 total)"
-      ],
-      "table_contents_analysed": false,
-      "note": "Structural inspection only; expression values not analyzed and no donor mapping implied."
-    }
-  },
-  "analysis_ready": false,
-  "curator_note": "Observed 9 sample accessions with ages; supplementary has 8 annotation columns and 9 TM-tagged data columns. Column-to-GSM mapping not verified; no expression testing performed."
+  "dataset_license_reviewed": false,
+  "donor_overlap_checked": false,
+  "research_claim": "NONE: structural metadata verification only"
 }
