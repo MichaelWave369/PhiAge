@@ -28,3 +28,10 @@ A non-blocking GitHub Actions integration check on PR #5 successfully retrieved:
 
 These observations verify two public artifacts could be retrieved and inspected, **not** that a correct sample-column crosswalk, donor independence, gene-level analysis, license clearance or any aging finding exists. The probe now includes public sample titles and columns for a conservative manual crosswalk audit.
 
+
+## Public record captured
+
+The exact metadata/header receipt from the successful non-blocking CI probe is saved at [`data/receipts/GSE307377_geo_probe_2026-11-21.json`](../data/receipts/GSE307377_geo_probe_2026-11-21.json), including the two SHA-256 hashes and the public nine-sample catalog.
+
+**Crosswalk blocker:** The expression header includes eight non-sample columns (`Transcript/RepeatID`, chromosome, start, end, strand, length, copies, and annotation) followed by nine columns with `TM`/ `CKC` tags. They are not named by GSM accession. The tag names suggest five older and four younger profiles, but that is **not independent proof** of which individual column corresponds to which GSM or donor. The source registry must remain blocked until a documented mapping is established.
+

@@ -1,0 +1,176 @@
+{
+  "receipt_type": "phiage-live-structural-source-probe/v0.3",
+  "observation_date_utc": "2026-11-21",
+  "collected_by": "GitHub Actions live-geo-probe job",
+  "run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44956239912",
+  "program_commit_sha": "d1044a5ba38336f17b89155a1be60a7f835c94e1",
+  "provenance": "Public NCBI GEO material; hashes are SHA-256 of downloaded gzip bytes, not proof of donor independence.",
+  "accession": "GSE307377",
+  "matrix": {
+    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/matrix/GSE307377_series_matrix.txt.gz",
+    "sha256": "0410e57d6a6b7dbdfbaeee3595a439f801f3dccbbcf7f8aa7339e920cc6fd709",
+    "compressed_bytes": 2312,
+    "metadata": {
+      "accession": "GSE307377",
+      "sample_catalog": [
+        {
+          "gsm_id": "GSM9222986",
+          "title": "Human dermal fibroblast, young, age 23, female",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 23"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222987",
+          "title": "Human dermal fibroblast, young, age 26, female",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 26"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222988",
+          "title": "Human dermal fibroblast, old, age 72, male",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 72"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222989",
+          "title": "Human dermal fibroblast, old, age 70, female",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 70"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222990",
+          "title": "Human dermal fibroblast, old, age 69, female",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 69"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222991",
+          "title": "Human dermal fibroblast, young, age 23, male",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 23"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222992",
+          "title": "Human dermal fibroblast, old, age 64, female",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 64"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222993",
+          "title": "Human dermal fibroblast, young, age 33, male",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 33"
+          ],
+          "supplementary_basename": "NONE"
+        },
+        {
+          "gsm_id": "GSM9222994",
+          "title": "Human dermal fibroblast, old, age 64, male",
+          "source_name": "Skin",
+          "public_age_labels": [
+            "age: 64"
+          ],
+          "supplementary_basename": "NONE"
+        }
+      ],
+      "sample_count": 9,
+      "unique_GSM_count": 9,
+      "metadata_row_types": [
+        "!Sample_channel_count",
+        "!Sample_characteristics_ch1",
+        "!Sample_contact_address",
+        "!Sample_contact_city",
+        "!Sample_contact_country",
+        "!Sample_contact_institute",
+        "!Sample_contact_name",
+        "!Sample_contact_state",
+        "!Sample_contact_zip/postal_code",
+        "!Sample_data_processing",
+        "!Sample_data_row_count",
+        "!Sample_description",
+        "!Sample_extract_protocol_ch1",
+        "!Sample_geo_accession",
+        "!Sample_growth_protocol_ch1",
+        "!Sample_instrument_model",
+        "!Sample_last_update_date",
+        "!Sample_library_selection",
+        "!Sample_library_source",
+        "!Sample_library_strategy",
+        "!Sample_molecule_ch1",
+        "!Sample_organism_ch1",
+        "!Sample_platform_id",
+        "!Sample_relation",
+        "!Sample_source_name_ch1",
+        "!Sample_status",
+        "!Sample_submission_date",
+        "!Sample_supplementary_file_1",
+        "!Sample_taxid_ch1",
+        "!Sample_title",
+        "!Sample_treatment_protocol_ch1",
+        "!Sample_type"
+      ],
+      "age_field_cells": 9,
+      "donor_identity_verified": false,
+      "age_annotation_validated": false,
+      "note": "A GSM is a deposited sample, not necessarily one independent human donor."
+    }
+  },
+  "supplementary_table": {
+    "sample_column_crosswalk_verified": false,
+    "mapping_instruction": "Compare sample_catalog titles and supplementary basenames with column_labels; do not infer a donor mapping merely from column position.",
+    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_raw.txt.gz",
+    "sha256": "08102ba1c503ce08782eee5eab08619d04c5b396785dc027d65c737b5e1a640c",
+    "compressed_bytes": 1363809,
+    "structure": {
+      "delimiter": "tab",
+      "column_count": 17,
+      "first_column_label": "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_H",
+      "GSM_columns": 0,
+      "column_labels": [
+        "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_HS_RC_S11 tags/TM12_CKC14_O_HS_",
+        "chr",
+        "start",
+        "end",
+        "strand",
+        "Length",
+        "Copies",
+        "Annotation/Divergence",
+        "tags/TM15_CKC7_O_CTRL_S15 (24231287.0 total)",
+        "tags/TM16_CKC8_Y_CTRL_S16 (29213548.0 total)",
+        "tags/TM17_CKC14_O_CTRL_S17 (27749988.0 total)",
+        "tags/TM18_CKC15_Y_CTRL_S18 (27297887.0 total)",
+        "tags/TM19_CKC16_O_CTRL_S19 (31283964.0 total)",
+        "tags/TM1_CKC3_Y_CTRL_S1 (31598368.0 total)",
+        "tags/TM2_CKC4_Y_CTRL_S2 (33021164.0 total)",
+        "tags/TM3_CKC5_O_CTRL_S3 (25505823.0 total)",
+        "tags/TM4_CKC6_O_CTRL_S4 (35926444.0 total)"
+      ],
+      "table_contents_analysed": false,
+      "note": "Structural inspection only; expression values not analyzed and no donor mapping implied."
+    }
+  },
+  "analysis_ready": false,
+  "curator_note": "Observed 9 sample accessions with ages; supplementary has 8 annotation columns and 9 TM-tagged data columns. Column-to-GSM mapping not verified; no expression testing performed."
+}
