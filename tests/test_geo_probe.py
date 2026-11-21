@@ -31,6 +31,8 @@ class GEOProbeTests(unittest.TestCase):
         parsed = parse_series_matrix(SYNTHETIC_MATRIX, "GSE307377")
         self.assertEqual(parsed["sample_count"], 2)
         self.assertEqual(parsed["age_field_cells"], 2)
+        self.assertEqual(len(parsed["sample_catalog"]), 2)
+        self.assertEqual(parsed["sample_catalog"][0]["public_age_labels"], ["age: 25"])
         self.assertFalse(parsed["donor_identity_verified"])
 
     def test_gzip(self):
@@ -51,6 +53,7 @@ class GEOProbeTests(unittest.TestCase):
     def test_supplement_structure_only(self):
         x = inspect_supplement_header("Gene\tGSM1234567\tGSM1234568\nA\t1\t2\n")
         self.assertEqual(x["GSM_columns"], 2)
+        self.assertEqual(x["column_labels"], ["Gene", "GSM1234567", "GSM1234568"])
         self.assertFalse(x["table_contents_analysed"])
 
     def test_no_network_without_explicit_opt_in(self):

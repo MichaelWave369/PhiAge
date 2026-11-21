@@ -113,8 +113,24 @@ def parse_series_matrix(text: str, accession: str) -> dict:
     age_fields = 0
     for row in fields.get("!Sample_characteristics_ch1", []):
         age_fields += sum(bool(re.search(r"(?:^|[\s;])age[\s_:]", value, re.I)) for value in row)
+    titles = fields.get("!Sample_title", [])
+    source_names = fields.get("!Sample_source_name_ch1", [])
+    characteristic_rows = fields.get("!Sample_characteristics_ch1", [])
+    files = fields.get("!Sample_supplementary_file_1", [])
+    catalog = []
+    for i, identifier in enumerate(ids):
+        age_labels = [row[i][:120] for row in characteristic_rows
+                      if re.search(r"(?:^|[\\s;])age[\\s_:]", row[i], re.I)]
+        catalog.append({
+            "gsm_id": identifier,
+            "title": titles[0][i][:120] if titles else None,
+            "source_name": source_names[0][i][:120] if source_names else None,
+            "public_age_labels": age_labels,
+            "supplementary_basename": files[0][i].rsplit("/", 1)[-1][:120] if files else None,
+        })
     return {
         "accession": accession,
+        "sample_catalog": catalog,
         "sample_count": sample_count,
         "unique_GSM_count": len(set(ids)),
         "metadata_row_types": sorted(fields),
@@ -138,6 +154,7 @@ def inspect_supplement_header(text: str) -> dict:
         "column_count": len(columns),
         "first_column_label": columns[0][:100],
         "GSM_columns": sum(bool(re.fullmatch(r"GSM[1-9][0-9]+", s)) for s in columns),
+        "column_labels": [s[:130] for s in columns],
         "table_contents_analysed": False,
         "note": "Structural inspection only; expression values not analyzed and no donor mapping implied.",
     }
@@ -169,6 +186,8 @@ def probe(accession: str, *, allow_network: bool = False, with_counts: bool = Fa
         supplemental_url = geo_supplement_url(accession)
         blob = download_bounded(supplemental_url)
         result["supplementary_table"] = {
+            "sample_column_crosswalk_verified": False,
+            "mapping_instruction": "Compare sample_catalog titles and supplementary basenames with column_labels; do not infer a donor mapping merely from column position.",
             "source_url": supplemental_url,
             "sha256": hashlib.sha256(blob).hexdigest(),
             "compressed_bytes": len(blob),
