@@ -27,3 +27,21 @@ jobs:
           python -c "from pathlib import Path; assert Path('data/source_registry.json').read_bytes() == Path('docs/sources.json').read_bytes()"
       - name: Compile Python
         run: python -m compileall -q phiage
+
+
+  # Informational integration check. External GEO availability is not a software correctness criterion.
+  live-geo-probe:
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe public GEO source metadata and supplementary header
+        run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --output /tmp/phiage-geo-probe.json
+      - name: Summarize source structure (not findings)
+        run: |
+          python -c "import json; p=json.load(open('/tmp/phiage-geo-probe.json')); print(json.dumps({'accession':p['accession'], 'matrix':p['series_matrix'], 'supplementary_table':p.get('supplementary_table'), 'analysis_ready':p['analysis_ready']},indent=2))"
