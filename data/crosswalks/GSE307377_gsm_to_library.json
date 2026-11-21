@@ -1,0 +1,100 @@
+{
+  "schema_version": "phiage-gsm-library-crosswalk/v0.4",
+  "accession": "GSE307377",
+  "provenance_description": "GEO sample Description field 'Library name: ...', one per GSM, checked against NCBI primary sample records; sex/age from NCBI GEO sample Characteristics/title.",
+  "curated_on_utc": "2026-11-21",
+  "status": "verified-library-label-relationship-only",
+  "notes": "This maps 9 public GEO samples to 9 expression columns, not donor independence, analytical validity, reuse license, or biological effect.",
+  "samples": [
+    {
+      "gsm_id": "GSM9222986",
+      "library_id": "TM1_CKC3_Y_CTRL",
+      "age_years": 23,
+      "sex": "female",
+      "group": "young",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222986",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222987",
+      "library_id": "TM2_CKC4_Y_CTRL",
+      "age_years": 26,
+      "sex": "female",
+      "group": "young",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222987",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222988",
+      "library_id": "TM3_CKC5_O_CTRL",
+      "age_years": 72,
+      "sex": "male",
+      "group": "old",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222988",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222989",
+      "library_id": "TM4_CKC6_O_CTRL",
+      "age_years": 70,
+      "sex": "female",
+      "group": "old",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222989",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222990",
+      "library_id": "TM15_CKC7_O_CTRL",
+      "age_years": 69,
+      "sex": "female",
+      "group": "old",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222990",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222991",
+      "library_id": "TM16_CKC8_Y_CTRL",
+      "age_years": 23,
+      "sex": "male",
+      "group": "young",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222991",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222992",
+      "library_id": "TM17_CKC14_O_CTRL",
+      "age_years": 64,
+      "sex": "female",
+      "group": "old",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222992",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222993",
+      "library_id": "TM18_CKC15_Y_CTRL",
+      "age_years": 33,
+      "sex": "male",
+      "group": "young",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222993",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    },
+    {
+      "gsm_id": "GSM9222994",
+      "library_id": "TM19_CKC16_O_CTRL",
+      "age_years": 64,
+      "sex": "male",
+      "group": "old",
+      "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9222994",
+      "source_field": "Description: Library name",
+      "sample_level_status": "public-repository-metadata"
+    }
+  ]
+}
