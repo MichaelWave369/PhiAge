@@ -25,6 +25,10 @@ jobs:
           python -m phiage sources data/source_registry.json > /tmp/phiage-source-audit.json
           python -c "import json; r=json.load(open('/tmp/phiage-source-audit.json')); assert r['source_count']==5 and r['analysis_ready_count']==0"
           python -c "from pathlib import Path; assert Path('data/source_registry.json').read_bytes() == Path('docs/sources.json').read_bytes()"
+      - name: Validate primary-source GSM/library crosswalk
+        run: |
+          python -m phiage crosswalk --output /tmp/phiage-gsm-crosswalk.json
+          python -c "import json; r=json.load(open('/tmp/phiage-gsm-crosswalk.json')); assert r['sample_to_column_verified'] is True and r['analysis_ready'] is False and len(r['mapped_samples']) == 9"
       - name: Compile Python
         run: python -m compileall -q phiage
 
@@ -42,6 +46,11 @@ jobs:
           python-version: '3.12'
       - name: Probe public GEO source metadata and supplementary header
         run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --with-tpm --output /tmp/phiage-geo-probe.json
+      - name: Run structural expression QC against pinned public hashes
+        run: python -m phiage expression-qc --allow-network --output /tmp/phiage-expression-qc.json
+      - name: Summarize numerical QC (not biological results)
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-expression-qc.json')); print(json.dumps({'schema':x['schema_version'], 'analysis_ready':x['analysis_ready'], 'tables':{name:{k:v for k,v in row.items() if k != 'sample_aggregate_descriptives'} for name,row in x['tables'].items()}},indent=2))"
       - name: Summarize source structure (not findings)
         run: |
           python -c "import json; p=json.load(open('/tmp/phiage-geo-probe.json')); print(json.dumps({'accession':p['accession'], 'matrix':p['series_matrix'], 'supplementary_table':p.get('supplementary_table'), 'normalized_table':p.get('normalized_table'), 'analysis_ready':p['analysis_ready']},indent=2))"

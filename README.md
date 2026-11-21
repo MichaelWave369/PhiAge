@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.3 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.4 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -22,6 +22,9 @@ python -m phiage validate examples/synthetic-evidence.json
 python -m phiage audit examples/synthetic-evidence.json
 python -m phiage simulate --steps 80 --generation 0.06 --repair 0.04 --boost 0.0
 python -m phiage sources data/source_registry.json --output source-audit.json
+python -m phiage crosswalk --output crosswalk-audit.json
+# Optional: live aggregate QC of two pinned NCBI GEO files; no biomedical results:
+python -m phiage expression-qc --allow-network --output expression-qc.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -50,6 +53,8 @@ Currently implemented:
 - **Interactive static dashboard** in `docs/`, covering the 12 hallmarks, research questions, and an illustrative dynamics plot.
 - **Candidate source registry audit v0.2**: DOI/accession-linked dataset discovery metadata, duplicate IDs, collection-family grouping, access/age/overlap/permission gates, and deterministic SHA-256 provenance receipts. **All five sources currently remain candidates; zero are approved for analysis.**
 - **NCBI GEO probe v0.3:** allowlisted, bounded, read-only HTTPS retrieval of a public Series Matrix and vetted supplementary header, with SHA-256 and structural validation. Network access is **off by default**. This is a metadata check, not expression analysis or human efficacy evidence.
+- **Verified public sample/library crosswalk v0.4:** nine one-to-one library labels from primary GEO sample Description fields matched against both raw and TPM headers. This clears *column identity*, not donor independence or analytical readiness.
+- **Read-only aggregate expression QC:** exact SHA-256 pinning of real NCBI GEO count/TPM files; table shape, missing and invalid numeric cells, feature-ID duplication and descriptive totals, without differential expression or uploading rows.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.

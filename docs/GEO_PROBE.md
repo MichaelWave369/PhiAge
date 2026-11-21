@@ -45,3 +45,11 @@ The CI probe retrieved `GSE307377_tpm.txt.gz` successfully (1,498,390 compressed
 
 The complete observed table-header receipt is preserved in [`data/receipts/GSE307377_tpm_2026-11-21.json`](../data/receipts/GSE307377_tpm_2026-11-21.json). The raw values were **not** statistically analyzed. A documented feature-ID mapping, normalization audit, donor mapping, and licensing check remain prerequisites.
 
+
+## v0.4: Primary GEO sample Description resolves library label ambiguity
+
+Nine GEO sample detail pages explicitly publish `Library name: TM…` in their **Description** fields, along with age/group/sex labels. The public sample-to-library mapping is now archived at [the crosswalk JSON](../data/crosswalks/GSE307377_gsm_to_library.json). It includes a primary GEO URL for every GSM and compares library IDs to both archived table headers.
+
+**Resolution:** The expression-column identity ambiguity is resolved using public depositor metadata, not positional inference. This is not an assertion that every GSM is an independent donor. A complete scientific analysis remains gated by donor provenance, feature semantics, normalization, covariates, license review, and replication.
+
+The read-only command `python -m phiage expression-qc --allow-network` validates public file hashes against the original receipts and scans table-level numeric quality and feature-ID properties. It does not produce gene-level or clinical aging conclusions.
