@@ -19,7 +19,7 @@ class FeatureTests(unittest.TestCase):
         self.tpm = load("data/receipts/GSE307377_tpm_2026-11-21.json")
         self.crosswalk = validate_crosswalk(self.mapping, self.geo, self.tpm)
         self.labels = self.tpm["normalized_table"]["structure"]["column_labels"]
-        self.meta = ["Transcript/RepeatID annotation" + "x" * 170,
+        self.meta = [self.labels[0] + " synthetic remainder",
                      "chr", "start", "end", "strand", "Length", "Copies", "Annotation/Divergence"]
         self.headers = self.meta + self.labels[8:]
 

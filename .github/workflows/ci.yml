@@ -48,6 +48,11 @@ jobs:
         run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --with-tpm --output /tmp/phiage-geo-probe.json
       - name: Run structural expression QC against pinned public hashes
         run: python -m phiage expression-qc --allow-network --output /tmp/phiage-expression-qc.json
+      - name: Run non-inferential feature and sample similarity QC
+        run: python -m phiage feature-qc --allow-network --output /tmp/phiage-feature-qc.json
+      - name: Summarize feature QC without biological claims
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-feature-qc.json')); print(json.dumps({'schema':x['schema_version'],'feature_rows':x['feature_rows'],'feature_id_syntax_counts':x['feature_id_syntax_counts'],'annotation_tokens':x['annotation_tail_literal_counts_top_12'],'all_sample_zero_rows':x['all_sample_zero_rows'],'similarity_min':x['similarity_min'],'similarity_median':x['similarity_median'],'similarity_max':x['similarity_max'],'analysis_ready':x['analysis_ready'],'claim_level':x['claim_level']},indent=2))"
       - name: Summarize numerical QC (not biological results)
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-expression-qc.json')); print(json.dumps({'schema':x['schema_version'], 'analysis_ready':x['analysis_ready'], 'tables':{name:{k:v for k,v in row.items() if k != 'sample_aggregate_descriptives'} for name,row in x['tables'].items()}},indent=2))"
