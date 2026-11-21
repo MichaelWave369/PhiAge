@@ -1,0 +1,64 @@
+{
+  "schema_version": "phiage-observed-feature-qc-summary/v0.5",
+  "dataset": "GSE307377",
+  "captured_from": "official NCBI GEO public TPM via pinned SHA-256; results are aggregate technical QC only",
+  "source_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44963480887",
+  "source_commit_sha": "3d5600a5a4ee8b15414c52cae1325eb16d336fdc",
+  "tpm_gzip_sha256": "1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad",
+  "utc_date": "2026-11-21",
+  "report": {
+    "schema": "phiage-feature-profile/v0.5",
+    "feature_rows": 27142,
+    "feature_id_syntax_counts": {
+      "RefSeq_transcript_accession_syntax": 27142
+    },
+    "annotation_tokens": [
+      {
+        "label": "protein-coding",
+        "count": 19302
+      },
+      {
+        "label": "ncRNA",
+        "count": 6371
+      },
+      {
+        "label": "pseudo",
+        "count": 1014
+      },
+      {
+        "label": "snoRNA",
+        "count": 413
+      },
+      {
+        "label": "snRNA",
+        "count": 39
+      },
+      {
+        "label": "rRNA",
+        "count": 2
+      },
+      {
+        "label": "scRNA",
+        "count": 1
+      }
+    ],
+    "all_sample_zero_rows": 6731,
+    "informative_feature_rows": 20411,
+    "nonzero_similarity_min": 0.960331,
+    "nonzero_similarity_median": 0.986313,
+    "nonzero_similarity_max": 0.994422,
+    "similarity_min": 0.968799,
+    "similarity_median": 0.989159,
+    "similarity_max": 0.995574,
+    "analysis_ready": false,
+    "claim_level": "TECHNICAL_QC_ONLY"
+  },
+  "biological_claims_supported": false,
+  "clinical_claims_supported": false,
+  "limitations": [
+    "These numbers are derived from published source annotations and transcript-ID syntax, not independent mapping to a curated gene reference.",
+    "High Pearson correlations do not establish age discrimination, causal mechanisms, clinical benefit or rejuvenation.",
+    "No second independent cohort, feature-to-gene approval, donor-level independence or study reuse review was completed.",
+    "Sample correlations include the same published cohort as the original nucleosome-stability study."
+  ]
+}

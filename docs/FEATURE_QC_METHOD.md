@@ -39,3 +39,12 @@ Before any confirmatory comparisons, independently establish gene/feature mappin
 
 ## Robustness improvement (after first live run)
 To avoid overstating similarity caused by shared all-zero transcripts, the report separately computes correlations using only entries with expression in at least one of the nine samples. The original all-feature results remain available for transparency. Both are *descriptive technical quality checks*, not independent scientific replication or age-discrimination validation. Medians use the actual midpoint for 36 sample pairs rather than selecting a single central rank.
+
+## Recorded live results, 2026-11-21
+
+An [approved-by-CI technical run](https://github.com/MichaelWave369/PhiAge/actions/runs/44963480887) retrieved the hash-pinned official GEO TPM table. All 27,142 feature IDs matched RefSeq transcript-accession *syntax*. Depositor annotation tails contained 19,302 protein-coding, 6,371 ncRNA, 1,014 pseudogene ("pseudo"), 413 snoRNA, 39 snRNA, two rRNA, and one scRNA entries. These are metadata counts, **not independently curated gene identities**.
+
+6,731 feature rows were zero in every sample, leaving 20,411 rows with at least one non-zero value. Across the 36 sample pairs, correlations on log1p(TPM) were 0.968799–0.995574 (all rows; median 0.989159) and 0.960331–0.994422 (non-all-zero rows; median 0.986313). These are *descriptive quality metrics* from nine samples of a published study, not age-discrimination results.
+
+The source-backed [summary receipt](../data/receipts/GSE307377_feature_qc_summary_2026-11-21.json) is duplicated into the GitHub Pages site for transparent public inspection. It contains only aggregate observations and source hashes, not full gene-expression rows.
+

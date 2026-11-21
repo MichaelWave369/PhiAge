@@ -145,4 +145,40 @@ async function setupSources(){
     host.append(p);console.error("Source registry load failed",error);
   }
 }
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();});
+
+async function setupQualityObservation(){
+  const host=$("qc-classifications");
+  try {
+    const response=await fetch("./feature_qc_summary.json");
+    if(!response.ok)throw Error("HTTP "+response.status);
+    const data=await response.json();
+    const q=data.report;
+    if(data.schema_version!=="phiage-observed-feature-qc-summary/v0.5"||
+       q.claim_level!=="TECHNICAL_QC_ONLY"||q.analysis_ready!==false||
+       q.feature_rows!==q.all_sample_zero_rows+q.informative_feature_rows)
+      throw Error("invalid QC result contract");
+    const count=n=>new Intl.NumberFormat("en-US").format(n);
+    $("qc-features").textContent=count(q.feature_rows);
+    $("qc-informative").textContent=count(q.informative_feature_rows);
+    $("qc-correlations").textContent=q.nonzero_similarity_median===null?
+      "undefined":q.nonzero_similarity_median.toFixed(3);
+    host.replaceChildren();
+    for(const item of q.annotation_tokens){
+      const card=document.createElement("article");card.className="source-card";
+      const top=document.createElement("div");top.className="source-card-top";
+      const label=document.createElement("span");label.textContent=item.label;
+      const value=document.createElement("strong");value.className="qc-count";value.textContent=count(item.count);
+      top.append(label,value);
+      const detail=document.createElement("p");detail.className="source-detail";
+      detail.textContent="Entries carrying this depositor annotation label; not independently curated.";
+      card.append(top,detail);host.append(card);
+    }
+  } catch(error){
+    host.replaceChildren();
+    const p=document.createElement("p");p.className="muted";
+    p.textContent="The archived QC receipt is unavailable. See the repository for recorded results.";
+    host.append(p);console.error("QC receipt load failed",error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();});
