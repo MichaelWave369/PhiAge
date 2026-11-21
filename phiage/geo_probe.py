@@ -120,7 +120,7 @@ def parse_series_matrix(text: str, accession: str) -> dict:
     catalog = []
     for i, identifier in enumerate(ids):
         age_labels = [row[i][:120] for row in characteristic_rows
-                      if re.search(r"(?:^|[\\s;])age[\\s_:]", row[i], re.I)]
+                      if re.search(r"(?:^|[\s;])age[\s_:]", row[i], re.I)]
         catalog.append({
             "gsm_id": identifier,
             "title": titles[0][i][:120] if titles else None,
