@@ -23,12 +23,17 @@ jobs:
       - name: Registry candidate audit
         run: |
           python -m phiage sources data/source_registry.json > /tmp/phiage-source-audit.json
-          python -c "import json; r=json.load(open('/tmp/phiage-source-audit.json')); assert r['source_count']==5 and r['analysis_ready_count']==0"
+          python -c "import json; r=json.load(open('/tmp/phiage-source-audit.json')); assert r['source_count']==6 and r['analysis_ready_count']==0"
           python -c "from pathlib import Path; assert Path('data/source_registry.json').read_bytes() == Path('docs/sources.json').read_bytes()"
       - name: Validate primary-source GSM/library crosswalk
         run: |
           python -m phiage crosswalk --output /tmp/phiage-gsm-crosswalk.json
           python -c "import json; r=json.load(open('/tmp/phiage-gsm-crosswalk.json')); assert r['sample_to_column_verified'] is True and r['analysis_ready'] is False and len(r['mapped_samples']) == 9"
+      - name: Verify committed technical QC observation is non-clinical
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE307377_feature_qc_summary_2026-11-21.json'); q=json.loads(p.read_text()); r=q['report']; assert r['analysis_ready'] is False and r['claim_level']=='TECHNICAL_QC_ONLY' and r['feature_rows']==r['informative_feature_rows']+r['all_sample_zero_rows']; assert sum(x['count'] for x in r['annotation_tokens'])==r['feature_rows']; assert p.read_bytes()==Path('docs/feature_qc_summary.json').read_bytes()"
+      - name: Validate static observatory JavaScript
+        run: node --check docs/app.js
       - name: Compile Python
         run: python -m compileall -q phiage
 
@@ -48,6 +53,11 @@ jobs:
         run: python -m phiage geo-probe GSE307377 --allow-network --with-counts --with-tpm --output /tmp/phiage-geo-probe.json
       - name: Run structural expression QC against pinned public hashes
         run: python -m phiage expression-qc --allow-network --output /tmp/phiage-expression-qc.json
+      - name: Run non-inferential feature and sample similarity QC
+        run: python -m phiage feature-qc --allow-network --output /tmp/phiage-feature-qc.json
+      - name: Summarize feature QC without biological claims
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-feature-qc.json')); print(json.dumps({'schema':x['schema_version'],'feature_rows':x['feature_rows'],'feature_id_syntax_counts':x['feature_id_syntax_counts'],'annotation_tokens':x['annotation_tail_literal_counts_top_12'],'all_sample_zero_rows':x['all_sample_zero_rows'],'informative_feature_rows':x['informative_feature_rows'],'nonzero_similarity_min':x['nonzero_similarity_min'],'nonzero_similarity_median':x['nonzero_similarity_median'],'nonzero_similarity_max':x['nonzero_similarity_max'],'similarity_min':x['similarity_min'],'similarity_median':x['similarity_median'],'similarity_max':x['similarity_max'],'analysis_ready':x['analysis_ready'],'claim_level':x['claim_level']},indent=2))"
       - name: Summarize numerical QC (not biological results)
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-expression-qc.json')); print(json.dumps({'schema':x['schema_version'], 'analysis_ready':x['analysis_ready'], 'tables':{name:{k:v for k,v in row.items() if k != 'sample_aggregate_descriptives'} for name,row in x['tables'].items()}},indent=2))"

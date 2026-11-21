@@ -12,6 +12,7 @@ from .sources import RegistryError, audit_registry
 from .geo_probe import GEOProbeError, probe as geo_probe
 from .crosswalk import CrosswalkError, validate_crosswalk
 from .expression_qc import ExpressionQCError, run_qc as expression_qc
+from .feature_profile import run_profile as feature_profile
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -49,6 +50,12 @@ def main(argv=None) -> int:
     numeric.add_argument("--tpm-receipt", default="data/receipts/GSE307377_tpm_2026-11-21.json")
     numeric.add_argument("--allow-network", action="store_true")
     numeric.add_argument("--output")
+    profile = subs.add_parser("feature-qc", help="explore feature ID syntax and technical sample similarity")
+    profile.add_argument("--mapping", default="data/crosswalks/GSE307377_gsm_to_library.json")
+    profile.add_argument("--geo-receipt", default="data/receipts/GSE307377_geo_probe_2026-11-21.json")
+    profile.add_argument("--tpm-receipt", default="data/receipts/GSE307377_tpm_2026-11-21.json")
+    profile.add_argument("--allow-network", action="store_true")
+    profile.add_argument("--output")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -60,14 +67,16 @@ def main(argv=None) -> int:
         elif args.command == "geo-probe":
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
-        elif args.command in ("crosswalk", "expression-qc"):
+        elif args.command in ("crosswalk", "expression-qc", "feature-qc"):
             mapping = json.loads(Path(args.mapping).read_text(encoding="utf-8"))
             geo = json.loads(Path(args.geo_receipt).read_text(encoding="utf-8"))
             tpm = json.loads(Path(args.tpm_receipt).read_text(encoding="utf-8"))
             if args.command == "crosswalk":
                 data = validate_crosswalk(mapping, geo, tpm)
-            else:
+            elif args.command == "expression-qc":
                 data = expression_qc(mapping, geo, tpm, allow_network=args.allow_network)
+            else:
+                data = feature_profile(mapping, geo, tpm, allow_network=args.allow_network)
         elif args.command == "sources":
             data = audit_registry(json.loads(Path(args.input).read_text(encoding="utf-8")))
         else:

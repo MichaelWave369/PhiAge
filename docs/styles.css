@@ -17,3 +17,5 @@
 .source-card a{font-size:.77rem;color:var(--teal);font-weight:700}
 .source-caveat{font-size:.8rem;color:#d6c4a8;line-height:1.65;border-left:3px solid var(--orange);padding:15px 18px;background:#31291b44;margin-bottom:24px}
 @media(max-width:630px){.source-grid{grid-template-columns:1fr}.source-summary{gap:7px}.source-summary>div{padding:12px}.source-summary strong{font-size:1.3rem}.source-summary span{font-size:.65rem}}
+
+.qc-section{border-top:1px solid var(--border)}.qc-count{font-size:1.25rem;color:var(--ink)}
