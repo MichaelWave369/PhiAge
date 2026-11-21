@@ -64,9 +64,8 @@ class ExpressionQCTests(unittest.TestCase):
         header[0] = "Transcript/RepeatID " + "source command " * 12
         archived = header.copy()
         archived[0] = header[0][:130]
-        text = "	".join(header) + "
-" + "	".join(
-            ["RE_A","chr1","1","100","+","100","2","x"] + ["0"] * 9)
+        text = "\t".join(header) + "\n" + "\t".join(
+            ["RE_A", "chr1", "1", "100", "+", "100", "2", "x"] + ["0"] * 9)
         result = inspect_table(text, archived, kind="raw")
         self.assertTrue(result["structural_numeric_qc_pass"])
 
