@@ -4,7 +4,9 @@ from pathlib import Path
 import re
 import unittest
 
-REC = Path(__file__).resolve().parents[1] / "data" / "receipts" / "GSE307377_geo_probe_2026-11-21.json"
+RECEIPTS = Path(__file__).resolve().parents[1] / "data" / "receipts"
+REC = RECEIPTS / "GSE307377_geo_probe_2026-11-21.json"
+TPM = RECEIPTS / "GSE307377_tpm_2026-11-21.json"
 
 class GEOReceiptTests(unittest.TestCase):
     @classmethod
@@ -37,6 +39,17 @@ class GEOReceiptTests(unittest.TestCase):
             artifact = r[key]
             self.assertRegex(artifact["sha256"], r"^[0-9a-f]{64}$")
             self.assertTrue(artifact["source_url"].startswith("https://ftp.ncbi.nlm.nih.gov/geo/series/"))
+
+    def test_tpm_observation_is_not_a_gene_level_result(self):
+        tpm = json.loads(TPM.read_text(encoding="utf-8"))
+        self.assertFalse(tpm["analysis_ready"])
+        self.assertFalse(tpm["feature_type_validated"])
+        self.assertFalse(tpm["donor_column_crosswalk_verified"])
+        artifact = tpm["normalized_table"]
+        self.assertTrue(artifact["source_url"].endswith("GSE307377_tpm.txt.gz"))
+        self.assertRegex(artifact["sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(artifact["structure"]["column_count"], 17)
+        self.assertEqual(artifact["structure"]["GSM_columns"], 0)
 
     def test_unique_public_sample_catalog(self):
         rows = self.receipt["series_matrix"]["metadata"]["sample_catalog"]

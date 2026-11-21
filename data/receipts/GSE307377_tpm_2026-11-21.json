@@ -1,0 +1,46 @@
+{
+  "receipt_type": "phiage-live-tpm-structure/v0.3",
+  "observation_date_utc": "2026-11-21",
+  "source_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44956449636",
+  "source_ref": "GSE307377",
+  "analysis_ready": false,
+  "research_claim": "NONE: deposited TPM matrix header only",
+  "feature_type_validated": false,
+  "donor_column_crosswalk_verified": false,
+  "normalized_table": {
+    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE307nnn/GSE307377/suppl/GSE307377_tpm.txt.gz",
+    "sha256": "1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad",
+    "compressed_bytes": 1498390,
+    "sample_column_crosswalk_verified": false,
+    "normalization_type_reported": "TPM",
+    "normalization_validated": false,
+    "structure": {
+      "delimiter": "tab",
+      "column_count": 17,
+      "first_column_label": "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_H",
+      "GSM_columns": 0,
+      "column_labels": [
+        "Transcript/RepeatID (cmd=analyzeRepeats.pl rna hg19 -d tags/TM10_CKC7_O_HS_RC_S10 tags/TM11_CKC8_Y_HS_RC_S11 tags/TM12_CKC14_O_HS_",
+        "chr",
+        "start",
+        "end",
+        "strand",
+        "Length",
+        "Copies",
+        "Annotation/Divergence",
+        "tags/TM15_CKC7_O_CTRL_S15 TPM",
+        "tags/TM16_CKC8_Y_CTRL_S16 TPM",
+        "tags/TM17_CKC14_O_CTRL_S17 TPM",
+        "tags/TM18_CKC15_Y_CTRL_S18 TPM",
+        "tags/TM19_CKC16_O_CTRL_S19 TPM",
+        "tags/TM1_CKC3_Y_CTRL_S1 TPM",
+        "tags/TM2_CKC4_Y_CTRL_S2 TPM",
+        "tags/TM3_CKC5_O_CTRL_S3 TPM",
+        "tags/TM4_CKC6_O_CTRL_S4 TPM"
+      ],
+      "table_contents_analysed": false,
+      "note": "Structural inspection only; expression values not analyzed and no donor mapping implied."
+    },
+    "note": "TPM as named by depositor. No independent normalization verification, donor mapping, or age-effect analysis."
+  }
+}

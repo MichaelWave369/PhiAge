@@ -38,3 +38,10 @@ The exact metadata/header receipt from the successful non-blocking CI probe is s
 
 ## TPM discovery
 The official [GSE307377 GEO record](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE307377) also lists `GSE307377_tpm.txt.gz`, a separate deposited processed expression table. Probe its header with `--with-tpm`. TPM values are relative abundance estimates, **not** differential-expression test statistics or an age reversal measurement. The pipeline still refuses to infer which `TM` tag belongs to which GSM accession.
+
+## Live deposited TPM observation (2026-11-21)
+
+The CI probe retrieved `GSE307377_tpm.txt.gz` successfully (1,498,390 compressed bytes; SHA-256 `1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad`). The header has **17 tab-separated columns**, eight annotation fields and nine `TM`-tagged data columns; none uses a GSM accession. The original first column is `Transcript/RepeatID`, so it is not safe to assume the rows are uniquely identified protein-coding genes.
+
+The complete observed table-header receipt is preserved in [`data/receipts/GSE307377_tpm_2026-11-21.json`](../data/receipts/GSE307377_tpm_2026-11-21.json). The raw values were **not** statistically analyzed. A documented feature-ID mapping, normalization audit, donor mapping, and licensing check remain prerequisites.
+
