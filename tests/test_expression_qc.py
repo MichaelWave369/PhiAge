@@ -59,6 +59,17 @@ class ExpressionQCTests(unittest.TestCase):
         with self.assertRaisesRegex(ExpressionQCError, "header"):
             inspect_table(self.fake_text().replace("RE_A", "RE_A"), self.headers[:-1], kind="raw")
 
+    def test_archived_long_header_prefix_supported(self):
+        header = self.headers.copy()
+        header[0] = "Transcript/RepeatID " + "source command " * 12
+        archived = header.copy()
+        archived[0] = header[0][:130]
+        text = "	".join(header) + "
+" + "	".join(
+            ["RE_A","chr1","1","100","+","100","2","x"] + ["0"] * 9)
+        result = inspect_table(text, archived, kind="raw")
+        self.assertTrue(result["structural_numeric_qc_pass"])
+
     def test_wrong_column_count_stops(self):
         text = self.fake_text().replace("\t" + self.headers[-1], "", 1)
         with self.assertRaisesRegex(ExpressionQCError, "header"):

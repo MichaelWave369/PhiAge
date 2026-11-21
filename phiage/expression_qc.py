@@ -25,10 +25,18 @@ def inspect_table(text: str, expected_headers: list[str], *, kind: str) -> dict:
         actual_header = next(reader)
     except StopIteration as exc:
         raise ExpressionQCError("expression table is empty") from exc
-    if actual_header != expected_headers:
-        raise ExpressionQCError("expression header disagrees with archived provenance receipt")
-    if len(actual_header) != 17:
+    if len(actual_header) != 17 or len(expected_headers) != 17:
         raise ExpressionQCError("expected exactly 17 table columns")
+    # The archived inspector intentionally clipped long labels at 130 chars.
+    # The one long command-containing annotation header can be compared by its
+    # pinned prefix; all other headers, especially sample columns, must match.
+    for index, (actual, archived) in enumerate(zip(actual_header, expected_headers)):
+        if index == 0 and len(archived) == 130:
+            match = actual.startswith(archived)
+        else:
+            match = actual == archived
+        if not match:
+            raise ExpressionQCError(f"expression header mismatch at column {index}")
     sample_columns = 9
     samples = [{"column": h, "nonzero_cells": 0, "zero_cells": 0, "total": 0.0,
                 "min": None, "max": None} for h in actual_header[8:]]
