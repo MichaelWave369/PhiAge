@@ -36,3 +36,6 @@ Correlations across the same features in the same cell type may be high even if 
 ## Next analysis gate
 
 Before any confirmatory comparisons, independently establish gene/feature mapping and provenance of the HOMER command, donor-level biological independence and documented culture/batch covariates, reuse terms, and a second independent human cohort. A same-paper reanalysis is not biological replication.
+
+## Robustness improvement (after first live run)
+To avoid overstating similarity caused by shared all-zero transcripts, the report separately computes correlations using only entries with expression in at least one of the nine samples. The original all-feature results remain available for transparency. Both are *descriptive technical quality checks*, not independent scientific replication or age-discrimination validation. Medians use the actual midpoint for 36 sample pairs rather than selecting a single central rank.

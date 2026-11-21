@@ -10,6 +10,7 @@ import csv
 import hashlib
 import math
 import re
+from statistics import median
 
 from .crosswalk import validate_crosswalk
 from .expression_qc import ExpressionQCError, inspect_table
@@ -57,6 +58,10 @@ def inspect_profile(text: str, expected_headers: list[str], crosswalk_audit: dic
     sample_nonzero = [0] * 9
     cross = [[0.0] * 9 for _ in range(9)]
     all_zero = 0
+    informative = 0
+    active_totals = [0.0] * 9
+    active_sq = [0.0] * 9
+    active_cross = [[0.0] * 9 for _ in range(9)]
     for row in reader:
         if not row or all(not c.strip() for c in row):
             continue
@@ -69,8 +74,16 @@ def inspect_profile(text: str, expected_headers: list[str], crosswalk_audit: dic
         annotations[tail[:50]] += 1
         values = [float(value) for value in row[8:]]
         transformed = [math.log1p(value) for value in values]
-        if all(value == 0 for value in values):
+        is_all_zero = all(value == 0 for value in values)
+        if is_all_zero:
             all_zero += 1
+        else:
+            informative += 1
+            for i in range(9):
+                active_totals[i] += transformed[i]
+                active_sq[i] += transformed[i] ** 2
+                for j in range(i + 1):
+                    active_cross[i][j] += transformed[i] * transformed[j]
         for i in range(9):
             sample_totals[i] += transformed[i]
             sample_sq[i] += transformed[i] ** 2
@@ -101,14 +114,20 @@ def inspect_profile(text: str, expected_headers: list[str], crosswalk_audit: dic
                 "correlation": _correlation(
                     n, sample_totals[j], sample_totals[i],
                     sample_sq[j], sample_sq[i], cross[i][j]),
-                "metric": "Pearson correlation of log1p(TPM) across all 27,142 deposited features",
+                "nonzero_feature_correlation": _correlation(
+                    informative, active_totals[j], active_totals[i],
+                    active_sq[j], active_sq[i], active_cross[i][j]),
+                "metric": "Pearson correlation of log1p(TPM) over all vs non-all-zero deposited features",
             })
     defined = [p["correlation"] for p in pairs if p["correlation"] is not None]
+    active_defined = [p["nonzero_feature_correlation"] for p in pairs
+                      if p["nonzero_feature_correlation"] is not None]
     return {
         "schema_version": "phiage-feature-profile/v0.5",
         "accession": "GSE307377",
         "feature_rows": n,
         "all_sample_zero_rows": all_zero,
+        "informative_feature_rows": informative,
         "feature_id_syntax_counts": dict(sorted(patterns.items())),
         "annotation_tail_literal_counts_top_12": [
             {"label": key, "count": count} for key, count in
@@ -117,8 +136,11 @@ def inspect_profile(text: str, expected_headers: list[str], crosswalk_audit: dic
         "per_sample_descriptives": summary,
         "sample_similarity_pairs": pairs,
         "similarity_min": min(defined) if defined else None,
-        "similarity_median": sorted(defined)[len(defined)//2] if defined else None,
+        "similarity_median": round(median(defined), 6) if defined else None,
         "similarity_max": max(defined) if defined else None,
+        "nonzero_similarity_min": min(active_defined) if active_defined else None,
+        "nonzero_similarity_median": round(median(active_defined), 6) if active_defined else None,
+        "nonzero_similarity_max": max(active_defined) if active_defined else None,
         "sample_column_crosswalk_verified": True,
         "feature_semantics_verified": False,
         "donor_independence_verified": False,

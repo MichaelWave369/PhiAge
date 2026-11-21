@@ -45,6 +45,10 @@ class FeatureTests(unittest.TestCase):
         report = inspect_profile(text, self.labels, self.crosswalk)
         self.assertEqual(report["feature_rows"],4)
         self.assertEqual(report["all_sample_zero_rows"],1)
+        self.assertEqual(report["informative_feature_rows"],3)
+        self.assertTrue(all(p["nonzero_feature_correlation"] is None or
+                            -1 <= p["nonzero_feature_correlation"] <= 1
+                            for p in report["sample_similarity_pairs"]))
         self.assertEqual(len(report["per_sample_descriptives"]),9)
         self.assertEqual(len(report["sample_similarity_pairs"]),36)
         self.assertEqual(report["feature_id_syntax_counts"]["RefSeq_transcript_accession_syntax"],2)
@@ -60,6 +64,8 @@ class FeatureTests(unittest.TestCase):
         ])
         report=inspect_profile(text,self.labels,self.crosswalk)
         self.assertTrue(all(p["correlation"] is None for p in report["sample_similarity_pairs"]))
+        self.assertEqual(report["informative_feature_rows"],0)
+        self.assertIsNone(report["nonzero_similarity_median"])
 
     def test_invalid_numeric_refused(self):
         text=self.sample([("NM_1.1","a|b",[float("nan")]+[1]*8)])
