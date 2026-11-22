@@ -68,6 +68,25 @@ class DesignPreflightTests(unittest.TestCase):
         self.assertFalse(r["exploratory_transport_metadata_gate_passed"])
         self.assertFalse(r["training_or_hypothesis_test_performed"])
 
+
+    def test_sparse_shared_age_decade_blocks_even_with_range_overlap(self):
+        primary=[
+            (age, "female" if i%2 else "male", "GPL18573", "Normal", f"P{i}")
+            for i,age in enumerate(([30,40,50]*40))
+        ]
+        transport=[
+            (age, "female", "GPL16791", "Normal", f"T{i}")
+            for i,age in enumerate([30]*3+[40]*8+[50]*2)
+        ]
+        hgps=[(8,"female","GPL18573","HGPS",f"H{i}") for i in range(10)]
+        result=audit_metadata(soft(primary+transport+hgps),PLAN)
+        self.assertEqual(result["source_observed_samples"],143)
+        self.assertEqual(result["excluded_hgps_samples"],10)
+        self.assertEqual(result["shared_decade_transport_count"],13)
+        self.assertEqual(result["sparse_shared_age_decades"],["50-59"])
+        self.assertFalse(result["exploratory_transport_metadata_gate_passed"])
+        self.assertFalse(result["analysis_ready"])
+
     def test_reject_changed_population(self):
         plan=dict(PLAN)
         plan["primary_population"]={"explicit_source_label":"hgps_label_explicit","minimum_age_years":1}
