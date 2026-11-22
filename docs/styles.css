@@ -19,3 +19,5 @@
 @media(max-width:630px){.source-grid{grid-template-columns:1fr}.source-summary{gap:7px}.source-summary>div{padding:12px}.source-summary strong{font-size:1.3rem}.source-summary span{font-size:.65rem}}
 
 .qc-section{border-top:1px solid var(--border)}.qc-count{font-size:1.25rem;color:var(--ink)}
+
+.rep-observations{display:flex;gap:20px;flex-wrap:wrap;margin:24px 0}.rep-observations p{border:1px solid var(--border);background:var(--panel);padding:16px;border-radius:10px;font-size:.8rem;color:var(--muted)}.rep-observations strong{font-size:1.2rem;color:var(--lime)}

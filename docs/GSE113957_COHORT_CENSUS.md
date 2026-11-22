@@ -42,3 +42,11 @@ SOFT is block-oriented (`^SAMPLE = GSM…`), unlike the column-oriented GEO Seri
 The primary SOFT metadata explicitly reports disease codes `Normal` and `HGPS`. A conservative update now recognizes the exact `disease: Normal` label as a **source-assigned control group**, not an independently verified healthy phenotype. Years-and-months formats (for example `2yr3mos` and `6ys11mos`) are retained as fractional years rather than rounded to invented integer ages.
 
 The published FPKM table has eight annotation columns followed by 143 public sample titles. A new check compares the exact public title set from SOFT sample blocks against these source column labels. It refuses duplicates and order-based guesses. Even a perfect name-to-column match **does not verify donor independence, the FPKM quantification model, biological feature harmonization, or data reuse rights**. The `analysis_ready` flag stays false.
+
+## Observed live candidate-source results, 2026-11-22 UTC
+
+A [successful GitHub Actions run](https://github.com/MichaelWave369/PhiAge/actions/runs/44965976209) verified **143 unique GSM sample records** from the source family SOFT. The public source explicitly lists 133 `disease: Normal` and 10 `disease: HGPS`, matching the paper's reported group split. The improved age parser recognized all 143 public age fields, some in years and months, spanning ages 1–96 *across both status groups*.
+
+The separately deposited `GSE113957_fpkm.txt.gz` file contains 151 columns: eight annotation columns and 143 **unique** public sample-title columns. All 143 column names matched the SOFT sample titles exactly, providing a source-backed column name crosswalk without relying on positional assumptions. The gzip SHA-256 values are preserved in [the concise source receipt](../data/receipts/GSE113957_cohort_source_observation_2026-11-22.json).
+
+**Remaining blockers:** the 143 samples have not been independently certified as 143 independent donors, exact source-donor overlap with other studies is unknown, cell-culture and experimental batch confounding remain, the FPKM process and feature harmonization vs GSE307377 remain unresolved, licensing/redistribution review is not complete, and no aging hypothesis has been tested. Source labels do not equal independent medical validation.
