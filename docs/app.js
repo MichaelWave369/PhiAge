@@ -244,4 +244,41 @@ async function setupReplicationQuality(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();});
+
+async function setupDesignPreflight(){
+  try{
+    const res=await fetch("./design_preflight_summary.json");
+    if(!res.ok)throw Error("source receipt unavailable");
+    const d=await res.json();
+    if(d.receipt_type!=="phiage-source-observed-platform-preflight/v0.8"||
+       d.analysis_ready!==false||d.training_or_hypothesis_test_performed!==false||
+       d.donor_independence_verified!==false||
+       d.eligible_adult_healthy.sample_count!==
+         d.primary_platform_healthy_adult.sample_count+d.transport_platform_healthy_adult.sample_count)
+      throw Error("unsafe or inconsistent design receipt");
+    $("design-adults").textContent=String(d.eligible_adult_healthy.sample_count);
+    $("design-primary").textContent=String(d.primary_platform_healthy_adult.sample_count);
+    $("design-transport").textContent=String(d.transport_platform_healthy_adult.sample_count);
+    const host=$("design-decades");host.replaceChildren();
+    for(const [decade,counts] of Object.entries(d.shared_decade_sample_counts)){
+      const item=document.createElement("div");item.className="design-decade";
+      const title=document.createElement("strong");title.textContent=decade;
+      const details=document.createElement("span");
+      details.textContent="GPL18573: "+counts.primary_count+" · GPL16791: "+counts.transport_count;
+      item.append(title,details);
+      if(d.sparse_shared_age_decades.includes(decade)){
+        const warning=document.createElement("em");warning.textContent="Sparse";
+        item.append(warning);
+      }
+      host.append(item);
+    }
+    $("design-gate-status").textContent=d.exploratory_transport_metadata_gate_passed?
+       "Minimum descriptive support observed, but biological analysis remains blocked.":
+       "Design feasibility blocked: "+d.transport_metadata_gate_blockers.join("; ")+". No model trained.";
+  }catch(error){
+    console.error("Design preflight receipt:",error);
+    $("design-gate-status").textContent="Design receipt unavailable; no research readiness is claimed.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();});

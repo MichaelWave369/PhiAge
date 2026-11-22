@@ -28,3 +28,9 @@
 .rep-track{height:11px;background:#27364a;border-radius:16px;overflow:hidden;margin:24px 0 8px}
 .rep-fill{height:100%;width:0;background:var(--teal);border-radius:16px;transition:width 700ms ease}
 .rep-v07 .source-detail{margin:12px 0;color:var(--muted)}
+
+.design-decade{display:flex;gap:16px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding:12px 6px}
+.design-decade strong{font-size:.9rem}
+.design-decade span{font-size:.8rem;color:var(--muted)}
+.design-decade em{font-size:.75rem;color:var(--orange);font-style:normal}
+@media(max-width:550px){.design-decade{flex-wrap:wrap;gap:6px}}
