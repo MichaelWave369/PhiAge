@@ -130,3 +130,20 @@ jobs:
       - name: Assert experiment remains blocked from age-effect inference
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-design-preflight.json')); assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['training_or_hypothesis_test_performed'] is False and x['claim_level']=='DESIGN_FEASIBILITY_ONLY'; print(json.dumps(x,indent=2))"
+
+  live-common-support:
+    # Informational public GEO metadata only. Never enables age modeling.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan pinned common age and sex support in public GSE113957 SOFT
+        run: python -m phiage common-support --allow-network --output /tmp/phiage-common-support.json
+      - name: Assert no biological effect or clinical readiness claims
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-common-support.json')); assert x['analysis_ready'] is False and x['age_effect_tested'] is False and x['sample_matching_performed'] is False and x['donor_independence_verified'] is False and x['claim_level']=='COMMON_SUPPORT_METADATA_AUDIT_ONLY'; print(json.dumps(x,indent=2))"

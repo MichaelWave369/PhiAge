@@ -17,6 +17,7 @@ from .cohort_probe import CohortProbeError, probe_candidate as cohort_probe
 from .replication_qc import ReplicationQCError, run_replication_qc
 from .feature_overlap import run_overlap
 from .design_preflight import run_preflight
+from .common_support import run_common_support
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -81,6 +82,12 @@ def main(argv=None) -> int:
     design.add_argument("--overlap-receipt", default="data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json")
     design.add_argument("--allow-network", action="store_true")
     design.add_argument("--output")
+    support = subs.add_parser("common-support", help="pinned GSE113957 age 30-49 sex-by-decade metadata audit")
+    support.add_argument("--plan", default="data/design/EXP001_common_support_v09.json")
+    support.add_argument("--source-receipt", default="data/receipts/GSE113957_cohort_source_observation_2026-11-22.json")
+    support.add_argument("--overlap-receipt", default="data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json")
+    support.add_argument("--allow-network", action="store_true")
+    support.add_argument("--output")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -92,6 +99,11 @@ def main(argv=None) -> int:
         elif args.command == "geo-probe":
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
+        elif args.command == "common-support":
+            plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
+            source = json.loads(Path(args.source_receipt).read_text(encoding="utf-8"))
+            overlap = json.loads(Path(args.overlap_receipt).read_text(encoding="utf-8"))
+            data = run_common_support(plan, source, overlap, allow_network=args.allow_network)
         elif args.command == "design-preflight":
             plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
             source = json.loads(Path(args.source_receipt).read_text(encoding="utf-8"))
