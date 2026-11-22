@@ -60,6 +60,20 @@ class CohortProbeTests(unittest.TestCase):
         result = summarize_matrix(altered)
         self.assertEqual(result["observed_sample_label_counts"]["unknown"], 1)
 
+
+    def test_normal_disease_label_and_month_precision(self):
+        text = SYNTHETIC.replace('"disease: healthy"', '"disease: Normal"')
+        text = text.replace('"age: 8"', '"age: 6ys11mos"')
+        result = summarize_matrix(text)
+        self.assertEqual(result["observed_sample_label_counts"]["healthy_label_explicit"], 1)
+        self.assertEqual(result["parsed_sample_age_count"], 3)
+        self.assertAlmostEqual(result["parsed_age_min"], 6 + 11/12, places=4)
+
+    def test_invalid_months_are_rejected(self):
+        text = SYNTHETIC.replace('"age: 8"', '"age: 5yr14mos"')
+        with self.assertRaises(CohortProbeError):
+            summarize_matrix(text)
+
     def test_conflicting_status_not_silently_resolved(self):
         altered = SYNTHETIC.replace('"disease: HGPS"', '"disease: healthy, HGPS"')
         result = summarize_matrix(altered)
