@@ -94,6 +94,17 @@ def audit_metadata(soft_text: str, plan: dict) -> dict:
     has_range_overlap=bool(p and t and overlap_lower<=overlap_upper)
     overlapping_decade_samples_primary=sum(int(s["age"])//10 in common_decades for s in p)
     overlapping_decade_samples_secondary=sum(int(s["age"])//10 in common_decades for s in t)
+    shared_decade_support = {
+        f"{decade*10}-{decade*10+9}": {
+            "primary_count": sum(int(s["age"])//10 == decade for s in p),
+            "transport_count": sum(int(s["age"])//10 == decade for s in t),
+        }
+        for decade in sorted(common_decades)
+    }
+    sparse_shared_decades = [
+        decade for decade, cells in shared_decade_support.items()
+        if min(cells["primary_count"], cells["transport_count"]) < 3
+    ]
     # All statuses are strictly depositor labels, not independent diagnoses.
     deficits=[]
     if total!=143 or disease_count["healthy_label_explicit"]!=133 or disease_count["hgps_label_explicit"]!=10:
@@ -107,6 +118,8 @@ def audit_metadata(soft_text: str, plan: dict) -> dict:
         deficits.append("Fewer than two age decades are observed on both platforms")
     if overlapping_decade_samples_secondary<10:
         deficits.append("Fewer than ten secondary-platform adult profiles in shared age decades")
+    if sparse_shared_decades:
+        deficits.append("Shared age-decade platform strata with fewer than three samples per platform")
     result={
         "schema_version":SCHEMA,
         "source":"GSE113957",
@@ -127,6 +140,9 @@ def audit_metadata(soft_text: str, plan: dict) -> dict:
         "primary_platform_healthy_adult":_strata_age_summary(p),
         "transport_platform_healthy_adult":_strata_age_summary(t),
         "shared_age_decades":[f"{x*10}-{x*10+9}" for x in sorted(common_decades)],
+        "shared_decade_sample_counts":shared_decade_support,
+        "sparse_shared_age_decades":sparse_shared_decades,
+        "minimum_sample_count_per_shared_platform_decade":3,
         "shared_decade_primary_count":overlapping_decade_samples_primary,
         "shared_decade_transport_count":overlapping_decade_samples_secondary,
         "age_range_intersection_years":[overlap_lower,overlap_upper] if has_range_overlap else None,

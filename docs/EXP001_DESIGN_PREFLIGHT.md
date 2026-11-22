@@ -35,3 +35,5 @@ This is an auditable pre-analysis **design draft**, not an externally preregiste
 **Important:** Passing a *metadata* feasibility check does not open the biological analysis gate. All sample and expression analysis remains read-only until evidence and review are sufficient.
 
 Run \`python -m phiage design-preflight --allow-network --output design-preflight.json\`. The command fetches only the exact pinned public source SOFT gzip and emits aggregate results. The frozen contract lives at \`data/design/EXP001_frozen_preflight_v08.json\`.
+
+**Additional conservative gate:** every decade shared by both platforms must contain at least three public Normal-labeled adult samples on each platform. This is only a descriptive support threshold, not an assertion of statistical power. A sparse decade blocks the exploratory transport metadata gate; an approved model would still require donor identity, confounding, and quantification review.
