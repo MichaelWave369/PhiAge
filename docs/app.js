@@ -367,4 +367,47 @@ async function setupProvenanceGate(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();setupCommonSupport();setupProvenanceGate();});
+
+async function setupSourceEvidenceReview(){
+  try{
+    const [reviewRes,suppRes]=await Promise.all([
+      fetch("./source_review_summary.json"),
+      fetch("./supplement_structure_summary.json")
+    ]);
+    if(!reviewRes.ok||!suppRes.ok)throw Error("source evidence receipts missing");
+    const r=await reviewRes.json(),s=await suppRes.json();
+    if(r.schema_version!=="phiage-exp001-reviewed-provenance-summary/v1.1"||
+       r.claim_level!=="RESEARCH_PROVENANCE_REVIEW_ONLY"||
+       r.analysis_ready!==false||r.donor_independence_verified!==false||
+       r.linked_supplement_sample_level_join_verified!==false||
+       r.blocked_review_gate_count!==r.required_review_gate_count||
+       r.original_publisher_supplement_docx_sha256!==s.source_docx_sha256||
+       s.table_to_gsm_join_verified!==false||s.analysis_ready!==false)
+      throw Error("source review integrity gate failed");
+    $("review-sources").textContent=String(r.cited_original_source_count);
+    $("review-claims").textContent=String(r.scoped_evidence_statement_count);
+    $("review-gates").textContent=String(r.blocked_review_gate_count);
+    $("review-supplement-status").textContent=
+      "Publisher DOCX SHA-256 verified · "+
+      String(s.word_paragraph_count)+" nonempty paragraphs · "+
+      String(s.word_table_count)+" Word table · "+
+      "S2/S3 captions detected. Per-sample linkage NOT verified.";
+    const host=$("review-questions");host.replaceChildren();
+    for(const gate of r.blocked_gates){
+      const row=document.createElement("div");row.className="review-gate";
+      const heading=document.createElement("strong");
+      heading.textContent=gate.id.replaceAll("_"," ");
+      const detail=document.createElement("span");
+      detail.textContent=gate.reason;
+      const status=document.createElement("em");
+      status.textContent="Blocked";
+      row.append(heading,detail,status);host.append(row);
+    }
+  }catch(error){
+    console.error("Source evidence review:",error);
+    $("review-supplement-status").textContent="Source review receipts unavailable. Evidence gates remain blocked.";
+    $("review-questions").textContent="Source-backed evidence is not currently displayed.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();setupCommonSupport();setupProvenanceGate();setupSourceEvidenceReview();});

@@ -37,3 +37,9 @@ An **optional** \`python -m phiage supplement-probe --allow-network\` downloads 
 8. Obtain an externally reviewable, leakage-aware, predeclared statistical plan before age effect modeling.
 
 No machine-readable \`analysis_ready:true\` can be produced by v1.1. A passing literature metadata review is not independent biological replication or a medical result.
+
+## Original publisher DOCX structural checkpoint (22 November 2026 UTC)
+
+The original Springer supplementary DOCX was downloaded successfully by [GitHub Actions run 44995236689](https://github.com/MichaelWave369/PhiAge/actions/runs/44995236689). Its observed 2,440,808 bytes yielded SHA-256 c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94. The bounded Word XML parser counted 52 nonempty paragraphs, one native Word table with 11 rows, and mentions of Tables S2/S3. **These are document-structure observations only.** A table can be embedded as text or an image rather than a native Word table; no GSM-to-culture row mapping has been demonstrated.
+
+The [archived publisher receipt](../data/receipts/Fleischer2018_supplement_structure_2026-11-22.json) is tied to the [review summary](../data/receipts/EXP001_source_review_summary_2026-11-22.json). The new review validator rejects mismatched publisher fingerprints and all attempts to promote a source-structure observation to person-level evidence. Eight review gates remain blocked.

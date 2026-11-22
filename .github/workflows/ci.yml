@@ -55,6 +55,9 @@ jobs:
       - name: Verify publisher supplemental source checksum and nonclinical flags
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/Fleischer2018_supplement_structure_2026-11-22.json'); d=json.loads(p.read_text()); assert d['source_docx_sha256']=='c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94'; assert d['table_to_gsm_join_verified'] is False and d['analysis_ready'] is False and d['supplement_sample_level_values_released'] is False; assert p.read_bytes()==Path('docs/supplement_structure_summary.json').read_bytes()"
+      - name: Check v1.1 published review summary matches frozen original sources
+        run: |
+          python -c "import json; from pathlib import Path; from phiage.review_ledger import audit_review; a=json.loads(Path('data/evidence/EXP001_provenance_review_v11.json').read_text()); b=json.loads(Path('data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json').read_text()); c=json.loads(Path('data/receipts/Fleischer2018_supplement_structure_2026-11-22.json').read_text()); p=Path('data/receipts/EXP001_source_review_summary_2026-11-22.json'); assert audit_review(a,b,c)==json.loads(p.read_text()); assert p.read_bytes()==Path('docs/source_review_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python

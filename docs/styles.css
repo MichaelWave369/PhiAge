@@ -43,3 +43,5 @@
 .provenance-stat{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;padding:14px 6px;border-bottom:1px solid var(--border)}
 .provenance-stat strong{font-size:.9rem}
 .provenance-stat span{font-size:.78rem;color:var(--muted)}
+
+.review-gate{display:grid;grid-template-columns:minmax(100px,1fr) minmax(180px,2fr) auto;gap:12px;align-items:start;border-bottom:1px solid var(--border);padding:12px 5px}.review-gate strong{text-transform:capitalize;font-size:.83rem}.review-gate span{font-size:.78rem;color:var(--muted)}.review-gate em{color:var(--orange);font-size:.74rem;font-style:normal}@media(max-width:640px){.review-gate{grid-template-columns:1fr}.review-gate em{justify-self:start}}
