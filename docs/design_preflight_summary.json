@@ -1,0 +1,146 @@
+{
+  "receipt_type": "phiage-source-observed-platform-preflight/v0.8",
+  "observed_utc_date": "2026-11-22",
+  "source_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44976453778",
+  "source_commit_sha": "29175c1667d8cca8261f025f87970883ed8de7c5",
+  "source_note": "Aggregated public NCBI GEO SOFT metadata, SHA-256 verified, no individual participant rows or model training.",
+  "schema_version": "phiage-exp001-design-preflight/v0.8",
+  "source": "GSE113957",
+  "source_observed_samples": 143,
+  "depositor_label_counts": {
+    "healthy_label_explicit": 133,
+    "hgps_label_explicit": 10
+  },
+  "unparseable_age_samples": 0,
+  "source_cell_id_duplicate_label_excess": 0,
+  "source_cell_id_missing": 0,
+  "source_platform_missing": 0,
+  "primary_target": "descriptive platform-aware healthy adult design feasibility only",
+  "target_population_source_label": "Normal (depositor-reported), not clinically verified",
+  "adult_minimum_age_years": 20,
+  "excluded_hgps_samples": 10,
+  "healthy_all_ages": {
+    "sample_count": 133,
+    "age_min_years": 1,
+    "age_max_years": 96,
+    "ages_per_decade": {
+      "0-9": 12,
+      "10-19": 14,
+      "20-29": 17,
+      "30-39": 14,
+      "40-49": 14,
+      "50-59": 6,
+      "60-69": 19,
+      "70-79": 4,
+      "80-89": 26,
+      "90-99": 7
+    },
+    "male_samples": 99,
+    "female_samples": 34,
+    "sex_missing_or_unrecognized_samples": 0
+  },
+  "eligible_adult_healthy": {
+    "sample_count": 107,
+    "age_min_years": 20,
+    "age_max_years": 96,
+    "ages_per_decade": {
+      "20-29": 17,
+      "30-39": 14,
+      "40-49": 14,
+      "50-59": 6,
+      "60-69": 19,
+      "70-79": 4,
+      "80-89": 26,
+      "90-99": 7
+    },
+    "male_samples": 79,
+    "female_samples": 28,
+    "sex_missing_or_unrecognized_samples": 0
+  },
+  "primary_platform": "GPL18573",
+  "transport_platform": "GPL16791",
+  "primary_platform_healthy_adult": {
+    "sample_count": 94,
+    "age_min_years": 20,
+    "age_max_years": 96,
+    "ages_per_decade": {
+      "20-29": 17,
+      "30-39": 11,
+      "40-49": 6,
+      "50-59": 4,
+      "60-69": 19,
+      "70-79": 4,
+      "80-89": 26,
+      "90-99": 7
+    },
+    "male_samples": 71,
+    "female_samples": 23,
+    "sex_missing_or_unrecognized_samples": 0
+  },
+  "transport_platform_healthy_adult": {
+    "sample_count": 13,
+    "age_min_years": 30,
+    "age_max_years": 50,
+    "ages_per_decade": {
+      "30-39": 3,
+      "40-49": 8,
+      "50-59": 2
+    },
+    "male_samples": 8,
+    "female_samples": 5,
+    "sex_missing_or_unrecognized_samples": 0
+  },
+  "shared_age_decades": [
+    "30-39",
+    "40-49",
+    "50-59"
+  ],
+  "shared_decade_sample_counts": {
+    "30-39": {
+      "primary_count": 11,
+      "transport_count": 3
+    },
+    "40-49": {
+      "primary_count": 6,
+      "transport_count": 8
+    },
+    "50-59": {
+      "primary_count": 4,
+      "transport_count": 2
+    }
+  },
+  "sparse_shared_age_decades": [
+    "50-59"
+  ],
+  "minimum_sample_count_per_shared_platform_decade": 3,
+  "shared_decade_primary_count": 21,
+  "shared_decade_transport_count": 13,
+  "age_range_intersection_years": [
+    30,
+    50
+  ],
+  "exploratory_transport_metadata_gate_passed": false,
+  "transport_metadata_gate_blockers": [
+    "Shared age-decade platform strata with fewer than three samples per platform"
+  ],
+  "negative_controls_planned": [
+    "Age labels shuffled within platform and sex strata before any fitting, with deterministic seed",
+    "Platform-only and sex-only covariate baseline before expression models",
+    "Zero-expression and random feature baselines",
+    "Leave-one-age-decade-out sensitivity only if sample counts allow",
+    "Reject any held-out assessment with cell-id, donor or cohort leakage"
+  ],
+  "donor_independence_verified": false,
+  "FPKM_TPM_harmonization_verified": false,
+  "sample_preparation_and_batch_confounding_excluded": false,
+  "training_or_hypothesis_test_performed": false,
+  "replication_validated": false,
+  "analysis_ready": false,
+  "claim_level": "DESIGN_FEASIBILITY_ONLY",
+  "warning": "No individual-level output; metadata age/platform overlap does not establish model transferability or causal aging biology.",
+  "frozen_plan_sha256": "6d66a7e9f221de8110ee94d66f925487176cd1900196d852e5aa83ddd44c6d8d",
+  "source_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "source_fpkm_sha256": "999c9d720ff7f0dfe59675f347803d3a0181231313aace2f8406f08528aa123d",
+  "source_tpm_sha256": "1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad",
+  "exact_matching_refseq_label_count": 24560
+}

@@ -37,3 +37,11 @@ This is an auditable pre-analysis **design draft**, not an externally preregiste
 Run \`python -m phiage design-preflight --allow-network --output design-preflight.json\`. The command fetches only the exact pinned public source SOFT gzip and emits aggregate results. The frozen contract lives at \`data/design/EXP001_frozen_preflight_v08.json\`.
 
 **Additional conservative gate:** every decade shared by both platforms must contain at least three public Normal-labeled adult samples on each platform. This is only a descriptive support threshold, not an assertion of statistical power. A sparse decade blocks the exploratory transport metadata gate; an approved model would still require donor identity, confounding, and quantification review.
+
+## First live source-backed feasibility observation (2026-11-22 UTC)
+
+From the pinned NCBI GEO SOFT file, there are 143 GSMs. Applying the declared **Normal source label and age ≥20** yields **107 adults**, 94 on GPL18573 and 13 on GPL16791. All HGPS samples are excluded. Age ranges overlap **30–50 years**. Shared age-decade counts (GPL18573 / GPL16791): **30–39 = 11/3**, **40–49 = 6/8**, **50–59 = 4/2**.
+
+The 50–59 bin has only two GPL16791 profiles, below the declared descriptive minimum of three per platform per shared decade. Therefore **`exploratory_transport_metadata_gate_passed:false`**. This is a feasibility gate, **not** a statistical power calculation and not a negative biological finding.
+
+The live [GitHub Actions run](https://github.com/MichaelWave369/PhiAge/actions/runs/44976453778) verified source checksum, frozen design hash and cohort composition. Its aggregate [JSON receipt](../data/receipts/GSE113957_design_preflight_2026-11-22.json) is preserved, with `analysis_ready:false`, `training_or_hypothesis_test_performed:false`, and `donor_independence_verified:false`.
