@@ -96,7 +96,7 @@ def compare_transcripts(fpkm: str, tpm: str) -> dict:
 
 def run_overlap(primary: dict, older: dict, *, allow_network: bool = False) -> dict:
     require(primary.get("source") == "GSE113957", "wrong primary cohort receipt")
-    require(older.get("accession") == "GSE307377", "wrong secondary cohort receipt")
+    require(older.get("source_ref") == "GSE307377", "wrong secondary cohort receipt")
     if not allow_network:
         raise ReplicationQCError("network disabled; supply --allow-network")
     urls = [
