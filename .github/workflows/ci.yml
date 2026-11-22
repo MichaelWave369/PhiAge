@@ -110,3 +110,20 @@ jobs:
       - name: Report aggregate technical checks only
         run: |
           python -c "import json; d=json.load(open('/tmp/phiage-replication-qc.json')); assert d['analysis_ready'] is False and d['age_association_tested'] is False and d['donor_independence_verified'] is False and d['claim_level']=='TECHNICAL_REPLICATION_READINESS_QC_ONLY'; print(json.dumps(d,indent=2))"
+
+  live-design-preflight:
+    # Informational source-metadata check, no models and no clinical conclusions.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run hash-pinned public cohort design feasibility audit
+        run: python -m phiage design-preflight --allow-network --output /tmp/phiage-design-preflight.json
+      - name: Assert experiment remains blocked from age-effect inference
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-design-preflight.json')); assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['training_or_hypothesis_test_performed'] is False and x['claim_level']=='DESIGN_FEASIBILITY_ONLY'; print(json.dumps(x,indent=2))"

@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.7 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.8 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -37,6 +37,8 @@ python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output coh
 python -m phiage replication-qc --allow-network --output replication-qc.json
 # Exact RefSeq identifier overlap census (not an expression model):
 python -m phiage transcript-overlap --allow-network --output transcript-overlap.json
+# Frozen study population/platform feasibility only, no fitting:
+python -m phiage design-preflight --allow-network --output design-preflight.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -71,6 +73,7 @@ Currently implemented:
 - **GSE113957 source-census v0.6:** audits public GSM count, age-field parsing, age bins, and explicit/unknown disease labels from official GEO Series Matrix. The 133+10 split from the paper remains a *reported claim* until verified against source metadata. Donor independence, data reuse, FPKM crosswalk, and study harmonization remain blocked.
 - **GSE113957 v0.7 independent-cohort readiness QC:** source-verified **cell-line ID label duplication** census and platform/sex/group distribution, plus a read-only numerical scan of the published 143-column FPKM matrix. Exact gzip SHA-256 match enforced. Donor independence, normalization, study overlap and any biological or clinical age effect remain **unverified**.
 - **Cross-cohort accession-only comparison:** audited exact RefSeq transcript ID strings, version-unaware ID overlap and order using *pinned* GSE113957 FPKM and GSE307377 TPM. Identical accession strings are not evidence of comparable quantification or replicated age associations.
+- **Frozen design preflight v0.8:** deterministic source-pinned audit of healthy adults (source label "Normal", age ≥20), explicit HGPS exclusion, age-decade overlap, donor-label duplication and platform shift feasibility. No statistical training or biological age-effect tests run.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.
