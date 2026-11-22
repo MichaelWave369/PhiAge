@@ -65,7 +65,7 @@ class CohortProbeTests(unittest.TestCase):
         self.assertEqual(result["observed_sample_label_counts"]["conflicting"], 1)
 
     def test_metadata_cardinality_rejected(self):
-        altered = SYNTHETIC.replace('"disease: unknown"', '')
+        altered = SYNTHETIC.replace('\t"disease: unknown"', '')
         with self.assertRaisesRegex(Exception, "cardinality"):
             summarize_matrix(altered)
 
