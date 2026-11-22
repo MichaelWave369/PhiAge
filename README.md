@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.6 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.7 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -31,6 +31,8 @@ python -m phiage expression-qc --allow-network --output expression-qc.json
 python -m phiage feature-qc --allow-network --output feature-qc.json
 # Candidate *metadata only*, no disease or age-effect inference:
 python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
+# Full second-cohort FPKM numerical and metadata QC; never claims donor independence:
+python -m phiage replication-qc --allow-network --output replication-qc.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -63,6 +65,7 @@ Currently implemented:
 - **Read-only aggregate expression QC:** exact SHA-256 pinning of real NCBI GEO count/TPM files; table shape, missing and invalid numeric cells, feature-ID duplication and descriptive totals, without differential expression or uploading rows.
 - **Exploratory feature/similarity QC v0.5:** classify uncurated transcript identifier *syntax*, count literal annotation tags, measure sample zero fractions, and compute log1p(TPM) sample correlations, with no age-group hypothesis testing or medical claims.
 - **GSE113957 source-census v0.6:** audits public GSM count, age-field parsing, age bins, and explicit/unknown disease labels from official GEO Series Matrix. The 133+10 split from the paper remains a *reported claim* until verified against source metadata. Donor independence, data reuse, FPKM crosswalk, and study harmonization remain blocked.
+- **GSE113957 v0.7 independent-cohort readiness QC:** source-verified **cell-line ID label duplication** census and platform/sex/group distribution, plus a read-only numerical scan of the published 143-column FPKM matrix. Exact gzip SHA-256 match enforced. Donor independence, normalization, study overlap and any biological or clinical age effect remain **unverified**.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.
