@@ -48,6 +48,16 @@ jobs:
       - name: Verify source-backed donor identity receipt remains blocked
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json'); x=json.loads(p.read_text()); a,b=x['source_cohorts']; assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['cross_cohort_same_person_linkage_evaluable'] is False; assert a['geo_sample_records']==143 and b['geo_sample_records']==9; assert a['identity']['cell_id_field_present']==143 and b['identity']['cell_line_description_field_present']==9; assert a['identity']['subject_identifier_field_present']==0 and b['identity']['subject_identifier_field_present']==0; assert p.read_bytes()==Path('docs/provenance_gate_summary.json').read_bytes()"
+      - name: Verify publication and biobank review against pinned source audit
+        run: |
+          python -m phiage review-provenance --output /tmp/phiage-review-v11.json
+          python -c "import json; x=json.load(open('/tmp/phiage-review-v11.json')); assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['blocked_review_gate_count']==8 and x['explicit_subject_id_field_count']==0 and x['geo_sample_level_passage_field_count']==0"
+      - name: Verify publisher supplemental source checksum and nonclinical flags
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/Fleischer2018_supplement_structure_2026-11-22.json'); d=json.loads(p.read_text()); assert d['source_docx_sha256']=='c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94'; assert d['table_to_gsm_join_verified'] is False and d['analysis_ready'] is False and d['supplement_sample_level_values_released'] is False; assert p.read_bytes()==Path('docs/supplement_structure_summary.json').read_bytes()"
+      - name: Check v1.1 published review summary matches frozen original sources
+        run: |
+          python -c "import json; from pathlib import Path; from phiage.review_ledger import audit_review; a=json.loads(Path('data/evidence/EXP001_provenance_review_v11.json').read_text()); b=json.loads(Path('data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json').read_text()); c=json.loads(Path('data/receipts/Fleischer2018_supplement_structure_2026-11-22.json').read_text()); p=Path('data/receipts/EXP001_source_review_summary_2026-11-22.json'); assert audit_review(a,b,c)==json.loads(p.read_text()); assert p.read_bytes()==Path('docs/source_review_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python
@@ -170,3 +180,21 @@ jobs:
       - name: Enforce blocked donor linkage and no clinical claim
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-provenance-gate.json')); assert x['analysis_ready'] is False and x['age_effects_tested'] is False and x['donor_independence_verified'] is False and x['cross_cohort_same_person_linkage_evaluable'] is False and x['claim_level']=='SOURCE_PROVENANCE_GAPS_ONLY'; print(json.dumps(x,indent=2))"
+
+  live-original-supplement:
+    # Optional original publisher download, technical structure only.
+    # Network errors are evidence availability issues, not code failures.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect original Fleischer supplementary DOCX without exporting sample rows
+        run: python -m phiage supplement-probe --allow-network --output /tmp/phiage-fleischer-supplement.json
+      - name: Enforce absence of human donor and expression claims
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-fleischer-supplement.json')); assert x['analysis_ready'] is False and x['table_to_gsm_join_verified'] is False and x['supplement_sample_level_values_released'] is False and x['claim_level']=='SUPPLEMENT_STRUCTURE_ONLY'; print(json.dumps(x,indent=2))"

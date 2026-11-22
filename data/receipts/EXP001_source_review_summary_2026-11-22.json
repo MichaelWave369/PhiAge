@@ -1,0 +1,84 @@
+{
+  "schema_version": "phiage-exp001-reviewed-provenance-summary/v1.1",
+  "review_id": "EXP001-PROVENANCE-AND-REUSE-REVIEW",
+  "cohorts": [
+    "GSE113957",
+    "GSE307377"
+  ],
+  "cohort_sample_counts": {
+    "GSE113957": 143,
+    "GSE307377": 9
+  },
+  "explicit_subject_id_field_count": 0,
+  "geo_sample_level_passage_field_count": 0,
+  "cited_original_source_count": 8,
+  "scoped_evidence_statement_count": 7,
+  "evidence_class_counts": {
+    "policy_context_only": 1,
+    "publication_reported": 3,
+    "source_observed": 2,
+    "supplement_structure_observed": 1
+  },
+  "required_review_gate_count": 8,
+  "blocked_review_gate_count": 8,
+  "blocked_gates": [
+    {
+      "id": "person_level_donor_linkage",
+      "reason": "Verified pseudonymous person-level study-to-cell-line mapping with ethical handling",
+      "next_review_question": "Do original study or repository records provide permitted donor-to-cell-line mappings that verify independence without exposing identities?"
+    },
+    {
+      "id": "cross_study_overlap_exclusion",
+      "reason": "Documented controlled comparison of cohort donors or lineage provenance under appropriate authority",
+      "next_review_question": "Can the sources confirm whether the original Coriell/PRF lines intersect SD-NSC-derived donor lines, without attempting personal reidentification?"
+    },
+    {
+      "id": "culture_history_crosswalk",
+      "reason": "Sample-level verified population-doubling or passage variable with exact GSM/cell-line linkage",
+      "next_review_question": "Can supplementary Tables S2/S3 be safely inspected and linked to publicly named cell lines, keeping doubling and passage distinct?"
+    },
+    {
+      "id": "second_cohort_culture_review",
+      "reason": "Methods and supplementary table audit for GSE307377's nine lines",
+      "next_review_question": "Does the original study's Supplementary Table 1 include approved passage or lineage fields for these nine samples?"
+    },
+    {
+      "id": "public_expression_reuse_scope",
+      "reason": "Separate original GEO/public-data terms from Coriell MTA and institutional requirements",
+      "next_review_question": "Which restrictions apply to material samples versus already-deposited expression values, annotations and reproduced study tables?"
+    },
+    {
+      "id": "batch_and_platform_comparability",
+      "reason": "Platform, library prep, culture, passage, RNA extraction and processing audit",
+      "next_review_question": "Can a covariate-complete, appropriately balanced source-only design be specified before evaluating any expression-age relationship?"
+    },
+    {
+      "id": "feature_and_scale_harmonization",
+      "reason": "Versioned annotation equivalence and a predeclared FPKM/TPM transformation policy",
+      "next_review_question": "Are shared RefSeq identifiers biologically comparable and what transformations would avoid treating FPKM as TPM?"
+    },
+    {
+      "id": "statistical_analysis_authorization",
+      "reason": "Independent written protocol review and leakage-aware pre-registration or clear exploratory labeling",
+      "next_review_question": "Is there a reviewed plan before fitting any age association or reporting an aging intervention?"
+    }
+  ],
+  "original_publisher_supplement_docx_sha256": "c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94",
+  "original_publisher_supplement_table_caption_flags": {
+    "table_s2_mentioned": true,
+    "table_s3_mentioned": true
+  },
+  "original_publisher_supplement_tables_structure_checked": true,
+  "linked_supplement_sample_level_join_verified": false,
+  "external_human_subject_reidentification_performed": false,
+  "cross_cohort_person_identity_verified": false,
+  "culture_history_source_granularity": "published study-level means and source-verified supplementary structure, but no verified GSM-to-culture row join",
+  "Coriell_policy_scope": "biomaterial distribution only; public GEO expression-data reuse must be reviewed separately",
+  "donor_independence_verified": false,
+  "cross_cohort_overlap_excluded": false,
+  "expression_harmonized": false,
+  "age_effects_tested": false,
+  "analysis_ready": false,
+  "claim_level": "RESEARCH_PROVENANCE_REVIEW_ONLY",
+  "note": "Citations establish provenance leads, not an approved human donor linkage or experimental result."
+}

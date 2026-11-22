@@ -1,0 +1,273 @@
+{
+  "schema_version": "phiage-exp001-provenance-review-ledger/v1.1",
+  "review_id": "EXP001-PROVENANCE-AND-REUSE-REVIEW",
+  "evidence_cutoff_utc": "2026-11-22",
+  "purpose": "Separate original GEO sample-level observations, peer-reviewed study-level methods, related repository policies and uninspected supplements before any donor independence or age-effect claims.",
+  "cohort_accessions": [
+    "GSE113957",
+    "GSE307377"
+  ],
+  "source_snapshots": {
+    "GSE113957": {
+      "samples": 143,
+      "cell_id_fields": 143,
+      "donor_id_fields": 0,
+      "sample_level_passage_fields": 0,
+      "source_gzip_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4"
+    },
+    "GSE307377": {
+      "samples": 9,
+      "cell_line_description_fields": 9,
+      "donor_id_fields": 0,
+      "sample_level_passage_fields": 0,
+      "source_gzip_sha256": "0410e57d6a6b7dbdfbaeee3595a439f801f3dccbbcf7f8aa7339e920cc6fd709"
+    }
+  },
+  "sources": [
+    {
+      "id": "geo-fleischer",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113957",
+      "type": "primary_data_registry",
+      "scope": "GSE113957: GEO sample metadata",
+      "review_state": "source_snapshot_verified",
+      "locator": "family SOFT sample records and committed v1.0 checksum receipt"
+    },
+    {
+      "id": "geo-nucleosome",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE307377",
+      "type": "primary_data_registry",
+      "scope": "GSE307377: GEO sample metadata",
+      "review_state": "source_snapshot_verified",
+      "locator": "Series Matrix sample records and committed v1.0 checksum receipt"
+    },
+    {
+      "id": "fleischer-paper",
+      "url": "https://link.springer.com/article/10.1186/s13059-018-1599-6",
+      "type": "original_peer_reviewed_publication",
+      "scope": "GSE113957: study design and reported culture procedures",
+      "review_state": "publication_text_reviewed",
+      "locator": "Results: Large transcriptome dataset; Methods: Cell culture and RNA sequencing"
+    },
+    {
+      "id": "fleischer-supplement",
+      "url": "https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-018-1599-6/MediaObjects/13059_2018_1599_MOESM1_ESM.docx",
+      "type": "original_supplement",
+      "scope": "GSE113957: Tables S2 (population doubling) and S3 (HGPS passage)",
+      "review_state": "structure_inspected_unjoined",
+      "locator": "Additional file 1, tables S2 and S3; document contents not yet crosswalk-verified"
+    },
+    {
+      "id": "nucleosome-paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12458469/",
+      "type": "original_peer_reviewed_publication",
+      "scope": "GSE307377: study-level sample source",
+      "review_state": "publication_text_reviewed",
+      "locator": "Methods: primary dermal fibroblasts from the San Diego Nathan Shock Center; supplementary table 1 not yet vetted"
+    },
+    {
+      "id": "sd-nsc-protocol",
+      "url": "https://bmjopen.bmj.com/content/14/6/e082659",
+      "type": "institutional_cohort_protocol",
+      "scope": "SD-NSC context only; NOT a participant crosswalk for GSE307377",
+      "review_state": "context_only",
+      "locator": "Clinical cohort protocol; biospecimen resource and cell-line model background"
+    },
+    {
+      "id": "coriell-policy",
+      "url": "https://www.coriell.org/1/NIGMS/FAQ",
+      "type": "biomaterial_use_policy",
+      "scope": "NIGMS repository material distribution and privacy; NOT a GEO expression-data license",
+      "review_state": "context_only",
+      "locator": "Sample Submission, Use and Distribution; Privacy Issues"
+    },
+    {
+      "id": "coriell-mta",
+      "url": "https://www.coriell.org/1/NIGMS/How-to-Order",
+      "type": "biomaterial_use_policy",
+      "scope": "NIGMS material transfer and physical-sample ordering, not permission for public transcriptome redistribution",
+      "review_state": "context_only",
+      "locator": "Material Transfer Agreement for Human Cell Lines; Statement of Research Intent"
+    }
+  ],
+  "claims": [
+    {
+      "id": "geo113-identity",
+      "source_ids": [
+        "geo-fleischer"
+      ],
+      "evidence_class": "source_observed",
+      "level": "sample-metadata",
+      "statement": "143 distinct deposited cell id labels; no explicit person-level donor ID or sample-level passage field in archived GEO sample characteristics.",
+      "limitation": "Cell-line labels alone do not prove 143 independent donors; absence in GEO is not absence from the study."
+    },
+    {
+      "id": "geo307-identity",
+      "source_ids": [
+        "geo-nucleosome"
+      ],
+      "evidence_class": "source_observed",
+      "level": "sample-metadata",
+      "statement": "Nine samples expose cell line descriptions and library labels; no explicit person-level donor ID or sample-level passage characteristic in archived GEO Series Matrix.",
+      "limitation": "Generic descriptions and lab library labels cannot be compared to Coriell cell IDs as person identifiers."
+    },
+    {
+      "id": "fleischer-culture-source",
+      "source_ids": [
+        "fleischer-paper"
+      ],
+      "evidence_class": "publication_reported",
+      "level": "study-level",
+      "statement": "Healthy-group fibroblasts came from Coriell's NIA/NIGMS cell repositories; HGPS fibroblasts came from the Progeria Research Foundation.",
+      "limitation": "Reported collection source does not establish an individual GSM-to-donor lineage record."
+    },
+    {
+      "id": "fleischer-culture-statistics",
+      "source_ids": [
+        "fleischer-paper"
+      ],
+      "evidence_class": "publication_reported",
+      "level": "study-level",
+      "statement": "The publication reports healthy-group mean population doubling of 10 (SD 4.2), and HGPS-group mean passage number of 11 (SD 0.7).",
+      "limitation": "Population doubling and passage number are different metrics; aggregates must not be assigned to individual sample records."
+    },
+    {
+      "id": "fleischer-supplement-structure",
+      "source_ids": [
+        "fleischer-paper",
+        "fleischer-supplement"
+      ],
+      "evidence_class": "supplement_structure_observed",
+      "level": "potential-sample-supplement",
+      "statement": "The original publisher DOCX was downloaded and SHA-256 verified; document text mentions Tables S2 and S3. Individual GSM-to-table-row or culture-history mapping has not been extracted or certified.",
+      "limitation": "Structure/mention verification does not validate sample-level linkage, donor independence, or original table values."
+    },
+    {
+      "id": "geo307-core-source",
+      "source_ids": [
+        "nucleosome-paper",
+        "sd-nsc-protocol"
+      ],
+      "evidence_class": "publication_reported",
+      "level": "study-level",
+      "statement": "The GSE307377 study describes four young and five older fibroblast donors obtained from the San Diego Nathan Shock Center Human Cell Models of Aging Core.",
+      "limitation": "No direct cross-study donor ID mapping or overlap exclusion has been established from the publication."
+    },
+    {
+      "id": "coriell-material-policy",
+      "source_ids": [
+        "coriell-policy",
+        "coriell-mta"
+      ],
+      "evidence_class": "policy_context_only",
+      "level": "material-distribution-policy",
+      "statement": "The NIGMS Coriell repository describes consent, privacy and material transfer conditions for physical human cell lines.",
+      "limitation": "Biomaterial distribution terms must not automatically be treated as a license or restriction on independent publicly posted GEO expression data."
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "person_level_donor_linkage",
+      "status": "blocked",
+      "required": "Verified pseudonymous person-level study-to-cell-line mapping with ethical handling",
+      "supporting_claim_ids": [
+        "geo113-identity",
+        "geo307-identity",
+        "geo307-core-source"
+      ],
+      "review_question": "Do original study or repository records provide permitted donor-to-cell-line mappings that verify independence without exposing identities?"
+    },
+    {
+      "id": "cross_study_overlap_exclusion",
+      "status": "blocked",
+      "required": "Documented controlled comparison of cohort donors or lineage provenance under appropriate authority",
+      "supporting_claim_ids": [
+        "geo113-identity",
+        "geo307-identity"
+      ],
+      "review_question": "Can the sources confirm whether the original Coriell/PRF lines intersect SD-NSC-derived donor lines, without attempting personal reidentification?"
+    },
+    {
+      "id": "culture_history_crosswalk",
+      "status": "blocked",
+      "required": "Sample-level verified population-doubling or passage variable with exact GSM/cell-line linkage",
+      "supporting_claim_ids": [
+        "fleischer-culture-statistics",
+        "fleischer-supplement-structure",
+        "geo113-identity"
+      ],
+      "review_question": "Can supplementary Tables S2/S3 be safely inspected and linked to publicly named cell lines, keeping doubling and passage distinct?"
+    },
+    {
+      "id": "second_cohort_culture_review",
+      "status": "blocked",
+      "required": "Methods and supplementary table audit for GSE307377's nine lines",
+      "supporting_claim_ids": [
+        "geo307-core-source",
+        "geo307-identity"
+      ],
+      "review_question": "Does the original study's Supplementary Table 1 include approved passage or lineage fields for these nine samples?"
+    },
+    {
+      "id": "public_expression_reuse_scope",
+      "status": "blocked",
+      "required": "Separate original GEO/public-data terms from Coriell MTA and institutional requirements",
+      "supporting_claim_ids": [
+        "coriell-material-policy",
+        "fleischer-culture-source"
+      ],
+      "review_question": "Which restrictions apply to material samples versus already-deposited expression values, annotations and reproduced study tables?"
+    },
+    {
+      "id": "batch_and_platform_comparability",
+      "status": "blocked",
+      "required": "Platform, library prep, culture, passage, RNA extraction and processing audit",
+      "supporting_claim_ids": [
+        "fleischer-culture-statistics",
+        "geo307-core-source"
+      ],
+      "review_question": "Can a covariate-complete, appropriately balanced source-only design be specified before evaluating any expression-age relationship?"
+    },
+    {
+      "id": "feature_and_scale_harmonization",
+      "status": "blocked",
+      "required": "Versioned annotation equivalence and a predeclared FPKM/TPM transformation policy",
+      "supporting_claim_ids": [
+        "geo113-identity",
+        "geo307-identity"
+      ],
+      "review_question": "Are shared RefSeq identifiers biologically comparable and what transformations would avoid treating FPKM as TPM?"
+    },
+    {
+      "id": "statistical_analysis_authorization",
+      "status": "blocked",
+      "required": "Independent written protocol review and leakage-aware pre-registration or clear exploratory labeling",
+      "supporting_claim_ids": [
+        "geo307-core-source",
+        "geo113-identity"
+      ],
+      "review_question": "Is there a reviewed plan before fitting any age association or reporting an aging intervention?"
+    }
+  ],
+  "policies": {
+    "no_network_by_default": true,
+    "emit_person_level_identifiers": false,
+    "permit_cross_study_person_reidentification": false,
+    "permit_donor_claims": false,
+    "permit_model_fitting": false,
+    "permit_age_effect_inference": false,
+    "analysis_ready": false,
+    "supplement_sample_level_verified": false,
+    "global_claim_level": "RESEARCH_PROVENANCE_REVIEW_ONLY"
+  },
+  "supplement_source_snapshot": {
+    "source_docx_sha256": "c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94",
+    "publisher_url": "https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-018-1599-6/MediaObjects/13059_2018_1599_MOESM1_ESM.docx",
+    "word_table_count": 1,
+    "caption_flags": {
+      "table_s2_mentioned": true,
+      "table_s3_mentioned": true
+    },
+    "sample_level_join_verified": false,
+    "evidence_level": "original_publisher_document_structure_only"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "receipt_type": "phiage-source-observed-supplement-structure/v1.1",
+  "observed_utc_date": "2026-11-22",
+  "source_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44995236689",
+  "source_code_commit_sha": "9d2342308d491c1b41be3a4c16839df7cc6c0c4d",
+  "schema_version": "phiage-fleischer-supplement-structure/v1.1",
+  "document_gzip": false,
+  "compressed_source_bytes": 2440808,
+  "source_docx_sha256": "c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94",
+  "word_paragraph_count": 52,
+  "word_table_count": 1,
+  "word_table_row_count_total": 11,
+  "supplement_caption_mention_flags": {
+    "table_s2_mentioned": true,
+    "table_s3_mentioned": true
+  },
+  "original_paper_reports_s2_population_doubling": true,
+  "original_paper_reports_s3_hgps_passage": true,
+  "supplement_sample_level_values_released": false,
+  "table_to_gsm_join_verified": false,
+  "cohort_donor_uniqueness_verified": false,
+  "culture_batch_equivalence_verified": false,
+  "analysis_ready": false,
+  "claim_level": "SUPPLEMENT_STRUCTURE_ONLY",
+  "caveat": "Caption detection confirms text presence only, never sample lineage linkage, donor identity or individual passage records.",
+  "source_url": "https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-018-1599-6/MediaObjects/13059_2018_1599_MOESM1_ESM.docx"
+}
