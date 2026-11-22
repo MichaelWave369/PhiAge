@@ -28,6 +28,7 @@ TABLE_PATTERNS = {
     "table_s3_mentioned": re.compile(r"\bTable\s*S[\s-]*3\b", re.I),
 }
 SCHEMA="phiage-fleischer-supplement-structure/v1.1"
+EXPECTED_SHA256="c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94"
 
 def require(condition, message):
     if not condition:
@@ -110,5 +111,7 @@ def probe_supplement(*,allow_network=False):
     except (OSError,ValueError) as error:
         raise ReplicationQCError("public publisher DOCX unavailable; not a source-code error") from error
     result=summarize_docx(blob)
+    require(result["source_docx_sha256"]==EXPECTED_SHA256,
+            "publisher supplementary archive changed from source fingerprint")
     result["source_url"]=SOURCE_URL
     return result

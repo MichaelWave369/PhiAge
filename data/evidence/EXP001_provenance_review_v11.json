@@ -53,7 +53,7 @@
       "url": "https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-018-1599-6/MediaObjects/13059_2018_1599_MOESM1_ESM.docx",
       "type": "original_supplement",
       "scope": "GSE113957: Tables S2 (population doubling) and S3 (HGPS passage)",
-      "review_state": "linked_not_parsed",
+      "review_state": "structure_inspected_unjoined",
       "locator": "Additional file 1, tables S2 and S3; document contents not yet crosswalk-verified"
     },
     {
@@ -131,15 +131,15 @@
       "limitation": "Population doubling and passage number are different metrics; aggregates must not be assigned to individual sample records."
     },
     {
-      "id": "fleischer-supplement-uninspected",
+      "id": "fleischer-supplement-structure",
       "source_ids": [
         "fleischer-paper",
         "fleischer-supplement"
       ],
-      "evidence_class": "linked_uninspected",
+      "evidence_class": "supplement_structure_observed",
       "level": "potential-sample-supplement",
-      "statement": "The paper links supplementary Tables S2 and S3 with culture-history details; sample-level join keys and contents have not been independently parsed.",
-      "limitation": "Do not convert a supplementary table's existence into verified sample-level metadata or independence."
+      "statement": "The original publisher DOCX was downloaded and SHA-256 verified; document text mentions Tables S2 and S3. Individual GSM-to-table-row or culture-history mapping has not been extracted or certified.",
+      "limitation": "Structure/mention verification does not validate sample-level linkage, donor independence, or original table values."
     },
     {
       "id": "geo307-core-source",
@@ -192,7 +192,7 @@
       "required": "Sample-level verified population-doubling or passage variable with exact GSM/cell-line linkage",
       "supporting_claim_ids": [
         "fleischer-culture-statistics",
-        "fleischer-supplement-uninspected",
+        "fleischer-supplement-structure",
         "geo113-identity"
       ],
       "review_question": "Can supplementary Tables S2/S3 be safely inspected and linked to publicly named cell lines, keeping doubling and passage distinct?"
@@ -258,5 +258,16 @@
     "analysis_ready": false,
     "supplement_sample_level_verified": false,
     "global_claim_level": "RESEARCH_PROVENANCE_REVIEW_ONLY"
+  },
+  "supplement_source_snapshot": {
+    "source_docx_sha256": "c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94",
+    "publisher_url": "https://static-content.springer.com/esm/art%3A10.1186%2Fs13059-018-1599-6/MediaObjects/13059_2018_1599_MOESM1_ESM.docx",
+    "word_table_count": 1,
+    "caption_flags": {
+      "table_s2_mentioned": true,
+      "table_s3_mentioned": true
+    },
+    "sample_level_join_verified": false,
+    "evidence_level": "original_publisher_document_structure_only"
   }
 }
