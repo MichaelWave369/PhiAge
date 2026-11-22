@@ -1,0 +1,35 @@
+{
+  "schema_version": "phiage-exp001-frozen-design/v0.8",
+  "plan_id": "EXP-001-GSE113957-ADULT-METADATA-PREFLIGHT",
+  "status": "design-draft-not-statistically-authorized",
+  "target_accession": "GSE113957",
+  "source_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "source_fpkm_sha256": "999c9d720ff7f0dfe59675f347803d3a0181231313aace2f8406f08528aa123d",
+  "source_tpm_sha256": "1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad",
+  "primary_population": {
+    "explicit_source_label": "healthy_label_explicit",
+    "minimum_age_years": 20
+  },
+  "excluded_source_label": "hgps_label_explicit",
+  "primary_platform": "GPL18573",
+  "transport_platform": "GPL16791",
+  "study_role": "source-label and platform/age support feasibility analysis only",
+  "held_out_source": "GSE307377",
+  "feature_intersection_exact_refseq_accessions": 24560,
+  "negative_controls": [
+    "Age labels shuffled within platform and sex strata before any fitting, with deterministic seed",
+    "Platform-only and sex-only covariate baseline before expression models",
+    "Zero-expression and random feature baselines",
+    "Leave-one-age-decade-out sensitivity only if sample counts allow",
+    "Reject any held-out assessment with cell-id, donor or cohort leakage"
+  ],
+  "no_gene_level_statistics": true,
+  "do_not_release_prediction_model": true,
+  "blockers": [
+    "Independent donor or cell-line provenance across studies not confirmed",
+    "Cross-study sample-preparation/culture/batch differences unresolved",
+    "FPKM-to-TPM normalization and transcript annotation equivalence unvalidated",
+    "Independent consent and reuse review incomplete",
+    "Explicit review required before any age-effect analysis or model training"
+  ]
+}
