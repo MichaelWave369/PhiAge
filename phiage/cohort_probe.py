@@ -22,6 +22,9 @@ SCHEMA = "phiage-cohort-census/v0.6"
 TARGET = "GSE113957"
 AGE_FIELD = re.compile(r"^\s*age(?:\s*\(\s*years?\s*\))?\s*(?::|=)\s*(\d{1,3})(?:\s*(?:years?|yrs?))?\s*$", re.I)
 AGE_KEY = re.compile(r"^\s*age(?:\s*\(\s*years?\s*\))?\s*$", re.I)
+AGE_YEARS_MONTHS = re.compile(
+    r"^\s*age\s*(?::|=)\s*(\d{1,3})\s*(?:yr|yrs|ys|years?)\s*"
+    r"(\d{1,2})\s*(?:mos|mo|months?)\s*$", re.I)
 HGPS_EXPLICIT = re.compile(r"\b(?:hutchinson[- ]gilford|progeria|HGPS)\b", re.I)
 HEALTHY_EXPLICIT = re.compile(r"\b(?:healthy|unaffected|normal control)\b", re.I)
 DIAGNOSIS_KEY = re.compile(r"\b(?:diagnosis|disease|phenotype|condition|health status|donor status|patient status)\b", re.I)
@@ -61,16 +64,21 @@ def _characteristic(value: str) -> tuple[str, str] | None:
     return (key, raw.strip()) if key else None
 
 def _sample_status(title: str, characteristics: list[str]) -> str:
-    # Only explicit sample-level disease/healthy text, never GEO ID or title
-    # patterns such as HGADFN. Contradictions and missing labels are unresolved.
+    """Only explicit sample-level disease status, not GSM or cell-line IDs."""
     statements = []
+    diagnostic_values = []
     for char in characteristics:
         parsed = _characteristic(char)
         if parsed and DIAGNOSIS_KEY.search(parsed[0]):
             statements.append(parsed[1])
+            diagnostic_values.append(parsed[1].strip().casefold())
     statements.append(title)
     possible_hgps = any(HGPS_EXPLICIT.search(value) for value in statements)
-    possible_healthy = any(HEALTHY_EXPLICIT.search(value) for value in statements)
+    # "disease: Normal" is an explicit depositor label, not a clinical finding.
+    possible_healthy = (
+        any(HEALTHY_EXPLICIT.search(value) for value in statements) or
+        any(value in {"normal", "control"} for value in diagnostic_values)
+    )
     if possible_hgps and possible_healthy:
         return "conflicting"
     if possible_hgps:
@@ -79,21 +87,26 @@ def _sample_status(title: str, characteristics: list[str]) -> str:
         return "healthy_label_explicit"
     return "unknown"
 
-def _sample_age(chars: list[str]) -> int | None:
+def _sample_age(chars: list[str]) -> float | None:
+    """Parse full years or exact years+months; never fabricate rounded ages."""
     observed = set()
     for char in chars:
-        if not isinstance(char, str):
-            continue
         parsed = _characteristic(char)
         if not parsed or not AGE_KEY.fullmatch(parsed[0]):
             continue
-        match = AGE_FIELD.fullmatch(char)
-        if match is None:
-            # Unparseable public age is missing, never converted to 0 or guessed.
-            return None
-        value = int(match.group(1))
-        require(0 <= value <= 120, "out-of-range sample age")
-        observed.add(value)
+        years = AGE_FIELD.fullmatch(char)
+        if years:
+            age = int(years.group(1))
+            require(0 <= age <= 120, "out-of-range sample age")
+            observed.add(float(age))
+            continue
+        months = AGE_YEARS_MONTHS.fullmatch(char)
+        if months:
+            y, m = int(months.group(1)), int(months.group(2))
+            require(0 <= y <= 120 and 0 <= m < 12, "out-of-range years/months age")
+            observed.add(round((12*y+m)/12, 6))
+            continue
+        return None
     require(len(observed) <= 1, "contradictory public age annotations for one sample")
     return next(iter(observed)) if observed else None
 
@@ -142,7 +155,10 @@ def summarize_matrix(text: str, *, accession: str = TARGET) -> dict:
         "unique_gsm_sample_count": catalog["unique_GSM_count"],
         "study_claims_healthy_donors": 133,
         "study_claims_hgps_donors": 10,
-        "claimed_split_verified_from_metadata": False,
+        "claimed_split_verified_from_metadata": (
+            n == 143 and summary["healthy_label_explicit"] == 133 and
+            summary["hgps_label_explicit"] == 10 and sum(summary.values()) == n
+        ),
         "observed_sample_label_counts": dict(sorted(summary.items())),
         "sample_characteristic_key_counts": dict(sorted(keys.items())),
         "samples_without_characteristics": no_chars,
@@ -234,6 +250,22 @@ def summarize_soft(text: str, *, accession: str = TARGET) -> dict:
     report["expression_data_analysed"] = False
     return report
 
+def _soft_sample_titles(text: str) -> list[str]:
+    """Ordered title labels published in SOFT; distinct from donor identity."""
+    titles = []
+    active = False
+    for line in text.splitlines():
+        if line.startswith("^SAMPLE = "):
+            titles.append("")
+            active = True
+        elif line.startswith("^"):
+            active = False
+        elif active and line.startswith("!Sample_title = "):
+            require(not titles[-1], "duplicate SOFT title field")
+            titles[-1] = line[len("!Sample_title = "):].strip()
+    require(titles and all(titles), "SOFT sample title missing")
+    return titles
+
 def probe_candidate(accession: str = TARGET, *, allow_network: bool = False,
                     with_fpkm: bool = False) -> dict:
     require(accession == TARGET, "accession not allowed for candidate census")
@@ -241,7 +273,8 @@ def probe_candidate(accession: str = TARGET, *, allow_network: bool = False,
         raise CohortProbeError("network disabled by default; pass --allow-network")
     url = geo_soft_url(accession)
     blob = download_bounded(url)
-    summary = summarize_soft(decompress_bounded(blob), accession=accession)
+    soft_text = decompress_bounded(blob)
+    summary = summarize_soft(soft_text, accession=accession)
     summary.update({
         "source_url": url,
         "source_gzip_sha256": hashlib.sha256(blob).hexdigest(),
@@ -251,14 +284,27 @@ def probe_candidate(accession: str = TARGET, *, allow_network: bool = False,
         fpkm_url = geo_fpkm_url(accession)
         processed = download_bounded(fpkm_url)
         structure = inspect_supplement_header(decompress_bounded(processed))
+        titles = _soft_sample_titles(soft_text)
+        expression_names = structure["column_labels"][8:]
+        exact_bijection = (
+            len(titles) == len(expression_names) == summary["public_gsm_sample_count"] and
+            len(set(titles)) == len(titles) and
+            len(set(expression_names)) == len(expression_names) and
+            set(titles) == set(expression_names)
+        )
+        summary["processed_matrix_sample_crosswalk_verified"] = exact_bijection
         summary["processed_fpkm_header"] = {
             "url": fpkm_url,
             "source_gzip_sha256": hashlib.sha256(processed).hexdigest(),
             "compressed_bytes": len(processed),
             "structure": structure,
-            "sample_column_mapping_verified": False,
+            "sample_column_mapping_verified": exact_bijection,
+            "exact_title_header_matches": len(set(titles) & set(expression_names)),
+            "unique_soft_sample_titles": len(set(titles)),
+            "unique_expression_columns": len(set(expression_names)),
+            "annotation_columns": structure["column_count"] - len(expression_names),
             "quantification_verified": False,
             "expression_values_analysed": False,
-            "note": "Header only; inferred GSM mappings and FPKM values not validated.",
+            "note": "Exact sample title-header correspondence only; FPKM values, donor independence and clinical endpoints are not validated.",
         }
     return summary
