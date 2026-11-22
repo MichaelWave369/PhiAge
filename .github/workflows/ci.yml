@@ -150,3 +150,20 @@ jobs:
       - name: Assert no biological effect or clinical readiness claims
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-common-support.json')); assert x['analysis_ready'] is False and x['age_effect_tested'] is False and x['sample_matching_performed'] is False and x['donor_independence_verified'] is False and x['claim_level']=='COMMON_SUPPORT_METADATA_AUDIT_ONLY'; print(json.dumps(x,indent=2))"
+
+  live-provenance-gate:
+    # Informational source-metadata audit. Never claims independent donor identity.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit source-pinned public donor and culture metadata coverage
+        run: python -m phiage provenance-gate --allow-network --output /tmp/phiage-provenance-gate.json
+      - name: Enforce blocked donor linkage and no clinical claim
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-provenance-gate.json')); assert x['analysis_ready'] is False and x['age_effects_tested'] is False and x['donor_independence_verified'] is False and x['cross_cohort_same_person_linkage_evaluable'] is False and x['claim_level']=='SOURCE_PROVENANCE_GAPS_ONLY'; print(json.dumps(x,indent=2))"

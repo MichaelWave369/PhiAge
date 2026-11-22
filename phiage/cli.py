@@ -18,6 +18,7 @@ from .replication_qc import ReplicationQCError, run_replication_qc
 from .feature_overlap import run_overlap
 from .design_preflight import run_preflight
 from .common_support import run_common_support
+from .provenance_gate import run_provenance
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -88,6 +89,12 @@ def main(argv=None) -> int:
     support.add_argument("--overlap-receipt", default="data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json")
     support.add_argument("--allow-network", action="store_true")
     support.add_argument("--output")
+    lineage = subs.add_parser("provenance-gate", help="source-pinned donor-ID field and culture-protocol coverage audit")
+    lineage.add_argument("--source-receipt", default="data/receipts/GSE113957_cohort_source_observation_2026-11-22.json")
+    lineage.add_argument("--matrix-receipt", default="data/receipts/GSE307377_geo_probe_2026-11-21.json")
+    lineage.add_argument("--crosswalk", default="data/crosswalks/GSE307377_gsm_to_library.json")
+    lineage.add_argument("--allow-network", action="store_true")
+    lineage.add_argument("--output")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -99,6 +106,11 @@ def main(argv=None) -> int:
         elif args.command == "geo-probe":
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
+        elif args.command == "provenance-gate":
+            source = json.loads(Path(args.source_receipt).read_text(encoding="utf-8"))
+            matrix = json.loads(Path(args.matrix_receipt).read_text(encoding="utf-8"))
+            crosswalk = json.loads(Path(args.crosswalk).read_text(encoding="utf-8"))
+            data = run_provenance(source, matrix, crosswalk, allow_network=args.allow_network)
         elif args.command == "common-support":
             plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
             source = json.loads(Path(args.source_receipt).read_text(encoding="utf-8"))
