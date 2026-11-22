@@ -45,6 +45,9 @@ jobs:
       - name: Verify archived common-support source observation is blocked
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_common_support_2026-11-22.json'); r=json.loads(p.read_text()); assert r['analysis_ready'] is False and r['age_effect_tested'] is False and r['sample_matching_performed'] is False and r['metadata_balance_thresholds_passed'] is False; assert r['primary_metadata']['n']==17 and r['comparison_metadata']['n']==11 and r['maximum_balanced_pair_capacity']==8; assert '40-49/female' in r['missing_strata'] and '30-39/female' in r['thin_strata']; assert p.read_bytes()==Path('docs/common_support_summary.json').read_bytes()"
+      - name: Verify source-backed donor identity receipt remains blocked
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json'); x=json.loads(p.read_text()); a,b=x['source_cohorts']; assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['cross_cohort_same_person_linkage_evaluable'] is False; assert a['geo_sample_records']==143 and b['geo_sample_records']==9; assert a['identity']['cell_id_field_present']==143 and b['identity']['cell_line_description_field_present']==9; assert a['identity']['subject_identifier_field_present']==0 and b['identity']['subject_identifier_field_present']==0; assert p.read_bytes()==Path('docs/provenance_gate_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python

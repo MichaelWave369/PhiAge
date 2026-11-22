@@ -1,0 +1,206 @@
+{
+  "receipt_type": "phiage-source-observed-provenance-coverage/v1.0",
+  "observed_utc_date": "2026-11-22",
+  "source_workflow_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44991103995",
+  "source_code_head_sha": "e2796a62648324bdda337a42f4c820522fd9c180",
+  "note": "Aggregate public GEO sample metadata only; no donor names/IDs or source sample rows exported. Protocol fingerprints label depositor text, not verified batches.",
+  "schema_version": "phiage-exp001-provenance-gate/v1.0",
+  "source_cohorts": [
+    {
+      "accession": "GSE113957",
+      "geo_sample_records": 143,
+      "identity": {
+        "observed_characteristic_field_presence": {
+          "age": 143,
+          "cell id": 143,
+          "disease": 143,
+          "ethnicity": 127,
+          "sex": 143
+        },
+        "subject_identifier_field_present": 0,
+        "subject_identifier_field_missing": 143,
+        "subject_identifier_inconsistent_samples": 0,
+        "subject_identifier_duplicate_label_excess": 0,
+        "cell_line_description_field_present": 0,
+        "cell_id_field_present": 143,
+        "cell_id_field_missing": 0,
+        "cell_id_duplicate_label_excess": 0,
+        "public_cell_id_syntax_count": {
+          "GM_format": 57,
+          "HGADFN_format": 8,
+          "other_cell_id_format": 78
+        },
+        "sample_level_passage_field_present": 0,
+        "sample_level_passage_field_missing": 143,
+        "distinct_cell_id_labels": 143,
+        "distinct_subject_labels": 0,
+        "subject_identity_proven": false
+      },
+      "public_protocol_metadata": {
+        "extraction": {
+          "samples_with_nonempty": 143,
+          "samples_missing": 0,
+          "distinct_text_versions": 2,
+          "text_validated": false
+        },
+        "growth": {
+          "samples_with_nonempty": 143,
+          "samples_missing": 0,
+          "distinct_text_versions": 1,
+          "text_validated": false
+        },
+        "source_name": {
+          "samples_with_nonempty": 134,
+          "samples_missing": 9,
+          "distinct_text_versions": 18,
+          "text_validated": false
+        },
+        "treatment": {
+          "samples_with_nonempty": 0,
+          "samples_missing": 143,
+          "distinct_text_versions": 0,
+          "text_validated": false
+        }
+      },
+      "protocol_vs_platform": {
+        "platform_sample_counts": {
+          "GPL16791": 13,
+          "GPL18573": 130
+        },
+        "protocol_variant_distribution_by_platform": {
+          "extraction": {
+            "GPL16791": {
+              "text_sha256_6d39d64923d8": 13
+            },
+            "GPL18573": {
+              "text_sha256_6d39d64923d8": 130
+            }
+          },
+          "growth": {
+            "GPL16791": {
+              "text_sha256_64a6e38f075b": 13
+            },
+            "GPL18573": {
+              "text_sha256_64a6e38f075b": 130
+            }
+          },
+          "treatment": {
+            "GPL16791": {
+              "absent": 13
+            },
+            "GPL18573": {
+              "absent": 130
+            }
+          }
+        },
+        "text_sha256_truncated_identifiers_not_verified_processing_batches": true
+      },
+      "independent_donors_verified": false
+    },
+    {
+      "accession": "GSE307377",
+      "geo_sample_records": 9,
+      "identity": {
+        "observed_characteristic_field_presence": {
+          "age": 9,
+          "cell line": 9,
+          "cell type": 9,
+          "group": 9,
+          "sex": 9,
+          "tissue": 9
+        },
+        "subject_identifier_field_present": 0,
+        "subject_identifier_field_missing": 9,
+        "subject_identifier_inconsistent_samples": 0,
+        "subject_identifier_duplicate_label_excess": 0,
+        "cell_line_description_field_present": 9,
+        "cell_id_field_present": 0,
+        "cell_id_field_missing": 9,
+        "cell_id_duplicate_label_excess": 0,
+        "public_cell_id_syntax_count": {},
+        "sample_level_passage_field_present": 0,
+        "sample_level_passage_field_missing": 9,
+        "distinct_cell_id_labels": 0,
+        "distinct_subject_labels": 0,
+        "subject_identity_proven": false
+      },
+      "public_protocol_metadata": {
+        "extraction": {
+          "samples_with_nonempty": 9,
+          "samples_missing": 0,
+          "distinct_text_versions": 2,
+          "text_validated": false
+        },
+        "growth": {
+          "samples_with_nonempty": 9,
+          "samples_missing": 0,
+          "distinct_text_versions": 1,
+          "text_validated": false
+        },
+        "source_name": {
+          "samples_with_nonempty": 9,
+          "samples_missing": 0,
+          "distinct_text_versions": 1,
+          "text_validated": false
+        },
+        "treatment": {
+          "samples_with_nonempty": 9,
+          "samples_missing": 0,
+          "distinct_text_versions": 1,
+          "text_validated": false
+        }
+      },
+      "protocol_vs_platform": {
+        "platform_sample_counts": {
+          "GPL24676": 9
+        },
+        "protocol_variant_distribution_by_platform": {
+          "extraction": {
+            "GPL24676": {
+              "text_sha256_5080d6e2bb46": 9
+            }
+          },
+          "growth": {
+            "GPL24676": {
+              "text_sha256_5fa2902abbd8": 9
+            }
+          },
+          "treatment": {
+            "GPL24676": {
+              "text_sha256_521222b3c0d6": 9
+            }
+          }
+        },
+        "text_sha256_truncated_identifiers_not_verified_processing_batches": true
+      },
+      "library_labels_archived": 9,
+      "independent_donors_verified": false
+    }
+  ],
+  "source_identity_coverage_checked": true,
+  "clinical_donor_identity_confirmed": false,
+  "cross_cohort_overlap_excluded": false,
+  "cross_cohort_overlap_demonstrated": false,
+  "comparability_of_identifier_namespaces_verified": false,
+  "cross_cohort_common_subject_ids": null,
+  "cross_cohort_same_person_linkage_evaluable": false,
+  "donor_independence_verified": false,
+  "biological_replication_verified": false,
+  "analysis_ready": false,
+  "age_effects_tested": false,
+  "claim_level": "SOURCE_PROVENANCE_GAPS_ONLY",
+  "gate_blockers": [
+    "GSE113957: explicit donor/subject identifier missing in some source samples",
+    "GSE113957: sample-level passage field absent in some samples",
+    "GSE307377: explicit donor/subject identifier missing in some source samples",
+    "GSE307377: sample-level passage field absent in some samples",
+    "GSE307377: cell-line identifier absent in some samples",
+    "Cross-cohort person/biobank linkage cannot be proven from deposited identifiers",
+    "Source protocol text is depositor metadata, not externally audited experimental conditions",
+    "Culture/batch balance, reuse permissions, and FPKM/TPM harmonization unresolved"
+  ],
+  "warning": "Unique public cell IDs and nine deposited library labels cannot establish independent people or prove absence of repeated donors. Identifier values are not exported.",
+  "source_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "source_matrix_sha256": "0410e57d6a6b7dbdfbaeee3595a439f801f3dccbbcf7f8aa7339e920cc6fd709",
+  "curated_crosswalk_sha256": "f57e8c1dce1ca2d5603b19685066840abc98d898deed0347bb98c0cdac639fb7"
+}

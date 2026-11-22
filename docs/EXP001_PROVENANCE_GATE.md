@@ -32,3 +32,24 @@ By default there is **no network**. PR-only GitHub Actions source probes are inf
 The documented source material is insufficient to certify person-level uniqueness and independence across two projects. Any later study must (a) establish sample acquisition and provenance for both cohorts, (b) confirm clinical metadata and bioethical reuse permissions, (c) evaluate cell-culture passage and processing/batch comparability, and (d) freeze a donor-held-out statistical design before testing age associations.
 
 \`cross_cohort_same_person_linkage_evaluable:false\`; \`donor_independence_verified:false\`; \`analysis_ready:false\`; \`age_effects_tested:false\`; and \`claim_level:SOURCE_PROVENANCE_GAPS_ONLY\`.
+
+## Live primary-source evidence (2026-11-22 UTC)
+
+The [v1.0 GitHub Actions provenance probe](https://github.com/MichaelWave369/PhiAge/actions/runs/44991103995) validated the deposited compressed-file checksums and found:
+
+| Source-backed metadata field | GSE113957 | GSE307377 |
+|---|---:|---:|
+| GEO samples | 143 | 9 |
+| Explicit donor/subject ID field | 0 | 0 |
+| Public `cell id` field | 143 | 0 |
+| Public `cell line` **description** field | 0 | 9 |
+| Sample-level passage field | 0 | 0 |
+| Growth protocol field | 143 | 9 |
+| Extraction protocol field | 143 | 9 |
+| Treatment protocol field | 0 | 9 |
+
+GSE113957 deposited source-name description is missing for nine samples, but complete growth and extraction protocol text is present. Its 143 public cell ID labels are distinct; 57 match `GM...` syntax, eight `HGADFN...`, and 78 other syntax. This is a **text-format inventory**, not an authenticity or human-donor identity check.
+
+Across GSE113957's two NCBI sequencing platforms, the hashed **published** growth and extraction protocol-text combinations are identical: 13/13 GPL16791 and 130/130 GPL18573 each have the same deposited text fingerprints. This does **not** establish that experimental batches, RNA preparation details, sequencing library chemistry or passage counts were identical. GSE113957 still has no sample-level passage characteristic; GSE307377 likewise has none.
+
+The frozen aggregate [provenance receipt](../data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json) includes zero participant IDs or raw metadata text, and retains `cross_cohort_same_person_linkage_evaluable:false`, `donor_independence_verified:false`, `analysis_ready:false`. Future evidence work requires source-backed biobank/donor provenance, not a string comparison between `GM...` cell IDs and `TM...` expression-library identifiers.

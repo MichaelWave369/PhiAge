@@ -39,3 +39,7 @@
 .balance-decade strong{font-size:.86rem}
 .balance-decade span{color:var(--muted);font-size:.82rem}
 .balance-decade em{font-style:normal;color:var(--orange);font-size:.74rem}
+
+.provenance-stat{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;padding:14px 6px;border-bottom:1px solid var(--border)}
+.provenance-stat strong{font-size:.9rem}
+.provenance-stat span{font-size:.78rem;color:var(--muted)}
