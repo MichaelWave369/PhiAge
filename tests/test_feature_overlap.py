@@ -49,7 +49,7 @@ class FeatureOverlapTests(unittest.TestCase):
         a=["NM_001.1","NM_001.1"]
         r=compare_transcripts(mock_table("GSE113957",a),mock_table("GSE307377",["NM_001.1"]))
         self.assertEqual(r["GSE113957_duplicate_source_accessions"],1)
-        self.assertFalse(r["exact_identifier_set_equal"] is False)  # equal unique sets, duplicates separately visible
+        self.assertTrue(r["exact_identifier_set_equal"])  # equal unique sets, duplicates separately visible
 
     def test_wrong_header_fails(self):
         a=mock_table("GSE113957",["NM_001.1"]).replace("Transcript ID","Gene Identifier")

@@ -33,6 +33,8 @@ python -m phiage feature-qc --allow-network --output feature-qc.json
 python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
 # Full second-cohort FPKM numerical and metadata QC; never claims donor independence:
 python -m phiage replication-qc --allow-network --output replication-qc.json
+# Exact RefSeq identifier overlap census (not an expression model):
+python -m phiage transcript-overlap --allow-network --output transcript-overlap.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -66,6 +68,7 @@ Currently implemented:
 - **Exploratory feature/similarity QC v0.5:** classify uncurated transcript identifier *syntax*, count literal annotation tags, measure sample zero fractions, and compute log1p(TPM) sample correlations, with no age-group hypothesis testing or medical claims.
 - **GSE113957 source-census v0.6:** audits public GSM count, age-field parsing, age bins, and explicit/unknown disease labels from official GEO Series Matrix. The 133+10 split from the paper remains a *reported claim* until verified against source metadata. Donor independence, data reuse, FPKM crosswalk, and study harmonization remain blocked.
 - **GSE113957 v0.7 independent-cohort readiness QC:** source-verified **cell-line ID label duplication** census and platform/sex/group distribution, plus a read-only numerical scan of the published 143-column FPKM matrix. Exact gzip SHA-256 match enforced. Donor independence, normalization, study overlap and any biological or clinical age effect remain **unverified**.
+- **Cross-cohort accession-only comparison:** audited exact RefSeq transcript ID strings, version-unaware ID overlap and order using *pinned* GSE113957 FPKM and GSE307377 TPM. Identical accession strings are not evidence of comparable quantification or replicated age associations.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.

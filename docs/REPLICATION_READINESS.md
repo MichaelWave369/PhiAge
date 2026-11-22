@@ -36,3 +36,9 @@ The optional live job runs as an **informational, nonblocking** GitHub Actions c
 ### Interpretation
 
 An observation of 143 unique GEO sample names, unique public \`cell id\` labels, or an expression table without missing values cannot establish donor-level independence, a validated biological age predictor or lifespan extension. GSE113957 has already been studied by its authors and re-used in subsequent papers. A new analysis of it is reanalysis, not independent sample-level evidence of aging reversal.
+
+## Transcript identity: a necessary but insufficient comparability check
+
+`python -m phiage transcript-overlap --allow-network` fetches the **two immutable SHA-256-pinned official GEO tables**, examines only the first column of each, and counts exact RefSeq accession intersections, non-shared identifiers, source duplicates, and optional version-stripped intersections. It also checks if accession row order is exactly the same.
+
+A perfect 27,142/27,142 identifier match would only establish **shared reference labels**, not equal abundance units (FPKM versus TPM), equivalent normalization, batch correction, or independent age-association replication. No version stripping is used to construct an analysis matrix automatically.

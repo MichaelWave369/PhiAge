@@ -98,6 +98,11 @@ jobs:
           python-version: '3.12'
       - name: Inspect pinned GSE113957 public SOFT and FPKM numerical matrix
         run: python -m phiage replication-qc --allow-network --output /tmp/phiage-replication-qc.json
+      - name: Audit exact source transcript accession overlap
+        run: python -m phiage transcript-overlap --allow-network --output /tmp/phiage-transcript-overlap.json
+      - name: Summarize transcript identifier overlap (not biological equivalence)
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-transcript-overlap.json')); assert x['analysis_ready'] is False and x['expression_scale_harmonized'] is False; print(json.dumps(x,indent=2))"
       - name: Report aggregate technical checks only
         run: |
           python -c "import json; d=json.load(open('/tmp/phiage-replication-qc.json')); assert d['analysis_ready'] is False and d['age_association_tested'] is False and d['donor_independence_verified'] is False and d['claim_level']=='TECHNICAL_REPLICATION_READINESS_QC_ONLY'; print(json.dumps(d,indent=2))"
