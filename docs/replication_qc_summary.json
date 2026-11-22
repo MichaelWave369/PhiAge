@@ -1,0 +1,98 @@
+{
+  "receipt_type": "phiage-observed-replication-readiness/v0.7",
+  "observed_utc_date": "2026-11-22",
+  "github_actions_run": "https://github.com/MichaelWave369/PhiAge/actions/runs/44972049685",
+  "code_head": "ef38b659fe4f9d603b66ff99b3575cea4b171bb9",
+  "provenance": "Public NCBI GEO files verified against existing immutable compressed-file SHA-256 receipts. No cohort-level age-effect statistics performed.",
+  "schema_version": "phiage-replication-readiness/v0.7",
+  "accession": "GSE113957",
+  "input_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "input_fpkm_sha256": "999c9d720ff7f0dfe59675f347803d3a0181231313aace2f8406f08528aa123d",
+  "source_provenance_checked": true,
+  "source_title_column_crosswalk_verified": true,
+  "sample_metadata_qc": {
+    "accession": "GSE113957",
+    "observed_gsm_count": 143,
+    "unique_sample_title_count": 143,
+    "public_source_label_counts": {
+      "healthy_label_explicit": 133,
+      "hgps_label_explicit": 10
+    },
+    "cell_id_label": {
+      "reported_nonempty": 143,
+      "unique_labels": 143,
+      "duplicate_label_excess": 0,
+      "missing": 0,
+      "donor_identity_proven": false
+    },
+    "platform_count": 2,
+    "platform_group_counts": {
+      "GPL16791": {
+        "healthy_label_explicit": 13
+      },
+      "GPL18573": {
+        "healthy_label_explicit": 120,
+        "hgps_label_explicit": 10
+      }
+    },
+    "group_sex_counts": {
+      "healthy_label_explicit": {
+        "female": 34,
+        "male": 99
+      },
+      "hgps_label_explicit": {
+        "female": 7,
+        "male": 3
+      }
+    },
+    "group_age_ranges_years": {
+      "healthy_label_explicit": {
+        "count": 133,
+        "min": 1,
+        "max": 96
+      },
+      "hgps_label_explicit": {
+        "count": 10,
+        "min": 2.25,
+        "max": 8.833333
+      }
+    },
+    "unparsed_age_count": 0,
+    "metadata_has_unresolved_issues": false,
+    "donor_independence_verified": false,
+    "batch_effects_excluded": false
+  },
+  "expression_qc": {
+    "feature_rows": 27142,
+    "expression_sample_columns": 143,
+    "unique_feature_ids": 27142,
+    "refseq_transcript_accession_syntax_count": 27142,
+    "duplicate_feature_ids": 0,
+    "blank_feature_ids": 0,
+    "missing_numeric_cells": 0,
+    "invalid_or_nonfinite_numeric_cells": 0,
+    "negative_numeric_cells": 0,
+    "all_sample_zero_feature_rows": 3929,
+    "expressed_feature_rows": 23213,
+    "sample_nonzero_feature_min": 15733,
+    "sample_nonzero_feature_max": 17838,
+    "numeric_structure_pass": true,
+    "feature_semantics_curated": false,
+    "normalization_validated": false,
+    "note": "FPKM numeric/feature QC only. No association with age was tested."
+  },
+  "donor_independence_verified": false,
+  "batch_effects_excluded": false,
+  "cross_cohort_feature_harmonization_verified": false,
+  "license_and_reuse_reviewed": false,
+  "age_association_tested": false,
+  "independent_replication_verified": false,
+  "analysis_ready": false,
+  "claim_level": "TECHNICAL_REPLICATION_READINESS_QC_ONLY",
+  "warnings": [
+    "Source cell id uniqueness is not independent donor verification.",
+    "FPKM magnitude is not comparable to TPM or raw counts without a predeclared harmonization protocol.",
+    "Sample labels are depositor reports, not clinical diagnoses.",
+    "No age prediction, clinical effect or aging reversal has been tested."
+  ]
+}

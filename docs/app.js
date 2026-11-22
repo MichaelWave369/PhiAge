@@ -205,4 +205,43 @@ async function setupReplicationCensus(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();});
+
+async function setupReplicationQuality(){
+  try{
+    const [qres,ores]=await Promise.all([
+      fetch("./replication_qc_summary.json"),
+      fetch("./transcript_overlap_summary.json")
+    ]);
+    if(!qres.ok||!ores.ok)throw Error("missing verified receipt");
+    const q=await qres.json(), o=await ores.json();
+    const a=q.sample_metadata_qc, b=q.expression_qc;
+    if(q.receipt_type!=="phiage-observed-replication-readiness/v0.7"||
+       o.receipt_type!=="phiage-observed-transcript-id-overlap/v0.7"||
+       q.analysis_ready!==false||o.analysis_ready!==false||
+       q.age_association_tested!==false||o.expression_scale_harmonized!==false||
+       o.exact_refseq_identifier_overlap+o.source_a_only_accessions!==o.GSE113957_unique_refseq_ids||
+       a.observed_gsm_count!==b.expression_sample_columns)
+       throw Error("inconsistent or unauthorized research receipt");
+    const n=x=>new Intl.NumberFormat("en-US").format(x);
+    $("rep-shared-ids").textContent=n(o.exact_refseq_identifier_overlap);
+    $("rep-unique-cells").textContent=n(a.cell_id_label.unique_labels);
+    $("rep-fpkm-features").textContent=n(b.feature_rows);
+    const portion=100*o.exact_refseq_identifier_overlap/o.GSE113957_unique_refseq_ids;
+    $("rep-overlap-bar").style.width=portion.toFixed(2)+"%";
+    $("rep-overlap-caption").textContent=
+      portion.toFixed(1)+"% exact RefSeq text match; "+
+      n(o.source_a_only_accessions)+" unmatched from each cohort. No expression-scale equivalence.";
+    const platforms=a.platform_group_counts;
+    $("rep-platform-caveat").textContent=
+      "Source platform distribution: "+
+      Object.entries(platforms).map(([name,groups])=>
+       name+": "+Object.entries(groups).map(([group,count])=>count+" "+group.replace("_label_explicit","")).join(", ")
+      ).join("; ")+". This may confound naive group comparisons.";
+  }catch(error){
+    console.error("Replication QC receipts unavailable",error);
+    $("rep-overlap-caption").textContent="Archived technical QC receipt unavailable.";
+    $("rep-platform-caveat").textContent="Platform audit cannot be displayed.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();});

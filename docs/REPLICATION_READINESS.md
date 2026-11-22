@@ -42,3 +42,13 @@ An observation of 143 unique GEO sample names, unique public \`cell id\` labels,
 `python -m phiage transcript-overlap --allow-network` fetches the **two immutable SHA-256-pinned official GEO tables**, examines only the first column of each, and counts exact RefSeq accession intersections, non-shared identifiers, source duplicates, and optional version-stripped intersections. It also checks if accession row order is exactly the same.
 
 A perfect 27,142/27,142 identifier match would only establish **shared reference labels**, not equal abundance units (FPKM versus TPM), equivalent normalization, batch correction, or independent age-association replication. No version stripping is used to construct an analysis matrix automatically.
+
+## Live observed results (2026-11-22 UTC)
+
+[GitHub Actions run 44972049685](https://github.com/MichaelWave369/PhiAge/actions/runs/44972049685) verified both downloaded source artifacts against previously archived SHA-256 values.
+
+**GSE113957:** 143 unique deposited `cell id` labels, no missing/duplicate labels, but **not an independent human donor audit**. Two GEO platforms: **GPL16791 = 13 Normal**, **GPL18573 = 120 Normal and 10 HGPS**. Study labels also show a marked sex imbalance: Normal = 99 male / 34 female; HGPS = 3 male / 7 female. Healthy-labeled age range in the public metadata is **1–96 years**, HGPS-labeled **2.25–8.833333 years**. Dataset rows: **27,142 unique transcript IDs**, **143 expression columns**, **3,929 all-zero entries**, no observed missing/nonfinite/negative values or duplicate feature identifiers. See [the archived aggregate QC receipt](../data/receipts/GSE113957_replication_qc_2026-11-22.json).
+
+**Exact cross-cohort reference-label intersection:** GSE113957 and GSE307377 each contain 27,142 unique RefSeq-format transcript IDs; **24,560 match exactly, leaving 2,582 unmatched in each** (90.5% exact overlap). Stripping simple version suffixes did not increase the observed overlap. No biological/age-associated effect was tested, and expression/annotation equivalence remains **unverified**. See [the overlap receipt](../data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json).
+
+The platform-by-group imbalance and different abundance measurements (FPKM versus TPM) must be addressed **before** any held-out age-association hypothesis can be considered. Matching RefSeq strings is a necessary reference-label check, not independent validation of a gene-level scientific claim.

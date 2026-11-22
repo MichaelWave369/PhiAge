@@ -35,6 +35,10 @@ jobs:
       - name: Verify source-backed second-cohort receipt is non-clinical
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_cohort_source_observation_2026-11-22.json'); x=json.loads(p.read_text()); assert x['analysis_ready'] is False and x['independent_replication_established'] is False and x['donor_independence_verified'] is False and x['claim_level']=='COHORT_METADATA_DISCOVERY_ONLY'; assert x['reported_disease_normal_labels']+x['reported_disease_hgps_labels']==x['observed_public_gsm_samples']==x['sample_title_fpkm_header_exact_matches']==x['sample_age_values_parsed']==143; assert p.read_bytes()==Path('docs/cohort_census_summary.json').read_bytes()"
+      - name: Verify archived FPKM and RefSeq overlap observations remain non-clinical
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_replication_qc_2026-11-22.json'); q=json.loads(p.read_text()); d=q['expression_qc']; assert q['analysis_ready'] is False and q['age_association_tested'] is False and q['donor_independence_verified'] is False and q['claim_level']=='TECHNICAL_REPLICATION_READINESS_QC_ONLY'; assert d['feature_rows']==d['all_sample_zero_feature_rows']+d['expressed_feature_rows']; assert q['sample_metadata_qc']['observed_gsm_count']==d['expression_sample_columns']; assert p.read_bytes()==Path('docs/replication_qc_summary.json').read_bytes()"
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json'); q=json.loads(p.read_text()); assert q['analysis_ready'] is False and q['expression_scale_harmonized'] is False and q['exact_refseq_identifier_overlap']+q['source_a_only_accessions']==q['GSE113957_unique_refseq_ids']; assert q['exact_refseq_identifier_overlap']+q['source_b_only_accessions']==q['GSE307377_unique_refseq_ids']; assert p.read_bytes()==Path('docs/transcript_overlap_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python

@@ -11,6 +11,8 @@
 - **[Research dashboard](docs/index.html)**: interactive hallmark atlas and an explicitly hypothetical feedback-system simulator. This is a static website; it has no backend and makes no network requests except to load bundled files.
 - **[12 hallmarks](data/hallmarks.json)**: annotated conceptual taxonomy from López-Otín et al., *Cell* (2023), DOI [10.1016/j.cell.2022.11.001](https://doi.org/10.1016/j.cell.2022.11.001).
 - **[Observed feature QC receipt](data/receipts/GSE307377_feature_qc_summary_2026-11-21.json)**: archived summary from successful GitHub Actions, also rendered by the static dashboard. Source is one existing published GEO study, not independent aging replication.
+- **[Verified GSE113957 numeric and platform QC](data/receipts/GSE113957_replication_qc_2026-11-22.json)**: 143-column FPKM source observations and source-group platform imbalance. Never a donor-independence or aging result.
+- **[Exact transcript-ID overlap receipt](data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json)**: source-backed RefSeq label intersections; expression scales are **not** harmonized.
 - **[Observed GSE113957 cohort receipt](data/receipts/GSE113957_cohort_source_observation_2026-11-22.json)**: official SOFT family records and processed FPKM header, with source checksums, 143 exact title matches, and *no claim of validated donor independence*.
 - **[Source registry](data/source_registry.json)**: six documented candidate human datasets, all pending licensing and independence review. Run `python -m phiage sources data/source_registry.json` for a machine-readable readiness audit.
 - **[First experiment](experiments/EXP-001.md)**: preregistered-style plan to assess cross-tissue reproducibility, causal ambiguity, and intervention tradeoffs.
