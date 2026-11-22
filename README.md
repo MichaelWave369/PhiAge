@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.8 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.9 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -11,6 +11,7 @@
 - **[Research dashboard](docs/index.html)**: interactive hallmark atlas and an explicitly hypothetical feedback-system simulator. This is a static website; it has no backend and makes no network requests except to load bundled files.
 - **[12 hallmarks](data/hallmarks.json)**: annotated conceptual taxonomy from López-Otín et al., *Cell* (2023), DOI [10.1016/j.cell.2022.11.001](https://doi.org/10.1016/j.cell.2022.11.001).
 - **[Observed feature QC receipt](data/receipts/GSE307377_feature_qc_summary_2026-11-21.json)**: archived summary from successful GitHub Actions, also rendered by the static dashboard. Source is one existing published GEO study, not independent aging replication.
+- **[Observed v0.9 common-support receipt](data/receipts/GSE113957_common_support_2026-11-22.json)**: pinned 30–49 Normal-labeled age window, 17 versus 11 samples by platform, and a blocked female stratum. Eight potential metadata-balanced pairs are not real donor matches.
 - **[Observed v0.8 adult platform design receipt](data/receipts/GSE113957_design_preflight_2026-11-22.json)**: 107 Normal-labeled adults, split 94/13 across sequencing platforms. The 50–59 decade is too sparse for the frozen platform-comparison gate. No age-effect model.
 - **[Verified GSE113957 numeric and platform QC](data/receipts/GSE113957_replication_qc_2026-11-22.json)**: 143-column FPKM source observations and source-group platform imbalance. Never a donor-independence or aging result.
 - **[Exact transcript-ID overlap receipt](data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json)**: source-backed RefSeq label intersections; expression scales are **not** harmonized.
@@ -40,6 +41,8 @@ python -m phiage replication-qc --allow-network --output replication-qc.json
 python -m phiage transcript-overlap --allow-network --output transcript-overlap.json
 # Frozen study population/platform feasibility only, no fitting:
 python -m phiage design-preflight --allow-network --output design-preflight.json
+# More conservative age 30-49 sex × age-decade support; no model fit:
+python -m phiage common-support --allow-network --output common-support.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -75,6 +78,7 @@ Currently implemented:
 - **GSE113957 v0.7 independent-cohort readiness QC:** source-verified **cell-line ID label duplication** census and platform/sex/group distribution, plus a read-only numerical scan of the published 143-column FPKM matrix. Exact gzip SHA-256 match enforced. Donor independence, normalization, study overlap and any biological or clinical age effect remain **unverified**.
 - **Cross-cohort accession-only comparison:** audited exact RefSeq transcript ID strings, version-unaware ID overlap and order using *pinned* GSE113957 FPKM and GSE307377 TPM. Identical accession strings are not evidence of comparable quantification or replicated age associations.
 - **Frozen design preflight v0.8:** deterministic source-pinned audit of healthy adults (source label "Normal", age ≥20), explicit HGPS exclusion, age-decade overlap, donor-label duplication and platform shift feasibility. No statistical training or biological age-effect tests run.
+- **Common-support v0.9:** frozen GSE113957 age 30–49 selection, source-labeled Normal only, sex-by-age-decade/platform counts and a conservative ceiling on possible balanced pairs. No individual matching, model training or age-effect inference.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.

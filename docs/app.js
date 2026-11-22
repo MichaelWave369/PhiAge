@@ -281,4 +281,48 @@ async function setupDesignPreflight(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();});
+
+async function setupCommonSupport(){
+  try {
+    const response=await fetch("./common_support_summary.json");
+    if(!response.ok)throw Error("source-backed receipt not available");
+    const r=await response.json();
+    if(r.receipt_type!=="phiage-source-observed-common-support/v0.9"||
+       r.analysis_ready!==false||r.age_effect_tested!==false||
+       r.sample_matching_performed!==false||
+       r.claim_level!=="COMMON_SUPPORT_METADATA_AUDIT_ONLY"||
+       r.primary_metadata.n+r.comparison_metadata.n !==
+          r.sex_by_age_decade_strata.reduce((sum,s)=>sum+s.primary_n+s.comparison_n,0)||
+       r.maximum_balanced_pair_capacity!==
+          r.sex_by_age_decade_strata.reduce((sum,s)=>sum+s.maximum_balanced_pairs,0))
+      throw Error("unsafe or inconsistent source receipt");
+    $("balance-primary").textContent=String(r.primary_metadata.n);
+    $("balance-secondary").textContent=String(r.comparison_metadata.n);
+    $("balance-capacity").textContent=String(r.maximum_balanced_pair_capacity);
+    const host=$("balance-rows");host.replaceChildren();
+    for(const entry of r.sex_by_age_decade_strata){
+      const row=document.createElement("div");
+      row.className="balance-decade";
+      const name=document.createElement("strong");
+      name.textContent=entry.decade+" · "+entry.sex;
+      const values=document.createElement("span");
+      values.textContent="GPL18573: "+entry.primary_n+" · GPL16791: "+entry.comparison_n;
+      row.append(name,values);
+      if(!entry.at_least_two_each){
+        const label=document.createElement("em");
+        label.textContent=entry.maximum_balanced_pairs===0?"Missing stratum":"Sparse stratum";
+        row.append(label);
+      }
+      host.append(row);
+    }
+    $("balance-conclusion").textContent=
+       r.metadata_balance_thresholds_passed ?
+       "Minimum metadata support met, but biological modeling is still blocked." :
+       "Common-support gate blocked: "+r.metadata_blockers.join("; ")+". No model was trained.";
+  }catch(error){
+    console.error("Common support dashboard",error);
+    $("balance-conclusion").textContent="Verified common-support receipt unavailable; the research gate remains closed.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();setupCommonSupport();});

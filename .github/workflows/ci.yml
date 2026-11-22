@@ -42,6 +42,9 @@ jobs:
       - name: Validate frozen design report remains a blocked source-only audit
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_design_preflight_2026-11-22.json'); d=json.loads(p.read_text()); assert d['analysis_ready'] is False and d['training_or_hypothesis_test_performed'] is False and d['donor_independence_verified'] is False and d['claim_level']=='DESIGN_FEASIBILITY_ONLY'; assert d['eligible_adult_healthy']['sample_count']==107 and d['primary_platform_healthy_adult']['sample_count']==94 and d['transport_platform_healthy_adult']['sample_count']==13; assert d['exploratory_transport_metadata_gate_passed'] is False and '50-59' in d['sparse_shared_age_decades']; assert p.read_bytes()==Path('docs/design_preflight_summary.json').read_bytes()"
+      - name: Verify archived common-support source observation is blocked
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_common_support_2026-11-22.json'); r=json.loads(p.read_text()); assert r['analysis_ready'] is False and r['age_effect_tested'] is False and r['sample_matching_performed'] is False and r['metadata_balance_thresholds_passed'] is False; assert r['primary_metadata']['n']==17 and r['comparison_metadata']['n']==11 and r['maximum_balanced_pair_capacity']==8; assert '40-49/female' in r['missing_strata'] and '30-39/female' in r['thin_strata']; assert p.read_bytes()==Path('docs/common_support_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python
@@ -130,3 +133,20 @@ jobs:
       - name: Assert experiment remains blocked from age-effect inference
         run: |
           python -c "import json; x=json.load(open('/tmp/phiage-design-preflight.json')); assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['training_or_hypothesis_test_performed'] is False and x['claim_level']=='DESIGN_FEASIBILITY_ONLY'; print(json.dumps(x,indent=2))"
+
+  live-common-support:
+    # Informational public GEO metadata only. Never enables age modeling.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan pinned common age and sex support in public GSE113957 SOFT
+        run: python -m phiage common-support --allow-network --output /tmp/phiage-common-support.json
+      - name: Assert no biological effect or clinical readiness claims
+        run: |
+          python -c "import json; x=json.load(open('/tmp/phiage-common-support.json')); assert x['analysis_ready'] is False and x['age_effect_tested'] is False and x['sample_matching_performed'] is False and x['donor_independence_verified'] is False and x['claim_level']=='COMMON_SUPPORT_METADATA_AUDIT_ONLY'; print(json.dumps(x,indent=2))"

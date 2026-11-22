@@ -34,3 +34,8 @@
 .design-decade span{font-size:.8rem;color:var(--muted)}
 .design-decade em{font-size:.75rem;color:var(--orange);font-style:normal}
 @media(max-width:550px){.design-decade{flex-wrap:wrap;gap:6px}}
+
+.balance-decade{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--border);padding:14px 6px}
+.balance-decade strong{font-size:.86rem}
+.balance-decade span{color:var(--muted);font-size:.82rem}
+.balance-decade em{font-style:normal;color:var(--orange);font-size:.74rem}

@@ -1,0 +1,108 @@
+{
+  "receipt_type": "phiage-source-observed-common-support/v0.9",
+  "observed_utc_date": "2026-11-22",
+  "source_run_url": "https://github.com/MichaelWave369/PhiAge/actions/runs/44986911498",
+  "source_code_head": "7b17d978e4393452d378102efb875bbf341f6172",
+  "source_description": "Aggregate NCBI GEO family SOFT values, verified against archived compressed-file SHA-256; no individual accession or donor identity exported.",
+  "schema_version": "phiage-exp001-common-support/v0.9",
+  "accession": "GSE113957",
+  "source_sample_count": 143,
+  "source_label_counts": {
+    "healthy_label_explicit": 133,
+    "hgps_label_explicit": 10
+  },
+  "status": "descriptive metadata feasibility only",
+  "age_window_years": {
+    "min_inclusive": 30,
+    "max_exclusive": 50
+  },
+  "disease_excluded_from_age_study": "hgps_label_explicit",
+  "primary_platform": "GPL18573",
+  "comparison_platform": "GPL16791",
+  "primary_metadata": {
+    "n": 17,
+    "male": 12,
+    "female": 5,
+    "unknown_sex": 0,
+    "minimum_age_years": 30,
+    "maximum_age_years": 47,
+    "mean_age_years": 37.8235
+  },
+  "comparison_metadata": {
+    "n": 11,
+    "male": 7,
+    "female": 4,
+    "unknown_sex": 0,
+    "minimum_age_years": 30,
+    "maximum_age_years": 47,
+    "mean_age_years": 40.0909
+  },
+  "sex_by_age_decade_strata": [
+    {
+      "decade": "30-39",
+      "sex": "female",
+      "primary_n": 5,
+      "comparison_n": 1,
+      "maximum_balanced_pairs": 1,
+      "at_least_two_each": false
+    },
+    {
+      "decade": "30-39",
+      "sex": "male",
+      "primary_n": 6,
+      "comparison_n": 2,
+      "maximum_balanced_pairs": 2,
+      "at_least_two_each": true
+    },
+    {
+      "decade": "40-49",
+      "sex": "female",
+      "primary_n": 0,
+      "comparison_n": 3,
+      "maximum_balanced_pairs": 0,
+      "at_least_two_each": false
+    },
+    {
+      "decade": "40-49",
+      "sex": "male",
+      "primary_n": 6,
+      "comparison_n": 5,
+      "maximum_balanced_pairs": 5,
+      "at_least_two_each": true
+    }
+  ],
+  "missing_strata": [
+    "40-49/female"
+  ],
+  "thin_strata": [
+    "30-39/female"
+  ],
+  "maximum_balanced_pair_capacity": 8,
+  "maximum_balanced_samples_total": 16,
+  "excluded_source_status_hgps": 10,
+  "unknown_sex_in_window": 0,
+  "missing_or_unparsed_ages_all_source": 0,
+  "unrecognized_platform_in_window": 0,
+  "source_cell_id_missing": 0,
+  "source_cell_id_duplicate_label_excess": 0,
+  "metadata_balance_thresholds_passed": false,
+  "metadata_blockers": [
+    "Age-decade × sex strata absent on at least one platform",
+    "Age-decade × sex strata with fewer than two samples on a platform"
+  ],
+  "frozen_plan_minimum_per_stratum": 2,
+  "frozen_plan_minimum_balanced_pairs": 8,
+  "donor_independence_verified": false,
+  "batch_or_platform_effects_controlled": false,
+  "sample_matching_performed": false,
+  "FPKM_TPM_harmonized": false,
+  "clinical_label_validity_verified": false,
+  "replication_performed": false,
+  "age_effect_tested": false,
+  "analysis_ready": false,
+  "claim_level": "COMMON_SUPPORT_METADATA_AUDIT_ONLY",
+  "limitation": "Counts of age-decade/sex label combinations reflect only deposited public metadata, not biological donor verification, causal identification, expression normalization or statistical power. No person-level sample list is exported.",
+  "source_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "frozen_plan_sha256": "638111021a74c88309ae2bfabcb590225be69e9673fa282248a47afbdd9757b6",
+  "exact_cross_cohort_refseq_labels": 24560
+}

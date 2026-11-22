@@ -1,0 +1,37 @@
+{
+  "schema_version": "phiage-exp001-common-support-plan/v0.9",
+  "plan_id": "EXP001-GSE113957-HEALTHY-30-49-SEX-DECADE-BALANCE",
+  "basis": "v0.8 public-source age overlap showed sparse 50–59 on GPL16791",
+  "status": "design-candidate-no-age-effect-fit-authorized",
+  "accession": "GSE113957",
+  "source_label": "healthy_label_explicit",
+  "exclude_label": "hgps_label_explicit",
+  "lower_age_years": 30,
+  "upper_age_exclusive": 50,
+  "primary_platform": "GPL18573",
+  "comparison_platform": "GPL16791",
+  "age_decade_bins": [
+    30,
+    40
+  ],
+  "stratify_by": "depositor-reported sex, female or male",
+  "minimum_per_platform_sex_decade": 2,
+  "minimum_cross_platform_pair_capacity": 8,
+  "pinned_soft_sha256": "041e5adfd00beb232d0e73503bfd8f51a0b5018e3849b7a5143e608aac6a86f4",
+  "pinned_fpkm_sha256": "999c9d720ff7f0dfe59675f347803d3a0181231313aace2f8406f08528aa123d",
+  "pinned_tpm_sha256": "1b5a6e82268dcf05dec75f7b24109b06cb4006abe7b925be8fdad89bae38c1ad",
+  "allow_age_model_fitting": false,
+  "negative_controls_planned": [
+    "Sex/platform-only baseline must be evaluated prior to any transcript-based model",
+    "Permuted ages within source and sex strata on a future separately approved analysis branch",
+    "Study leakage, exact cell-line reuse, and donor-overlap checks",
+    "Reproducibility across independent cohorts without reusing the same samples"
+  ],
+  "unresolved": [
+    "True independent donor and cell-line provenance across studies",
+    "Age-by-sex missingness and unmeasured culture/passages, batch and selection",
+    "FPKM-versus-TPM scale/annotation harmonization",
+    "Public data reuse and ethics review",
+    "An independently reviewed prospective hypothesis analysis plan"
+  ]
+}
