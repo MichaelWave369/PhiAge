@@ -325,4 +325,46 @@ async function setupCommonSupport(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();setupCommonSupport();});
+
+async function setupProvenanceGate(){
+  try{
+    const response=await fetch("./provenance_gate_summary.json");
+    if(!response.ok)throw Error("no archived provenance receipt");
+    const d=await response.json();
+    if(d.receipt_type!=="phiage-source-observed-provenance-coverage/v1.0"||
+       d.analysis_ready!==false||d.donor_independence_verified!==false||
+       d.age_effects_tested!==false||d.cross_cohort_same_person_linkage_evaluable!==false||
+       d.claim_level!=="SOURCE_PROVENANCE_GAPS_ONLY")
+      throw Error("unsafe or invalid provenance receipt");
+    const [a,b]=d.source_cohorts;
+    if(a.accession!=="GSE113957"||b.accession!=="GSE307377"||
+       a.identity.cell_id_field_present>a.geo_sample_records||
+       b.identity.cell_line_description_field_present>b.geo_sample_records)
+      throw Error("invalid source sample counts");
+    $("source-a-cellids").textContent=String(a.identity.cell_id_field_present);
+    $("source-b-linefields").textContent=String(b.identity.cell_line_description_field_present);
+    $("source-donorids").textContent=String(a.identity.subject_identifier_field_present+
+                                          b.identity.subject_identifier_field_present);
+    const host=$("provenance-observations");host.replaceChildren();
+    for(const cohort of [a,b]){
+      const el=document.createElement("div");el.className="provenance-stat";
+      const title=document.createElement("strong");title.textContent=cohort.accession;
+      const p=document.createElement("span");
+      const growth=cohort.public_protocol_metadata.growth;
+      const extract=cohort.public_protocol_metadata.extraction;
+      p.textContent=cohort.geo_sample_records+" GEO samples · "+
+        cohort.identity.sample_level_passage_field_present+" passage fields · "+
+        growth.samples_with_nonempty+" growth protocols · "+
+        extract.samples_with_nonempty+" extraction protocols";
+      el.append(title,p);host.append(el);
+    }
+    $("provenance-blocked").textContent=
+      "Person-level linkage remains unavailable. "+d.gate_blockers.length+
+      " source and comparability blockers are documented; no independent replication has been claimed.";
+  }catch(error){
+    console.error("Provenance receipt:",error);
+    $("provenance-blocked").textContent="Source-backed provenance receipt unavailable; donor independence remains unverified.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();setupReplicationQuality();setupDesignPreflight();setupCommonSupport();setupProvenanceGate();});
