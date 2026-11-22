@@ -77,7 +77,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Probe GSE113957 public Series Matrix metadata
-        run: python -m phiage cohort-probe GSE113957 --allow-network --output /tmp/phiage-gse113957-census.json
+        run: python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output /tmp/phiage-gse113957-census.json
       - name: Assert conservative cohort readiness policy
         run: |
           python -c "import json; p=json.load(open('/tmp/phiage-gse113957-census.json')); assert p['public_gsm_sample_count']>0 and p['analysis_ready'] is False and p['claimed_split_verified_from_metadata'] is False and p['donor_independence_verified'] is False and p['claim_level']=='COHORT_METADATA_DISCOVERY_ONLY'; print(json.dumps(p,indent=2))"

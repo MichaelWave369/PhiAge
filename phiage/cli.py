@@ -60,6 +60,8 @@ def main(argv=None) -> int:
     cohort = subs.add_parser("cohort-probe", help="bounded, read-only GEO candidate metadata census")
     cohort.add_argument("accession", help="only allowlisted GSE113957")
     cohort.add_argument("--allow-network", action="store_true", help="explicit public GEO source fetch")
+    cohort.add_argument("--with-fpkm", action="store_true",
+                        help="also inspect deposited public FPKM matrix header, not values")
     cohort.add_argument("--output", help="write provenance and group ambiguity JSON")
     args = parser.parse_args(argv)
     try:
@@ -73,7 +75,7 @@ def main(argv=None) -> int:
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
         elif args.command == "cohort-probe":
-            data = cohort_probe(args.accession, allow_network=args.allow_network)
+            data = cohort_probe(args.accession, allow_network=args.allow_network, with_fpkm=args.with_fpkm)
         elif args.command in ("crosswalk", "expression-qc", "feature-qc"):
             mapping = json.loads(Path(args.mapping).read_text(encoding="utf-8"))
             geo = json.loads(Path(args.geo_receipt).read_text(encoding="utf-8"))

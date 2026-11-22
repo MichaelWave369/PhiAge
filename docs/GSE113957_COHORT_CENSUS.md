@@ -13,10 +13,10 @@ The publication describes fibroblasts from 133 healthy individuals of ages 1–9
 ## New read-only gate
 \`\`\`bash
 python -m unittest discover -s tests -v
-python -m phiage cohort-probe GSE113957 --allow-network --output cohort-census.json
+python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
 \`\`\`
 
-Runs solely against a fixed NCBI GEO Series Matrix HTTPS URL, using bounded gzip decompression, fixed-source checksum receipt, and synthetic parser tests. The command does not fetch raw sequencing, participant private records, or gene-expression rows for analysis. It counts unique **GSM sample IDs**, public-characteristic fields, strictly parseable ages, and explicit sample-level health/HGPS labels. Samples without clear statements remain \`unknown\`, and conflicting statements are marked \`conflicting\`; **no ID-pattern guesswork**.
+Runs solely against a fixed NCBI GEO family SOFT HTTPS URL, using bounded gzip decompression, fixed-source checksum receipt, and synthetic parser tests. The command does not fetch raw sequencing, participant private records, or gene-expression rows for analysis. It counts unique **GSM sample IDs**, public-characteristic fields, strictly parseable ages, and explicit sample-level health/HGPS labels. Samples without clear statements remain \`unknown\`, and conflicting statements are marked \`conflicting\`; **no ID-pattern guesswork**.
 
 ## What it does not certify
 - Whether each GSM corresponds to a unique independent human donor
@@ -30,3 +30,9 @@ A successful metadata probe must still output \`analysis_ready:false\`, \`health
 
 ## Next stage
 Independently validate published sample/donor mapping, specimen/cell line overlap, FPKM source filename, expression-column keys, replicate structure, culture confounders and public reuse terms. Only then decide whether a frozen hold-out design is feasible. Keep original healthy and HGPS cohorts distinct. Never treat an HGPS phenotype as ordinary accelerated healthy aging, or reuse of this dataset as an independent validation cohort.
+
+## Correct source file layout (verified in official NCBI FTP directory)
+
+The expected `GSE113957_series_matrix.txt.gz` returned HTTP 404. Instead, the [SOFT directory](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE113nnn/GSE113957/soft/) contains the official `GSE113957_family.soft.gz` (approximately 12 KB compressed), and the [supplementary directory](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE113nnn/GSE113957/suppl/) contains `GSE113957_fpkm.txt.gz` (approximately 7.2 MB compressed). Both links were inspected as public official directory listings. **No file checksums or row-to-GSM crosswalk have been verified at this stage.**
+
+SOFT is block-oriented (`^SAMPLE = GSM…`), unlike the column-oriented GEO Series Matrix. The dedicated parser extracts sample-level fields, then transposes metadata *in memory only* to reuse conservative validation. An optional `--with-fpkm` downloads only the bounded published FPKM file to inspect its first header row and record an immutable compressed-file checksum. It does not analyze expression values. The source census remains unapproved for analysis.

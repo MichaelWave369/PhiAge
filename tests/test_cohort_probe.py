@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from phiage.cohort_probe import (
-    CohortProbeError, probe_candidate, summarize_matrix,
+    CohortProbeError, geo_soft_url, geo_fpkm_url, probe_candidate, summarize_matrix, summarize_soft,
 )
 
 SYNTHETIC = (
@@ -51,8 +51,9 @@ class CohortProbeTests(unittest.TestCase):
 
     def test_missing_age_does_not_become_age_zero(self):
         altered = SYNTHETIC.replace('"age: 65"', '"age: unknown"')
-        with self.assertRaisesRegex(CohortProbeError, "age characteristic"):
-            summarize_matrix(altered)
+        result = summarize_matrix(altered)
+        self.assertEqual(result["unparsed_or_absent_age_count"], 1)
+        self.assertEqual(result["parsed_sample_age_count"], 2)
 
     def test_unsupported_characteristic_does_not_prove_healthy(self):
         altered = SYNTHETIC.replace('"disease: unknown"', '"cell passage: 3"')
@@ -68,6 +69,46 @@ class CohortProbeTests(unittest.TestCase):
         altered = SYNTHETIC.replace('\t"disease: unknown"', '')
         with self.assertRaisesRegex(Exception, "cardinality"):
             summarize_matrix(altered)
+
+
+    def test_soft_family_samples_classified_conservatively(self):
+        source = (
+            "^SERIES = GSE113957\n"
+            "^SAMPLE = GSM111\n"
+            "!Sample_geo_accession = GSM111\n"
+            "!Sample_title = Healthy fibroblast\n"
+            "!Sample_characteristics_ch1 = age: 22\n"
+            "!Sample_characteristics_ch1 = condition: healthy\n"
+            "^SAMPLE = GSM222\n"
+            "!Sample_geo_accession = GSM222\n"
+            "!Sample_title = HGPS fibroblast\n"
+            "!Sample_characteristics_ch1 = age: 8\n"
+            "!Sample_characteristics_ch1 = condition: HGPS\n"
+            "^PLATFORM = GPL123\n"
+        )
+        observed = summarize_soft(source)
+        self.assertEqual(observed["observed_source_format"], "SOFT_family")
+        self.assertEqual(observed["public_gsm_sample_count"], 2)
+        self.assertEqual(observed["parsed_sample_age_count"], 2)
+        self.assertEqual(observed["observed_sample_label_counts"],
+                         {"healthy_label_explicit": 1, "hgps_label_explicit": 1})
+        self.assertFalse(observed["analysis_ready"])
+
+    def test_soft_wrong_source_or_duplicate_block_rejected(self):
+        text = (
+            "^SERIES = GSE113957\n^SAMPLE = GSM111\n"
+            "!Sample_title = test\n^SAMPLE = GSM111\n!Sample_title = test\n"
+        )
+        with self.assertRaisesRegex(CohortProbeError, "duplicate SOFT"):
+            summarize_soft(text)
+        with self.assertRaisesRegex(CohortProbeError, "wrong accession"):
+            summarize_soft(text.replace("GSE113957", "GSE999"))
+
+    def test_soft_and_fpkm_pinned_urls(self):
+        self.assertTrue(geo_soft_url("GSE113957").endswith("GSE113957_family.soft.gz"))
+        self.assertTrue(geo_fpkm_url("GSE113957").endswith("GSE113957_fpkm.txt.gz"))
+        with self.assertRaises(CohortProbeError):
+            geo_soft_url("GSE000")
 
 if __name__ == "__main__":
     unittest.main()

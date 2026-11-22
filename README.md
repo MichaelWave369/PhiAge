@@ -29,7 +29,7 @@ python -m phiage expression-qc --allow-network --output expression-qc.json
 # Optional non-inferential feature/similarity QC; no gene-level claims:
 python -m phiage feature-qc --allow-network --output feature-qc.json
 # Candidate *metadata only*, no disease or age-effect inference:
-python -m phiage cohort-probe GSE113957 --allow-network --output cohort-census.json
+python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```

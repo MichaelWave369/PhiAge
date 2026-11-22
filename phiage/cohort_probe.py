@@ -7,13 +7,14 @@ from __future__ import annotations
 
 from collections import Counter
 import csv
+import io
 import hashlib
 import json
 import math
 import re
 
 from .geo_probe import (
-    GEOProbeError, download_bounded, decompress_bounded, geo_matrix_url,
+    GEOProbeError, download_bounded, decompress_bounded, inspect_supplement_header,
     parse_series_matrix,
 )
 
@@ -87,7 +88,9 @@ def _sample_age(chars: list[str]) -> int | None:
         if not parsed or not AGE_KEY.fullmatch(parsed[0]):
             continue
         match = AGE_FIELD.fullmatch(char)
-        require(match is not None, "age characteristic present but not safely parsed")
+        if match is None:
+            # Unparseable public age is missing, never converted to 0 or guessed.
+            return None
         value = int(match.group(1))
         require(0 <= value <= 120, "out-of-range sample age")
         observed.add(value)
@@ -165,16 +168,97 @@ def summarize_matrix(text: str, *, accession: str = TARGET) -> dict:
         ),
     }
 
-def probe_candidate(accession: str = TARGET, *, allow_network: bool = False) -> dict:
+
+def geo_soft_url(accession: str) -> str:
+    require(accession == TARGET, "only verified GSE113957 SOFT family is allowed")
+    return ("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE113nnn/"
+            "GSE113957/soft/GSE113957_family.soft.gz")
+
+def geo_fpkm_url(accession: str) -> str:
+    require(accession == TARGET, "only verified GSE113957 processed FPKM is allowed")
+    return ("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE113nnn/"
+            "GSE113957/suppl/GSE113957_fpkm.txt.gz")
+
+def summarize_soft(text: str, *, accession: str = TARGET) -> dict:
+    """Read public SOFT family metadata, not sample expression tables.
+
+    SOFT uses one ^SAMPLE block per GSM, unlike Series Matrix's column schema.
+    For consistent auditing, its sample fields are transposed into an in-memory
+    metadata-only Series Matrix and handed to the same strict census logic.
+    """
+    require(accession == TARGET, "unsupported SOFT source")
+    require(isinstance(text, str) and bool(text), "SOFT file must contain text")
+    require(f"^SERIES = {accession}" in text, "SOFT family has wrong accession")
+    samples = []
+    active = None
+    for line in text.splitlines():
+        if line.startswith("^SAMPLE = "):
+            identifier = line[len("^SAMPLE = "):].strip()
+            require(re.fullmatch(r"GSM[1-9][0-9]+", identifier) is not None,
+                    "invalid GSM sample block identifier")
+            require(len(samples) < 500, "too many SOFT sample blocks")
+            active = {"gsm_id": identifier, "title": "", "characteristics": []}
+            samples.append(active)
+            continue
+        if line.startswith("^"):
+            active = None
+            continue
+        if active is None or not line.startswith("!Sample_") or " = " not in line:
+            continue
+        key, value = line.split(" = ", 1)
+        value = value.strip()
+        if key == "!Sample_geo_accession":
+            require(value == active["gsm_id"], "SOFT sample block/accession mismatch")
+        elif key == "!Sample_title":
+            require(not active["title"], "duplicate SOFT sample title field")
+            active["title"] = value
+        elif key == "!Sample_characteristics_ch1":
+            require(len(active["characteristics"]) < 80,
+                    "too many characteristics for one sample")
+            active["characteristics"].append(value)
+    require(samples, "SOFT family did not contain any ^SAMPLE blocks")
+    require(len(samples) == len({s["gsm_id"] for s in samples}), "duplicate SOFT GSM identifiers")
+    buf = io.StringIO()
+    writer = csv.writer(buf, delimiter="\t", lineterminator="\n")
+    writer.writerow(["!Sample_geo_accession"] + [s["gsm_id"] for s in samples])
+    writer.writerow(["!Sample_title"] + [s["title"] for s in samples])
+    n = max(len(s["characteristics"]) for s in samples)
+    for index in range(n):
+        writer.writerow(["!Sample_characteristics_ch1"] +
+                        [s["characteristics"][index] if index < len(s["characteristics"])
+                         else "" for s in samples])
+    buf.write("!series_matrix_table_begin\n")
+    report = summarize_matrix(buf.getvalue(), accession=accession)
+    report["observed_source_format"] = "SOFT_family"
+    report["sample_record_count"] = len(samples)
+    report["expression_data_analysed"] = False
+    return report
+
+def probe_candidate(accession: str = TARGET, *, allow_network: bool = False,
+                    with_fpkm: bool = False) -> dict:
     require(accession == TARGET, "accession not allowed for candidate census")
     if not allow_network:
         raise CohortProbeError("network disabled by default; pass --allow-network")
-    url = geo_matrix_url(accession)
+    url = geo_soft_url(accession)
     blob = download_bounded(url)
-    summary = summarize_matrix(decompress_bounded(blob), accession=accession)
+    summary = summarize_soft(decompress_bounded(blob), accession=accession)
     summary.update({
         "source_url": url,
         "source_gzip_sha256": hashlib.sha256(blob).hexdigest(),
         "source_gzip_bytes": len(blob),
     })
+    if with_fpkm:
+        fpkm_url = geo_fpkm_url(accession)
+        processed = download_bounded(fpkm_url)
+        structure = inspect_supplement_header(decompress_bounded(processed))
+        summary["processed_fpkm_header"] = {
+            "url": fpkm_url,
+            "source_gzip_sha256": hashlib.sha256(processed).hexdigest(),
+            "compressed_bytes": len(processed),
+            "structure": structure,
+            "sample_column_mapping_verified": False,
+            "quantification_verified": False,
+            "expression_values_analysed": False,
+            "note": "Header only; inferred GSM mappings and FPKM values not validated.",
+        }
     return summary
