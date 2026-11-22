@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.6 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.7 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -11,6 +11,8 @@
 - **[Research dashboard](docs/index.html)**: interactive hallmark atlas and an explicitly hypothetical feedback-system simulator. This is a static website; it has no backend and makes no network requests except to load bundled files.
 - **[12 hallmarks](data/hallmarks.json)**: annotated conceptual taxonomy from López-Otín et al., *Cell* (2023), DOI [10.1016/j.cell.2022.11.001](https://doi.org/10.1016/j.cell.2022.11.001).
 - **[Observed feature QC receipt](data/receipts/GSE307377_feature_qc_summary_2026-11-21.json)**: archived summary from successful GitHub Actions, also rendered by the static dashboard. Source is one existing published GEO study, not independent aging replication.
+- **[Verified GSE113957 numeric and platform QC](data/receipts/GSE113957_replication_qc_2026-11-22.json)**: 143-column FPKM source observations and source-group platform imbalance. Never a donor-independence or aging result.
+- **[Exact transcript-ID overlap receipt](data/receipts/GSE113957_GSE307377_overlap_2026-11-22.json)**: source-backed RefSeq label intersections; expression scales are **not** harmonized.
 - **[Observed GSE113957 cohort receipt](data/receipts/GSE113957_cohort_source_observation_2026-11-22.json)**: official SOFT family records and processed FPKM header, with source checksums, 143 exact title matches, and *no claim of validated donor independence*.
 - **[Source registry](data/source_registry.json)**: six documented candidate human datasets, all pending licensing and independence review. Run `python -m phiage sources data/source_registry.json` for a machine-readable readiness audit.
 - **[First experiment](experiments/EXP-001.md)**: preregistered-style plan to assess cross-tissue reproducibility, causal ambiguity, and intervention tradeoffs.
@@ -31,6 +33,10 @@ python -m phiage expression-qc --allow-network --output expression-qc.json
 python -m phiage feature-qc --allow-network --output feature-qc.json
 # Candidate *metadata only*, no disease or age-effect inference:
 python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
+# Full second-cohort FPKM numerical and metadata QC; never claims donor independence:
+python -m phiage replication-qc --allow-network --output replication-qc.json
+# Exact RefSeq identifier overlap census (not an expression model):
+python -m phiage transcript-overlap --allow-network --output transcript-overlap.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -63,6 +69,8 @@ Currently implemented:
 - **Read-only aggregate expression QC:** exact SHA-256 pinning of real NCBI GEO count/TPM files; table shape, missing and invalid numeric cells, feature-ID duplication and descriptive totals, without differential expression or uploading rows.
 - **Exploratory feature/similarity QC v0.5:** classify uncurated transcript identifier *syntax*, count literal annotation tags, measure sample zero fractions, and compute log1p(TPM) sample correlations, with no age-group hypothesis testing or medical claims.
 - **GSE113957 source-census v0.6:** audits public GSM count, age-field parsing, age bins, and explicit/unknown disease labels from official GEO Series Matrix. The 133+10 split from the paper remains a *reported claim* until verified against source metadata. Donor independence, data reuse, FPKM crosswalk, and study harmonization remain blocked.
+- **GSE113957 v0.7 independent-cohort readiness QC:** source-verified **cell-line ID label duplication** census and platform/sex/group distribution, plus a read-only numerical scan of the published 143-column FPKM matrix. Exact gzip SHA-256 match enforced. Donor independence, normalization, study overlap and any biological or clinical age effect remain **unverified**.
+- **Cross-cohort accession-only comparison:** audited exact RefSeq transcript ID strings, version-unaware ID overlap and order using *pinned* GSE113957 FPKM and GSE307377 TPM. Identical accession strings are not evidence of comparable quantification or replicated age associations.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.

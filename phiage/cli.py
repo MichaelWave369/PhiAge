@@ -14,6 +14,8 @@ from .crosswalk import CrosswalkError, validate_crosswalk
 from .expression_qc import ExpressionQCError, run_qc as expression_qc
 from .feature_profile import run_profile as feature_profile
 from .cohort_probe import CohortProbeError, probe_candidate as cohort_probe
+from .replication_qc import ReplicationQCError, run_replication_qc
+from .feature_overlap import run_overlap
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -63,6 +65,15 @@ def main(argv=None) -> int:
     cohort.add_argument("--with-fpkm", action="store_true",
                         help="also inspect deposited public FPKM matrix header, not values")
     cohort.add_argument("--output", help="write provenance and group ambiguity JSON")
+    repl = subs.add_parser("replication-qc", help="read-only technical QC of source-pinned GSE113957 FPKM")
+    repl.add_argument("--receipt", default="data/receipts/GSE113957_cohort_source_observation_2026-11-22.json")
+    repl.add_argument("--allow-network", action="store_true")
+    repl.add_argument("--output", help="write aggregate quality/metadata receipt")
+    overlap = subs.add_parser("transcript-overlap", help="exact RefSeq text-identity census across both source cohorts")
+    overlap.add_argument("--primary-receipt", default="data/receipts/GSE113957_cohort_source_observation_2026-11-22.json")
+    overlap.add_argument("--secondary-receipt", default="data/receipts/GSE307377_tpm_2026-11-21.json")
+    overlap.add_argument("--allow-network", action="store_true")
+    overlap.add_argument("--output")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -74,6 +85,13 @@ def main(argv=None) -> int:
         elif args.command == "geo-probe":
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
+        elif args.command == "transcript-overlap":
+            primary = json.loads(Path(args.primary_receipt).read_text(encoding="utf-8"))
+            secondary = json.loads(Path(args.secondary_receipt).read_text(encoding="utf-8"))
+            data = run_overlap(primary, secondary, allow_network=args.allow_network)
+        elif args.command == "replication-qc":
+            receipt = json.loads(Path(args.receipt).read_text(encoding="utf-8"))
+            data = run_replication_qc(receipt, allow_network=args.allow_network)
         elif args.command == "cohort-probe":
             data = cohort_probe(args.accession, allow_network=args.allow_network, with_fpkm=args.with_fpkm)
         elif args.command in ("crosswalk", "expression-qc", "feature-qc"):
@@ -101,6 +119,6 @@ def main(argv=None) -> int:
             print("phiage: no source passes the EXP-001 readiness gate", file=sys.stderr)
             return 3
         return 0
-    except (ValueError, EvidenceError, RegistryError, GEOProbeError, CrosswalkError, ExpressionQCError, CohortProbeError, OSError, json.JSONDecodeError) as exc:
+    except (ValueError, EvidenceError, RegistryError, GEOProbeError, CrosswalkError, ExpressionQCError, CohortProbeError, ReplicationQCError, OSError, json.JSONDecodeError) as exc:
         print(f"phiage: {exc}", file=sys.stderr)
         return 2

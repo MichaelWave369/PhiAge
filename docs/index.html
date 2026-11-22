@@ -20,7 +20,7 @@
   </header>
   <main id="main">
     <section id="top" class="hero shell">
-      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.6</div>
+      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.7</div>
       <div class="hero-layout">
         <div>
           <h1>Understand aging.<br><em>Question everything.</em></h1>
@@ -117,7 +117,7 @@
     </section>
 
     <section class="shell section" id="replication">
-      <div class="eyebrow">05 / INDEPENDENT COHORT · METADATA ONLY</div>
+      <div class="eyebrow">05 / TWO COHORTS · TECHNICAL QC</div>
       <h2>The next cohort, audited.</h2>
       <p class="muted narrow">Independent validation begins with provenance, not a headline. We inspected the official GSE113957 SOFT family metadata and processed FPKM header, without performing age-effect tests.</p>
       <div class="source-summary">
@@ -128,6 +128,19 @@
       <div class="rep-observations">
         <p><strong id="rep-crosswalk">—</strong> exact sample title ↔ FPKM column-name matches</p>
         <p><strong id="rep-age">—</strong> public sample ages parsed, including months where available</p>
+      </div>
+      <div class="rep-v07">
+        <h3>v0.7 · Alignment and confounder audit</h3>
+        <p class="muted">The following counts reflect verified file structure, <strong>not replicated age-related expression changes</strong>.</p>
+        <div class="source-summary">
+          <div><strong id="rep-shared-ids">—</strong><span>Exact shared RefSeq transcript IDs</span></div>
+          <div><strong id="rep-unique-cells">—</strong><span>Unique deposited cell-ID labels</span></div>
+          <div><strong id="rep-fpkm-features">—</strong><span>FPKM transcript entries inspected</span></div>
+        </div>
+        <div class="rep-track" role="img" aria-label="Exact RefSeq ID overlap as fraction of 27,142 transcripts"><div id="rep-overlap-bar" class="rep-fill"></div></div>
+        <p id="rep-overlap-caption" class="source-detail">Loading observed source overlap…</p>
+        <p id="rep-platform-caveat" class="source-detail">Loading platform and group distribution…</p>
+        <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE113957_replication_qc_2026-11-22.json" target="_blank" rel="noopener noreferrer">Inspect full source QC receipt ↗</a>
       </div>
       <p class="source-caveat">Status: not analysis-ready. Unique sample titles do not prove independent donors. The two diseases/status groups must remain separate; FPKM processing and transcript-level comparability still require verification. No human rejuvenation finding is claimed.</p>
       <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE113957_cohort_source_observation_2026-11-22.json" target="_blank" rel="noopener noreferrer">Inspect the source-backed census receipt ↗</a>
