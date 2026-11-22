@@ -181,4 +181,28 @@ async function setupQualityObservation(){
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();});
+
+async function setupReplicationCensus(){
+  try{
+    const response=await fetch("./cohort_census_summary.json");
+    if(!response.ok)throw Error("HTTP "+response.status);
+    const x=await response.json();
+    if(x.receipt_type!=="phiage-candidate-cohort-source-observation/v0.6" ||
+       x.analysis_ready!==false ||
+       x.claim_level!=="COHORT_METADATA_DISCOVERY_ONLY" ||
+       x.observed_public_gsm_samples!==x.reported_disease_normal_labels+x.reported_disease_hgps_labels ||
+       x.sample_title_fpkm_header_exact_matches!==x.observed_public_gsm_samples)
+      throw Error("invalid cohort receipt");
+    $("rep-samples").textContent=String(x.observed_public_gsm_samples);
+    $("rep-normal").textContent=String(x.reported_disease_normal_labels);
+    $("rep-hgps").textContent=String(x.reported_disease_hgps_labels);
+    $("rep-crosswalk").textContent=String(x.sample_title_fpkm_header_exact_matches);
+    $("rep-age").textContent=String(x.sample_age_values_parsed);
+  }catch(error){
+    console.error("Replication census receipt unavailable",error);
+    for(const id of ["rep-samples","rep-normal","rep-hgps","rep-crosswalk","rep-age"])
+      $(id).textContent="unavailable";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{setupSim();setupHallmarks();setupSources();setupQualityObservation();setupReplicationCensus();});

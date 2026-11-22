@@ -32,6 +32,9 @@ jobs:
       - name: Verify committed technical QC observation is non-clinical
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE307377_feature_qc_summary_2026-11-21.json'); q=json.loads(p.read_text()); r=q['report']; assert r['analysis_ready'] is False and r['claim_level']=='TECHNICAL_QC_ONLY' and r['feature_rows']==r['informative_feature_rows']+r['all_sample_zero_rows']; assert sum(x['count'] for x in r['annotation_tokens'])==r['feature_rows']; assert p.read_bytes()==Path('docs/feature_qc_summary.json').read_bytes()"
+      - name: Verify source-backed second-cohort receipt is non-clinical
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_cohort_source_observation_2026-11-22.json'); x=json.loads(p.read_text()); assert x['analysis_ready'] is False and x['independent_replication_established'] is False and x['donor_independence_verified'] is False and x['claim_level']=='COHORT_METADATA_DISCOVERY_ONLY'; assert x['reported_disease_normal_labels']+x['reported_disease_hgps_labels']==x['observed_public_gsm_samples']==x['sample_title_fpkm_header_exact_matches']==x['sample_age_values_parsed']==143; assert p.read_bytes()==Path('docs/cohort_census_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python
@@ -64,3 +67,20 @@ jobs:
       - name: Summarize source structure (not findings)
         run: |
           python -c "import json; p=json.load(open('/tmp/phiage-geo-probe.json')); print(json.dumps({'accession':p['accession'], 'matrix':p['series_matrix'], 'supplementary_table':p.get('supplementary_table'), 'normalized_table':p.get('normalized_table'), 'analysis_ready':p['analysis_ready']},indent=2))"
+
+  candidate-cohort-census:
+    # Informational: source discovery; never a clinical or biological claim.
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe GSE113957 public Series Matrix metadata
+        run: python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output /tmp/phiage-gse113957-census.json
+      - name: Assert conservative cohort readiness policy
+        run: |
+          python -c "import json; p=json.load(open('/tmp/phiage-gse113957-census.json')); assert p['public_gsm_sample_count']>0 and p['analysis_ready'] is False and isinstance(p['claimed_split_verified_from_metadata'],bool) and p['donor_independence_verified'] is False and p['claim_level']=='COHORT_METADATA_DISCOVERY_ONLY'; print(json.dumps(p,indent=2))"

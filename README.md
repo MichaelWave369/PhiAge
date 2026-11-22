@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v0.5 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v0.6 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -11,6 +11,7 @@
 - **[Research dashboard](docs/index.html)**: interactive hallmark atlas and an explicitly hypothetical feedback-system simulator. This is a static website; it has no backend and makes no network requests except to load bundled files.
 - **[12 hallmarks](data/hallmarks.json)**: annotated conceptual taxonomy from López-Otín et al., *Cell* (2023), DOI [10.1016/j.cell.2022.11.001](https://doi.org/10.1016/j.cell.2022.11.001).
 - **[Observed feature QC receipt](data/receipts/GSE307377_feature_qc_summary_2026-11-21.json)**: archived summary from successful GitHub Actions, also rendered by the static dashboard. Source is one existing published GEO study, not independent aging replication.
+- **[Observed GSE113957 cohort receipt](data/receipts/GSE113957_cohort_source_observation_2026-11-22.json)**: official SOFT family records and processed FPKM header, with source checksums, 143 exact title matches, and *no claim of validated donor independence*.
 - **[Source registry](data/source_registry.json)**: six documented candidate human datasets, all pending licensing and independence review. Run `python -m phiage sources data/source_registry.json` for a machine-readable readiness audit.
 - **[First experiment](experiments/EXP-001.md)**: preregistered-style plan to assess cross-tissue reproducibility, causal ambiguity, and intervention tradeoffs.
 - **[Evidence policy](docs/EVIDENCE_POLICY.md)**: how to distinguish hypotheses, observations, experiments, and human outcomes.
@@ -28,6 +29,8 @@ python -m phiage crosswalk --output crosswalk-audit.json
 python -m phiage expression-qc --allow-network --output expression-qc.json
 # Optional non-inferential feature/similarity QC; no gene-level claims:
 python -m phiage feature-qc --allow-network --output feature-qc.json
+# Candidate *metadata only*, no disease or age-effect inference:
+python -m phiage cohort-probe GSE113957 --allow-network --with-fpkm --output cohort-census.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -59,6 +62,7 @@ Currently implemented:
 - **Verified public sample/library crosswalk v0.4:** nine one-to-one library labels from primary GEO sample Description fields matched against both raw and TPM headers. This clears *column identity*, not donor independence or analytical readiness.
 - **Read-only aggregate expression QC:** exact SHA-256 pinning of real NCBI GEO count/TPM files; table shape, missing and invalid numeric cells, feature-ID duplication and descriptive totals, without differential expression or uploading rows.
 - **Exploratory feature/similarity QC v0.5:** classify uncurated transcript identifier *syntax*, count literal annotation tags, measure sample zero fractions, and compute log1p(TPM) sample correlations, with no age-group hypothesis testing or medical claims.
+- **GSE113957 source-census v0.6:** audits public GSM count, age-field parsing, age bins, and explicit/unknown disease labels from official GEO Series Matrix. The 133+10 split from the paper remains a *reported claim* until verified against source metadata. Donor independence, data reuse, FPKM crosswalk, and study harmonization remain blocked.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.

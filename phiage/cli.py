@@ -13,6 +13,7 @@ from .geo_probe import GEOProbeError, probe as geo_probe
 from .crosswalk import CrosswalkError, validate_crosswalk
 from .expression_qc import ExpressionQCError, run_qc as expression_qc
 from .feature_profile import run_profile as feature_profile
+from .cohort_probe import CohortProbeError, probe_candidate as cohort_probe
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="phiage", description="Evidence-first geroscience workbench")
@@ -56,6 +57,12 @@ def main(argv=None) -> int:
     profile.add_argument("--tpm-receipt", default="data/receipts/GSE307377_tpm_2026-11-21.json")
     profile.add_argument("--allow-network", action="store_true")
     profile.add_argument("--output")
+    cohort = subs.add_parser("cohort-probe", help="bounded, read-only GEO candidate metadata census")
+    cohort.add_argument("accession", help="only allowlisted GSE113957")
+    cohort.add_argument("--allow-network", action="store_true", help="explicit public GEO source fetch")
+    cohort.add_argument("--with-fpkm", action="store_true",
+                        help="also inspect deposited public FPKM matrix header, not values")
+    cohort.add_argument("--output", help="write provenance and group ambiguity JSON")
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -67,6 +74,8 @@ def main(argv=None) -> int:
         elif args.command == "geo-probe":
             data = geo_probe(args.accession, allow_network=args.allow_network,
                              with_counts=args.with_counts, with_tpm=args.with_tpm)
+        elif args.command == "cohort-probe":
+            data = cohort_probe(args.accession, allow_network=args.allow_network, with_fpkm=args.with_fpkm)
         elif args.command in ("crosswalk", "expression-qc", "feature-qc"):
             mapping = json.loads(Path(args.mapping).read_text(encoding="utf-8"))
             geo = json.loads(Path(args.geo_receipt).read_text(encoding="utf-8"))
@@ -92,6 +101,6 @@ def main(argv=None) -> int:
             print("phiage: no source passes the EXP-001 readiness gate", file=sys.stderr)
             return 3
         return 0
-    except (ValueError, EvidenceError, RegistryError, GEOProbeError, CrosswalkError, ExpressionQCError, OSError, json.JSONDecodeError) as exc:
+    except (ValueError, EvidenceError, RegistryError, GEOProbeError, CrosswalkError, ExpressionQCError, CohortProbeError, OSError, json.JSONDecodeError) as exc:
         print(f"phiage: {exc}", file=sys.stderr)
         return 2

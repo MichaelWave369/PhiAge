@@ -14,13 +14,13 @@
   <header class="site-header">
     <a class="brand" href="#top" aria-label="PhiAge homepage"><span class="brand-icon">Φ</span><span>AGE<span class="brand-dot">.</span></span></a>
     <nav aria-label="Main navigation">
-      <a href="#hallmarks">Hallmarks</a><a href="#simulator">Systems lab</a><a href="#sources">Datasets</a><a href="#quality">QC observations</a><a href="#research">Research</a>
+      <a href="#hallmarks">Hallmarks</a><a href="#simulator">Systems lab</a><a href="#sources">Datasets</a><a href="#quality">QC observations</a><a href="#replication">Replication</a><a href="#research">Research</a>
     </nav>
     <a class="github" href="https://github.com/MichaelWave369/PhiAge" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
   </header>
   <main id="main">
     <section id="top" class="hero shell">
-      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.5</div>
+      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.6</div>
       <div class="hero-layout">
         <div>
           <h1>Understand aging.<br><em>Question everything.</em></h1>
@@ -116,8 +116,25 @@
       <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE307377_feature_qc_summary_2026-11-21.json" target="_blank" rel="noopener noreferrer">Inspect the observed QC receipt ↗</a>
     </section>
 
+    <section class="shell section" id="replication">
+      <div class="eyebrow">05 / INDEPENDENT COHORT · METADATA ONLY</div>
+      <h2>The next cohort, audited.</h2>
+      <p class="muted narrow">Independent validation begins with provenance, not a headline. We inspected the official GSE113957 SOFT family metadata and processed FPKM header, without performing age-effect tests.</p>
+      <div class="source-summary">
+        <div><strong id="rep-samples">—</strong><span>Public GEO sample records</span></div>
+        <div><strong id="rep-normal">—</strong><span>Depositor label: Normal</span></div>
+        <div><strong id="rep-hgps">—</strong><span>Depositor label: HGPS</span></div>
+      </div>
+      <div class="rep-observations">
+        <p><strong id="rep-crosswalk">—</strong> exact sample title ↔ FPKM column-name matches</p>
+        <p><strong id="rep-age">—</strong> public sample ages parsed, including months where available</p>
+      </div>
+      <p class="source-caveat">Status: not analysis-ready. Unique sample titles do not prove independent donors. The two diseases/status groups must remain separate; FPKM processing and transcript-level comparability still require verification. No human rejuvenation finding is claimed.</p>
+      <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE113957_cohort_source_observation_2026-11-22.json" target="_blank" rel="noopener noreferrer">Inspect the source-backed census receipt ↗</a>
+    </section>
+
     <section class="shell section" id="research">
-      <div class="eyebrow">05 / RESEARCH PROGRAM</div>
+      <div class="eyebrow">06 / RESEARCH PROGRAM</div>
       <h2>From curiosity to falsifiable work.</h2>
       <div class="research-grid">
         <article class="research-card"><div class="card-meta"><span>EXP-001</span><span class="status">PLANNED · NOT RUN</span></div><h3>Cross-tissue reproducibility</h3><p>Do aging-associated molecular signals generalize across independent human datasets after controlling for tissue, cohort and technical confounders?</p><a href="https://github.com/MichaelWave369/PhiAge/blob/main/experiments/EXP-001.md" target="_blank" rel="noopener noreferrer">View experimental plan ↗</a></article>
