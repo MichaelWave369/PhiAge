@@ -14,13 +14,13 @@
   <header class="site-header">
     <a class="brand" href="#top" aria-label="PhiAge homepage"><span class="brand-icon">Φ</span><span>AGE<span class="brand-dot">.</span></span></a>
     <nav aria-label="Main navigation">
-      <a href="#hallmarks">Hallmarks</a><a href="#simulator">Systems lab</a><a href="#sources">Datasets</a><a href="#quality">QC observations</a><a href="#replication">Replication</a><a href="#design">Design gate</a><a href="#research">Research</a>
+      <a href="#hallmarks">Hallmarks</a><a href="#simulator">Systems lab</a><a href="#sources">Datasets</a><a href="#quality">QC observations</a><a href="#replication">Replication</a><a href="#design">Design gate</a><a href="#balance">Balance audit</a><a href="#research">Research</a>
     </nav>
     <a class="github" href="https://github.com/MichaelWave369/PhiAge" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
   </header>
   <main id="main">
     <section id="top" class="hero shell">
-      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.8</div>
+      <div class="eyebrow"><span class="pulse-dot"></span> PHI369 LABS / OPEN SCIENCE / V0.9</div>
       <div class="hero-layout">
         <div>
           <h1>Understand aging.<br><em>Question everything.</em></h1>
@@ -165,8 +165,27 @@
       <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE113957_design_preflight_2026-11-22.json" target="_blank" rel="noopener noreferrer">Inspect the source-backed design receipt ↗</a>
     </section>
 
+
+    <section class="shell section" id="balance">
+      <div class="eyebrow">07 / COMMON SUPPORT · SEX AND AGE STRATA</div>
+      <h2>When matching ages is not enough.</h2>
+      <p class="muted narrow">A frozen metadata-only comparison of the 30–49-year range across both GEO sequencing platforms. Counts describe depositor-reported Normal samples, not clinically verified healthy donors or age-effect measurements.</p>
+      <div class="source-summary">
+        <div><strong id="balance-primary">—</strong><span>GPL18573 · eligible</span></div>
+        <div><strong id="balance-secondary">—</strong><span>GPL16791 · eligible</span></div>
+        <div><strong id="balance-capacity">—</strong><span>Theoretical maximum balanced pairs</span></div>
+      </div>
+      <div class="rep-v07">
+        <h3>Stratum coverage · decade × sex</h3>
+        <div id="balance-rows" aria-live="polite"><p class="muted">Loading source-backed count receipt…</p></div>
+        <p id="balance-conclusion" class="source-caveat">The biological analysis gate remains closed.</p>
+      </div>
+      <p class="source-caveat">Potential balanced pairs are a ceiling on group counts, not real donor matches. Source metadata does not prove independence or resolve batch, expression normalization, and study reuse. No model, age-effect test, intervention, or rejuvenation claim.</p>
+      <a class="citation" href="https://github.com/MichaelWave369/PhiAge/blob/main/data/receipts/GSE113957_common_support_2026-11-22.json" target="_blank" rel="noopener noreferrer">Inspect the source-backed balance audit ↗</a>
+    </section>
+
     <section class="shell section" id="research">
-      <div class="eyebrow">07 / RESEARCH PROGRAM</div>
+      <div class="eyebrow">08 / RESEARCH PROGRAM</div>
       <h2>From curiosity to falsifiable work.</h2>
       <div class="research-grid">
         <article class="research-card"><div class="card-meta"><span>EXP-001</span><span class="status">PLANNED · NOT RUN</span></div><h3>Cross-tissue reproducibility</h3><p>Do aging-associated molecular signals generalize across independent human datasets after controlling for tissue, cohort and technical confounders?</p><a href="https://github.com/MichaelWave369/PhiAge/blob/main/experiments/EXP-001.md" target="_blank" rel="noopener noreferrer">View experimental plan ↗</a></article>

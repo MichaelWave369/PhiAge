@@ -42,6 +42,9 @@ jobs:
       - name: Validate frozen design report remains a blocked source-only audit
         run: |
           python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_design_preflight_2026-11-22.json'); d=json.loads(p.read_text()); assert d['analysis_ready'] is False and d['training_or_hypothesis_test_performed'] is False and d['donor_independence_verified'] is False and d['claim_level']=='DESIGN_FEASIBILITY_ONLY'; assert d['eligible_adult_healthy']['sample_count']==107 and d['primary_platform_healthy_adult']['sample_count']==94 and d['transport_platform_healthy_adult']['sample_count']==13; assert d['exploratory_transport_metadata_gate_passed'] is False and '50-59' in d['sparse_shared_age_decades']; assert p.read_bytes()==Path('docs/design_preflight_summary.json').read_bytes()"
+      - name: Verify archived common-support source observation is blocked
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/GSE113957_common_support_2026-11-22.json'); r=json.loads(p.read_text()); assert r['analysis_ready'] is False and r['age_effect_tested'] is False and r['sample_matching_performed'] is False and r['metadata_balance_thresholds_passed'] is False; assert r['primary_metadata']['n']==17 and r['comparison_metadata']['n']==11 and r['maximum_balanced_pair_capacity']==8; assert '40-49/female' in r['missing_strata'] and '30-39/female' in r['thin_strata']; assert p.read_bytes()==Path('docs/common_support_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python

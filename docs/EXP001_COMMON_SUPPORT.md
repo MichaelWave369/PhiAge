@@ -29,3 +29,18 @@ Network is disabled by default. The command fetches only the archived-sha256-pin
 ## Next review
 
 If age-decade/sex cells are sparse, do **not** rebalance by inventing samples or changing the cutoffs after inspecting outcomes. A genuinely well-supported comparison may require additional donor-balanced public data or a simpler, separately justified exploratory design. Even a passing metadata gate would still not license an age association, aging-reversal claim or intervention.
+
+## First live results (observed in public source metadata, 2026-11-22 UTC)
+
+The [live source job](https://github.com/MichaelWave369/PhiAge/actions/runs/44986911498) scanned the immutable NCBI GEO family SOFT metadata. In the 30–49 age window, the deposited Normal group consists of **17 GPL18573** and **11 GPL16791** samples, with no unknown sex values. Platform age means are **37.8235** and **40.0909** years, respectively. Age-decade × sex count matrix:
+
+| Age decade and public sex | GPL18573 | GPL16791 | Capacity |
+|---|---:|---:|---:|
+| 30–39 female | 5 | 1 | 1 |
+| 30–39 male | 6 | 2 | 2 |
+| 40–49 female | 0 | 3 | 0 |
+| 40–49 male | 6 | 5 | 5 |
+
+Aggregate possible pair ceiling: **8**, representing at most **16 selected source profiles** if a valid matching rule existed. No matching is performed, and this is not a power analysis. **The v0.9 metadata balance gate fails** because 40–49 female GPL18573 samples are missing and 30–39 GPL16791 female samples are below the frozen threshold of two. Even perfect metadata balance would not prove donor independence or age-effects.
+
+The observed aggregates and source fingerprint appear in [the versioned report](../data/receipts/GSE113957_common_support_2026-11-22.json) and the observatory. All scientific analysis and clinical claim flags remain false.
