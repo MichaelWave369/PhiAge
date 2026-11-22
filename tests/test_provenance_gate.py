@@ -19,6 +19,7 @@ def soft(cell_a="GM123",cell_b="GM124",passage_a=None):
             "!Sample_geo_accession = "+gsm,
             "!Sample_title = cellline_"+str(i),
             "!Sample_growth_protocol_ch1 = public biobank culture",
+            "!Sample_platform_id = GPL111",
             "!Sample_source_name_ch1 = fibroblasts",
             "!Sample_characteristics_ch1 = cell id: "+cell,
             "!Sample_characteristics_ch1 = disease: Normal",
@@ -73,6 +74,25 @@ class ProvenanceGateTests(unittest.TestCase):
         x=soft().replace("GSM222","GSM111")
         with self.assertRaisesRegex(ReplicationQCError,"duplicate GSM"):
             audit_provenance(x,matrix(),MAPPING)
+
+
+    def test_protocol_fingerprint_by_platform_without_raw_text(self):
+        text=soft().replace(
+            "!Sample_growth_protocol_ch1 = public biobank culture\n"
+            "!Sample_platform_id = GPL111\n"
+            "!Sample_source_name_ch1 = fibroblasts\n"
+            "!Sample_characteristics_ch1 = cell id: GM124",
+            "!Sample_growth_protocol_ch1 = other culture source\n"
+            "!Sample_platform_id = GPL222\n"
+            "!Sample_source_name_ch1 = fibroblasts\n"
+            "!Sample_characteristics_ch1 = cell id: GM124",
+        )
+        result=audit_provenance(text,matrix(),MAPPING)
+        per=result["source_cohorts"][0]["protocol_vs_platform"]
+        self.assertEqual(per["platform_sample_counts"],{"GPL111":1,"GPL222":1})
+        self.assertNotIn("public biobank culture",str(per))
+        self.assertNotIn("other culture source",str(per))
+        self.assertFalse(result["cross_cohort_same_person_linkage_evaluable"])
 
     def test_network_default_off_and_checksum_fail_closed(self):
         with patch("phiage.provenance_gate.download_bounded",side_effect=AssertionError("network")):

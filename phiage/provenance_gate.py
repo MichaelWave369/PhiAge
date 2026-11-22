@@ -117,6 +117,10 @@ def _identity_coverage(records: list[dict]) -> dict:
         "subject_identifier_field_missing":n-subject_present,
         "subject_identifier_inconsistent_samples":ambiguous_subject,
         "subject_identifier_duplicate_label_excess":subject_duplicate,
+        "cell_line_description_field_present":sum(
+            bool(_char_map(r["fields"].get(CHAR_FIELD,[])).get("cell line"))
+            for r in records
+        ),
         "cell_id_field_present":cell_id_present,
         "cell_id_field_missing":n-cell_id_present,
         "cell_id_duplicate_label_excess":cell_duplicate,
@@ -148,6 +152,10 @@ def parse_soft_samples(text: str) -> list[dict]:
     require(len(validated)==len(output), "SOFT sample count changed")
     require([s["gsm_id"] for s in validated]==[s["gsm_id"] for s in output],
             "SOFT sample order or identity changed")
+    for i, sample in enumerate(output):
+        sample["platform"] = (
+            validated[i]["platforms"][0] if validated[i]["platforms"] else "(missing)"
+        )
     return output
 
 def parse_matrix_samples(text: str, mapping: dict) -> list[dict]:
@@ -161,9 +169,43 @@ def parse_matrix_samples(text: str, mapping: dict) -> list[dict]:
     for key,cell_rows in rows.items():
         for cells in cell_rows:
             require(len(cells)==n, f"matrix metadata column count mismatch: {key}")
+    platforms=rows.get("!Sample_platform_id",[])
+    require(len(platforms) <= 1, "duplicate matrix platform ID row")
     return [{"gsm_id":gsm[i],
+             "platform":platforms[0][i] if platforms else "(missing)",
              "fields":{key:[row[i] for row in cell_rows] for key,cell_rows in rows.items()}}
             for i in range(n)]
+
+
+def protocol_variant_by_platform(records: list[dict]) -> dict:
+    """Aggregate protocol-text fingerprints by platform, no text or IDs exported.
+
+    A hash is just a local string label for a deposited description.
+    Equal or different texts do not prove equal or different lab conditions.
+    """
+    protocol_keys = ("extraction", "growth", "treatment")
+    counts = {key: {} for key in protocol_keys}
+    total_platform = Counter()
+    for sample in records:
+        platform=sample.get("platform") or "(missing)"
+        require(platform=="(missing)" or PLATFORM.fullmatch(platform) is not None,
+                "invalid platform field")
+        total_platform[platform]+=1
+        for key in protocol_keys:
+            values=sample["fields"].get(PROTOCOL_FIELDS[key],[])
+            nonempty=sorted({v.strip() for v in values if _nonempty(v)})
+            digest=hashlib.sha256(json.dumps(nonempty,sort_keys=True).encode()).hexdigest()
+            label="absent" if not nonempty else "text_sha256_" + digest[:12]
+            bucket=counts[key].setdefault(platform,{})
+            bucket[label]=bucket.get(label,0)+1
+    return {
+        "platform_sample_counts":dict(sorted(total_platform.items())),
+        "protocol_variant_distribution_by_platform": {
+            name:{plat:dict(sorted(vals.items())) for plat,vals in sorted(platforms.items())}
+            for name,platforms in counts.items()
+        },
+        "text_sha256_truncated_identifiers_not_verified_processing_batches":True,
+    }
 
 def audit_provenance(soft: str, matrix: str, mapping: dict) -> dict:
     require(mapping.get("accession")=="GSE307377" and len(mapping.get("samples",[]))==9,
@@ -174,9 +216,11 @@ def audit_provenance(soft: str, matrix: str, mapping: dict) -> dict:
     audit_b=_identity_coverage(cohort_b)
     a={"accession":"GSE113957","geo_sample_records":len(cohort_a),
        "identity":audit_a,"public_protocol_metadata":_field_summary(cohort_a),
+       "protocol_vs_platform":protocol_variant_by_platform(cohort_a),
        "independent_donors_verified":False}
     b={"accession":"GSE307377","geo_sample_records":len(cohort_b),
        "identity":audit_b,"public_protocol_metadata":_field_summary(cohort_b),
+       "protocol_vs_platform":protocol_variant_by_platform(cohort_b),
        "library_labels_archived":len(mapping["samples"]),
        "independent_donors_verified":False}
     blockers=[]
