@@ -2,7 +2,7 @@
 
 **A research workbench for investigating mechanisms of biological aging through reproducible computational collaboration.**
 
-> **Status:** v1.0 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
+> **Status:** v1.1 research prototype. **No treatment, human rejuvenation, or life-extension claim is established by this software.** This project does not provide medical advice, treatment instructions, clinical decision support, or validated biological-age estimation.
 
 ΦAge is a public project from PHI369 Labs. Its aim is to make aging research easier to question, reproduce, and connect. Research agents should **challenge** evidence, not simply generate exciting claims.
 
@@ -46,6 +46,10 @@ python -m phiage design-preflight --allow-network --output design-preflight.json
 python -m phiage common-support --allow-network --output common-support.json
 # Identity field/protocol provenance coverage across both pinned GEO sources:
 python -m phiage provenance-gate --allow-network --output provenance-gate.json
+# Audited primary-source versus publication versus policy evidence (offline):
+python -m phiage review-provenance --output publication-review.json
+# Optional original publisher supplement STRUCTURE probe, no subject rows:
+python -m phiage supplement-probe --allow-network --output supplement-structure.json
 # Optional bounded, read-only live GEO probe (does NOT analyze expression):
 python -m phiage geo-probe GSE307377 --allow-network --with-counts --output geo-receipt.json
 ```
@@ -83,6 +87,7 @@ Currently implemented:
 - **Frozen design preflight v0.8:** deterministic source-pinned audit of healthy adults (source label "Normal", age ≥20), explicit HGPS exclusion, age-decade overlap, donor-label duplication and platform shift feasibility. No statistical training or biological age-effect tests run.
 - **Common-support v0.9:** frozen GSE113957 age 30–49 selection, source-labeled Normal only, sex-by-age-decade/platform counts and a conservative ceiling on possible balanced pairs. No individual matching, model training or age-effect inference.
 - **v1.0 donor provenance gap audit:** measures sample-level field coverage of explicit donor/subject IDs, cell-line IDs, passage and protocol text across GSE113957 and GSE307377. Cross-cohort donor linkage remains **not evaluable** from this source evidence; no identifier values or subject-level rows are exported.
+- **v1.1 evidence provenance review:** a source-scoped, machine-validated ledger distinguishes pinned GEO sample records, original study-level culture methods and uninspected supplementary tables, SD-NSC cohort context, and Coriell biomaterial-transfer policies from public data reuse rights. Eight critical analysis gates remain blocked. An optional original DOCX structure probe never releases subjects or sample rows.
 - **Standard-library unit tests** and CI.
 
 Not yet implemented: scientifically validated import, donor de-duplication or analysis of real expression measurements, PubMed adapters, independent computational agents, causal inference, omics integration, biological age calibration, human-intervention prediction, or claims of reversal.
