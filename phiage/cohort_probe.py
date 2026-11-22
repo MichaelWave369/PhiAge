@@ -146,7 +146,7 @@ def summarize_matrix(text: str, *, accession: str = TARGET) -> dict:
             age_missing += 1
         else:
             age_values.append(age)
-            lo = 10 * (age // 10)
+            lo = 10 * (int(age) // 10)
             age_bin_labels[f"{lo}-{lo+9}"] += 1
     return {
         "schema_version": SCHEMA,
