@@ -100,6 +100,7 @@ def main(argv=None) -> int:
     review = subs.add_parser("review-provenance", help="offline publication/biobank evidence review and blocked science gates")
     review.add_argument("--ledger", default="data/evidence/EXP001_provenance_review_v11.json")
     review.add_argument("--source-receipt", default="data/receipts/GSE113957_GSE307377_provenance_gate_2026-11-22.json")
+    review.add_argument("--supplement-receipt", default="data/receipts/Fleischer2018_supplement_structure_2026-11-22.json")
     review.add_argument("--output")
     supplement = subs.add_parser("supplement-probe", help="bounded read-only original paper DOCX structure; no individual-level output")
     supplement.add_argument("--allow-network", action="store_true")
@@ -118,7 +119,8 @@ def main(argv=None) -> int:
         elif args.command == "review-provenance":
             ledger = json.loads(Path(args.ledger).read_text(encoding="utf-8"))
             observation = json.loads(Path(args.source_receipt).read_text(encoding="utf-8"))
-            data = audit_review(ledger, observation)
+            supplement = json.loads(Path(args.supplement_receipt).read_text(encoding="utf-8"))
+            data = audit_review(ledger, observation, supplement)
         elif args.command == "supplement-probe":
             data = probe_supplement(allow_network=args.allow_network)
         elif args.command == "provenance-gate":

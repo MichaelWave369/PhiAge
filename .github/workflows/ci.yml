@@ -52,6 +52,9 @@ jobs:
         run: |
           python -m phiage review-provenance --output /tmp/phiage-review-v11.json
           python -c "import json; x=json.load(open('/tmp/phiage-review-v11.json')); assert x['analysis_ready'] is False and x['donor_independence_verified'] is False and x['blocked_review_gate_count']==8 and x['explicit_subject_id_field_count']==0 and x['geo_sample_level_passage_field_count']==0"
+      - name: Verify publisher supplemental source checksum and nonclinical flags
+        run: |
+          python -c "import json; from pathlib import Path; p=Path('data/receipts/Fleischer2018_supplement_structure_2026-11-22.json'); d=json.loads(p.read_text()); assert d['source_docx_sha256']=='c5e38bdd1c188f34d228d40c0b768ac7155e8a4440265835b248a37c0fe87c94'; assert d['table_to_gsm_join_verified'] is False and d['analysis_ready'] is False and d['supplement_sample_level_values_released'] is False; assert p.read_bytes()==Path('docs/supplement_structure_summary.json').read_bytes()"
       - name: Validate static observatory JavaScript
         run: node --check docs/app.js
       - name: Compile Python
