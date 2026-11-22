@@ -18,7 +18,7 @@ ALLOWED_TYPES = {
 }
 ALLOWED_CLASSES = {
     "source_observed", "publication_reported", "policy_context_only",
-    "linked_uninspected",
+    "linked_uninspected", "supplement_structure_observed",
 }
 ALLOWED_LEVELS = {
     "sample-metadata", "study-level", "potential-sample-supplement",
@@ -39,7 +39,7 @@ def require(value, message):
     if not value:
         raise ReplicationQCError(message)
 
-def audit_review(ledger: dict, observation: dict) -> dict:
+def audit_review(ledger: dict, observation: dict, supplement: dict) -> dict:
     require(isinstance(ledger,dict) and ledger.get("schema_version")==SCHEMA,
             "unrecognized provenance ledger")
     require(ledger.get("cohort_accessions")==["GSE113957","GSE307377"],
@@ -74,6 +74,25 @@ def audit_review(ledger: dict, observation: dict) -> dict:
                     "GSE307377 descriptive cell-line field coverage changed")
             require(observation["source_matrix_sha256"]==record["source_gzip_sha256"],
                     "GSE307377 official source hash changed")
+
+    snapshot=ledger.get("supplement_source_snapshot",{})
+    require(isinstance(supplement,dict) and
+            supplement.get("receipt_type")=="phiage-source-observed-supplement-structure/v1.1" and
+            supplement.get("schema_version")=="phiage-fleischer-supplement-structure/v1.1",
+            "original publisher supplement observation missing")
+    require(snapshot.get("source_docx_sha256")==supplement.get("source_docx_sha256") and
+            snapshot.get("publisher_url")==supplement.get("source_url"),
+            "original publisher supplement fingerprint/source URL drifted")
+    require(snapshot.get("word_table_count")==supplement.get("word_table_count") and
+            snapshot.get("caption_flags")==supplement.get("supplement_caption_mention_flags"),
+            "original publisher supplement structural summary drifted")
+    require(snapshot.get("sample_level_join_verified") is False and
+            supplement.get("analysis_ready") is False and
+            supplement.get("table_to_gsm_join_verified") is False and
+            supplement.get("supplement_sample_level_values_released") is False and
+            supplement.get("cohort_donor_uniqueness_verified") is False and
+            supplement.get("claim_level")=="SUPPLEMENT_STRUCTURE_ONLY",
+            "supplement structure must never authorize specimen-level analysis")
     sources=ledger.get("sources",[])
     require(isinstance(sources,list) and len(sources)>=6, "inadequate provenance citations")
     ids=[s.get("id") for s in sources]
@@ -87,7 +106,7 @@ def audit_review(ledger: dict, observation: dict) -> dict:
                 "source URL must be approved original host")
         require(source.get("review_state") in {
             "source_snapshot_verified","publication_text_reviewed","linked_not_parsed",
-            "context_only"
+            "context_only", "structure_inspected_unjoined"
         },"unapproved source review state")
         require(bool(source.get("locator")) and bool(source.get("scope")),
                 "source missing scope/locator")
@@ -106,9 +125,12 @@ def audit_review(ledger: dict, observation: dict) -> dict:
                 "claim references an absent source")
         require(bool(item.get("statement")) and bool(item.get("limitation")),
                 "every claim requires statement and limitation")
-        if item["evidence_class"]=="linked_uninspected":
+        if item["evidence_class"] in {"linked_uninspected","supplement_structure_observed"}:
             require(item["level"]=="potential-sample-supplement",
-                    "uninspected source cannot be promoted to sample-level evidence")
+                    "uninspected/structure-only source cannot be promoted to sample-level evidence")
+        if item["evidence_class"]=="supplement_structure_observed":
+            require("fleischer-supplement" in linked,
+                    "supplement structural claim requires the original publisher source")
     gates=ledger.get("review_gates",[])
     gate_ids=[x.get("id") for x in gates]
     require(set(gate_ids)==REQUIRED_GATES and len(gate_ids)==len(REQUIRED_GATES),
@@ -147,10 +169,13 @@ def audit_review(ledger: dict, observation: dict) -> dict:
         "blocked_review_gate_count":len(gates),
         "blocked_gates":[{"id":g["id"],"reason":g["required"],"next_review_question":g["review_question"]}
                          for g in gates],
+        "original_publisher_supplement_docx_sha256":supplement["source_docx_sha256"],
+        "original_publisher_supplement_table_caption_flags":supplement["supplement_caption_mention_flags"],
+        "original_publisher_supplement_tables_structure_checked":True,
         "linked_supplement_sample_level_join_verified":False,
         "external_human_subject_reidentification_performed":False,
         "cross_cohort_person_identity_verified":False,
-        "culture_history_source_granularity":"published study-level mean and linked unparsed supplement; no GEO sample field",
+        "culture_history_source_granularity":"published study-level means and source-verified supplementary structure, but no verified GSM-to-culture row join",
         "Coriell_policy_scope":"biomaterial distribution only; public GEO expression-data reuse must be reviewed separately",
         "donor_independence_verified":False,
         "cross_cohort_overlap_excluded":False,
