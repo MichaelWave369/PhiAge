@@ -59,7 +59,7 @@ class CohortProbeTests(unittest.TestCase):
         result = summarize_matrix(altered)
         self.assertEqual(result["observed_sample_label_counts"]["unknown"], 1)
 
-    def test_conflicting_status_not silently_resolved(self):
+    def test_conflicting_status_not_silently_resolved(self):
         altered = SYNTHETIC.replace('"disease: HGPS"', '"disease: healthy, HGPS"')
         result = summarize_matrix(altered)
         self.assertEqual(result["observed_sample_label_counts"]["conflicting"], 1)
